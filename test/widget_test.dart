@@ -29,7 +29,6 @@ void main() {
       
       // Verify theme is applied
       final appBar = find.byType(AppBar);
-      final appBarWidget = tester.widget<AppBar>(appBar);
       expect(appBar, findsOneWidget);
       
       // Verify the app title
