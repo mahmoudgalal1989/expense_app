@@ -1,0 +1,94 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force LF line endings for text files
+*.dart text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.gradle text eol=lf
+*.kt text eol=lf
+*.java text eol=lf
+*.swift text eol=lf
+*.plist text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Declare files that will always have CRLF line endings on checkout
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+*.sh text eol=lf
+
+# Denote all files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.bmp binary
+*.tiff binary
+*.wav binary
+*.mp3 binary
+*.mp4 binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.dll binary
+*.exe binary
+*.so binary
+*.dylib binary
+*.a binary
+*.o binary
+*.obj binary
+*.class binary
+*.jar binary
+*.keystore binary
+*.pbxproj binary
+*.xcworkspacedata binary
+*.xcuserstate binary
+*.xcuserdatad/* binary
+*.xcworkspace/contents.xcworkspacedata binary
+*.xcworkspace/xcshareddata/* binary
+*.xcworkspace/xcuserdata/* binary
+*.xcuserdatad/* binary
+*.xcuserstate binary
+*.xcodeproj/project.pbxproj binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/project.xcworkspace/* binary
+*.xcodeproj/xcshareddata/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
+*.xcodeproj/xcuserdata/* binary
+*.xcodeproj/xcshareddata/xcschemes/* binary
