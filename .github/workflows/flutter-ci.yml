@@ -34,8 +34,8 @@ jobs:
       - name: Run Flutter analyze
         run: flutter analyze --fatal-infos --fatal-warnings
         
-      - name: Run Flutter format
-        run: flutter format --set-exit-if-changed .
+      - name: Run Dart format
+        run: dart format --set-exit-if-changed .
         
       - name: Run Flutter test
         run: flutter test --coverage
