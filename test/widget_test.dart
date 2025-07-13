@@ -7,7 +7,7 @@ import 'package:expense_app/main.dart';
 // A test wrapper that provides the router and theme
 class TestApp extends StatelessWidget {
   final GoRouter router;
-  
+
   const TestApp({super.key, required this.router});
 
   @override
@@ -26,11 +26,11 @@ void main() {
   group('App Tests', () {
     testWidgets('App builds with correct theme', (tester) async {
       await tester.pumpWidget(const MyApp());
-      
+
       // Verify theme is applied
       final appBar = find.byType(AppBar);
       expect(appBar, findsOneWidget);
-      
+
       // Verify the app title
       expect(find.text('Expense Tracker'), findsOneWidget);
     });
@@ -56,7 +56,8 @@ void main() {
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const MyHomePage(title: 'Expense Tracker'),
+            builder: (context, state) =>
+                const MyHomePage(title: 'Expense Tracker'),
           ),
           GoRoute(
             path: '/expenses',
@@ -70,7 +71,7 @@ void main() {
 
       await tester.pumpWidget(TestApp(router: router));
       await tester.pumpAndSettle();
-      
+
       expect(find.text('Page not found'), findsOneWidget);
     });
 
@@ -80,13 +81,14 @@ void main() {
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const MyHomePage(title: 'Expense Tracker'),
+            builder: (context, state) =>
+                const MyHomePage(title: 'Expense Tracker'),
           ),
         ],
       );
 
       await tester.pumpWidget(TestApp(router: router));
-      
+
       expect(find.text('Welcome to Expense Tracker'), findsOneWidget);
     });
 
@@ -96,7 +98,8 @@ void main() {
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const MyHomePage(title: 'Expense Tracker'),
+            builder: (context, state) =>
+                const MyHomePage(title: 'Expense Tracker'),
           ),
           GoRoute(
             path: '/expenses',
@@ -106,18 +109,18 @@ void main() {
       );
 
       await tester.pumpWidget(TestApp(router: router));
-      
+
       // Initial page
       expect(find.text('Welcome to Expense Tracker'), findsOneWidget);
-      
+
       // Navigate to expenses
       await tester.tap(find.text('View Expenses'));
       await tester.pumpAndSettle();
-      
+
       // Verify navigation
       expect(find.text('Expenses'), findsOneWidget);
       expect(find.text('Expenses will be displayed here'), findsOneWidget);
-      
+
       // Test back navigation
       await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
@@ -146,18 +149,19 @@ void main() {
 
       // Build our app and trigger a frame
       await tester.pumpWidget(TestApp(router: router));
-      
+
       // Verify we're on the home page
       expect(find.text('Welcome to Expense Tracker'), findsOneWidget);
-      
+
       // Tap the button to navigate to expenses
       await tester.tap(find.text('View Expenses'));
       await tester.pumpAndSettle();
-      
+
       // Verify we've navigated to the expenses page
       expect(find.text('Expenses Page'), findsOneWidget);
     });
-    testWidgets('Displays welcome message and button', (WidgetTester tester) async {
+    testWidgets('Displays welcome message and button',
+        (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: MyHomePage(title: 'Expense Tracker'),
       ));
@@ -180,8 +184,6 @@ void main() {
     });
   });
 
-
-
   group('Expenses Page Tests', () {
     testWidgets('Displays expenses content', (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(
@@ -194,7 +196,5 @@ void main() {
       expect(find.text('Expenses will be displayed here'), findsOneWidget);
       expect(find.byIcon(Icons.arrow_back), findsOneWidget);
     });
-
-
   });
 }
