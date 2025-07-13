@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
           color: const Color(0xFF1C2022), // #1C2022 solid color
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: const Color.fromRGBO(0, 0, 0, 0.1),
               blurRadius: 22,
               offset: const Offset(0, -1),
             ),
@@ -70,7 +70,7 @@ class _MainPageState extends State<MainPage> {
               elevation: 0,
               type: BottomNavigationBarType.fixed,
               selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.white.withOpacity(0.7),
+              unselectedItemColor: const Color.fromRGBO(255, 255, 255, 0.7),
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
