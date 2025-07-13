@@ -13,9 +13,9 @@ flutter pub get
 echo "🔍 Running Flutter analyze..."
 flutter analyze --fatal-infos --fatal-warnings
 
-# 3. Run Flutter format check
+# 3. Run Dart format check
 echo "✨ Checking code formatting..."
-flutter format --set-exit-if-changed .
+dart format --set-exit-if-changed .
 
 # 4. Run tests
 echo "🧪 Running tests..."
