@@ -76,9 +76,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // This method is public for testing purposes
   void _navigateToExpenses() {
-    // Using GoRouter to navigate to the expenses page
-    context.go('/expenses');
+    if (context.mounted) {
+      context.go('/expenses');
+    }
   }
 
   @override
