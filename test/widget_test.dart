@@ -6,12 +6,14 @@ void main() {
   group('App Tests', () {
     testWidgets('App builds with correct title', (tester) async {
       await tester.pumpWidget(const MyApp());
-      expect(find.text('Expense Tracker'), findsNothing); // Title is in MaterialApp, not in the widget tree
+      expect(find.text('Expense Tracker'),
+          findsNothing); // Title is in MaterialApp, not in the widget tree
     });
   });
 
   group('MainPage Tests', () {
-    testWidgets('Displays bottom navigation bar with three items', (tester) async {
+    testWidgets('Displays bottom navigation bar with three items',
+        (tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: MainPage(),
       ));
@@ -29,7 +31,8 @@ void main() {
       expect(find.text('Transactions Page'), findsOneWidget);
     });
 
-    testWidgets('Switches between pages when bottom nav items are tapped', (tester) async {
+    testWidgets('Switches between pages when bottom nav items are tapped',
+        (tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: MainPage(),
       ));
@@ -42,7 +45,7 @@ void main() {
       // Tap Summary tab
       await tester.tap(find.byIcon(Icons.bar_chart));
       await tester.pumpAndSettle();
-      
+
       // Verify Summary page is shown
       expect(find.text('Transactions Page'), findsNothing);
       expect(find.text('Summary Page'), findsOneWidget);
@@ -51,7 +54,7 @@ void main() {
       // Tap Settings tab
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pumpAndSettle();
-      
+
       // Verify Settings page is shown
       expect(find.text('Transactions Page'), findsNothing);
       expect(find.text('Summary Page'), findsNothing);
@@ -60,7 +63,7 @@ void main() {
       // Tap Transactions tab
       await tester.tap(find.byIcon(Icons.receipt));
       await tester.pumpAndSettle();
-      
+
       // Verify Transactions page is shown again
       expect(find.text('Transactions Page'), findsOneWidget);
       expect(find.text('Summary Page'), findsNothing);
