@@ -37,6 +37,24 @@ A Flutter-based expense tracking application with a clean and intuitive user int
    flutter run
    ```
 
+## Development Setup
+
+### Git Hooks
+
+This project includes a pre-push Git hook that runs essential checks before allowing a push to the remote repository. The hook will:
+
+1. Check for uncommitted changes
+2. Run Flutter analyzer
+3. Check code formatting
+4. Run tests
+
+The hook is automatically configured when you clone the repository. If you need to manually set it up, run:
+
+```bash
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-push
+```
+
 ## CI/CD Pipeline
 
 This project uses GitHub Actions for continuous integration and deployment. The pipeline includes:

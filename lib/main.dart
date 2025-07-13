@@ -76,8 +76,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   void _navigateToExpenses() {
     // Using GoRouter to navigate to the expenses page
     context.go('/expenses');

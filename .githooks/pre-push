@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Exit on any error
+set -e
+
+echo "🚀 Running pre-push checks..."
+
+# 1. Get Flutter dependencies
+echo "📦 Getting Flutter dependencies..."
+flutter pub get
+
+# 2. Run Flutter analyze
+echo "🔍 Running Flutter analyze..."
+flutter analyze --fatal-infos --fatal-warnings
+
+# 3. Run Flutter format check
+echo "✨ Checking code formatting..."
+flutter format --set-exit-if-changed .
+
+# 4. Run tests
+echo "🧪 Running tests..."
+flutter test --coverage
+
+echo "✅ All pre-push checks passed!"
+echo "   Pushing to remote..."
+
+exit 0
