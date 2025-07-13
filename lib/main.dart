@@ -1,20 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
-// Configure routes
-final _router = GoRouter(
-  initialLocation: '/',
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const MyHomePage(title: 'Expense Tracker'),
-    ),
-    GoRoute(
-      path: '/expenses',
-      builder: (context, state) => const ExpensesPage(),
-    ),
-  ],
-);
 
 void main() {
   runApp(const MyApp());
@@ -25,87 +9,93 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Expense Tracker',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      routerConfig: _router,
+      home: const MainPage(),
     );
   }
 }
 
-// Expenses Page (temporary placeholder)
-class ExpensesPage extends StatelessWidget {
-  const ExpensesPage({super.key});
+// Main page with bottom navigation
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Expenses'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
-        ),
-      ),
-      body: const Center(
-        child: Text('Expenses will be displayed here'),
-      ),
-    );
-  }
+  State<MainPage> createState() => _MainPageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class _MainPageState extends State<MainPage> {
+  int _selectedIndex = 0;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  // List of pages to display
+  static final List<Widget> _pages = <Widget>[
+    const TransactionsPage(),
+    const SummaryPage(),
+    const SettingsPage(),
+  ];
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  // This method is public for testing purposes
-  void _navigateToExpenses() {
-    if (context.mounted) {
-      context.go('/expenses');
-    }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome to Expense Tracker',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _navigateToExpenses,
-              child: const Text('View Expenses'),
-            ),
-          ],
-        ),
+        child: _pages.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt),
+            label: 'Transactions',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Summary',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
+  }
+}
+
+// Placeholder pages
+class TransactionsPage extends StatelessWidget {
+  const TransactionsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Transactions Page'));
+  }
+}
+
+class SummaryPage extends StatelessWidget {
+  const SummaryPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Summary Page'));
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Settings Page'));
   }
 }
