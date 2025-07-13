@@ -48,9 +48,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _pages.elementAt(_selectedIndex),
-      ),
+      body: Center(child: _pages.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF1C2022), // #1C2022 solid color
@@ -111,10 +109,7 @@ class TransactionsPage extends StatelessWidget {
         ),
       ),
       child: const Center(
-        child: Text(
-          'Transactions Page',
-          style: TextStyle(color: Colors.white),
-        ),
+        child: Text('Transactions Page', style: TextStyle(color: Colors.white)),
       ),
     );
   }

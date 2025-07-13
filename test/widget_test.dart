@@ -6,17 +6,18 @@ void main() {
   group('App Tests', () {
     testWidgets('App builds with correct title', (tester) async {
       await tester.pumpWidget(const MyApp());
-      expect(find.text('Expense Tracker'),
-          findsNothing); // Title is in MaterialApp, not in the widget tree
+      expect(
+        find.text('Expense Tracker'),
+        findsNothing,
+      ); // Title is in MaterialApp, not in the widget tree
     });
   });
 
   group('MainPage Tests', () {
-    testWidgets('Displays bottom navigation bar with three items',
-        (tester) async {
-      await tester.pumpWidget(const MaterialApp(
-        home: MainPage(),
-      ));
+    testWidgets('Displays bottom navigation bar with three items', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const MaterialApp(home: MainPage()));
 
       // Verify bottom navigation bar is present
       final bottomNavBar = find.byType(BottomNavigationBar);
@@ -31,11 +32,10 @@ void main() {
       expect(find.text('Transactions Page'), findsOneWidget);
     });
 
-    testWidgets('Switches between pages when bottom nav items are tapped',
-        (tester) async {
-      await tester.pumpWidget(const MaterialApp(
-        home: MainPage(),
-      ));
+    testWidgets('Switches between pages when bottom nav items are tapped', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const MaterialApp(home: MainPage()));
 
       // Verify initial page is Transactions
       expect(find.text('Transactions Page'), findsOneWidget);
