@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
   runApp(const MyApp());
@@ -97,19 +98,141 @@ class _MainPageState extends State<MainPage> {
 // Placeholder pages
 class TransactionsPage extends StatelessWidget {
   const TransactionsPage({super.key});
+  
+  // Font family constant for consistent usage
+  static const String fontFamily = 'Sora';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF283339), Color(0xFF0C0F11)],
-        ),
+      color: const Color(0xFF0C0F11), // Dark background color
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFF1A1E1F), Color(0xFF0C0F11)],
+              ),
+            ),
+          ),
+          
+          // Main content - Centered with Stack
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Progress Items Container Image
+                    Image.asset(
+                      'assets/svg/Progress Items Container.png',
+                      width: 244.0,
+                      height: 192.0,
+                      fit: BoxFit.contain,
+                    ),
+                    
+                    const SizedBox(height: 24.0),
+                    
+                    // Main message
+                    Text(
+                      "Let's start your journey!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        fontFamily: fontFamily,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 8.0),
+                    
+                    // Subtitle
+                    Text(
+                      'Add your first transaction to start.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: const Color(0xFF8A8A8A),
+                        fontSize: 13.0,
+                        height: 1.5,
+                        fontFamily: fontFamily,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24.0),
+                    
+                    // Add expense button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(16.0),
+                          child: Ink(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.0),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xFFEFF2F6),
+                                  Color(0xFFDFDFDF),
+                                ],
+                                stops: [0.01, 1.0],
+                              ),
+                            ),
+                            child: Text(
+                              'Add expense',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color(0xFF151A1F),
+                                fontFamily: fontFamily,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                                height: 24.0 / 14.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      child: const Center(
-        child: Text('Transactions Page', style: TextStyle(color: Colors.white)),
+    );
+  }
+  
+  Widget _buildPlaceholderCard() {
+    return Container(
+      height: 80.0,
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1E1F),
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: const Color(0xFF2A2F31), width: 1.0),
+      ),
+      child: const Opacity(
+        opacity: 0.3,
+        child: Center(
+          child: Text(
+            'Transaction Card',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
