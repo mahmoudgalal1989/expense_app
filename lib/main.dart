@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
@@ -217,25 +216,26 @@ class TransactionsPage extends StatelessWidget {
     );
   }
   
-  Widget _buildPlaceholderCard() {
-    return Container(
-      height: 80.0,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1E1F),
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: const Color(0xFF2A2F31), width: 1.0),
-      ),
-      child: const Opacity(
-        opacity: 0.3,
-        child: Center(
-          child: Text(
-            'Transaction Card',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
+  // TODO: Implement transaction card widget
+  // Widget _buildPlaceholderCard() {
+  //   return Container(
+  //     height: 80.0,
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xFF1A1E1F),
+  //       borderRadius: BorderRadius.circular(12.0),
+  //       border: Border.all(color: const Color(0xFF2A2F31), width: 1.0),
+  //     ),
+  //     child: const Opacity(
+  //       opacity: 0.3,
+  //       child: Center(
+  //         child: Text(
+  //           'Transaction Card',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class SummaryPage extends StatelessWidget {
