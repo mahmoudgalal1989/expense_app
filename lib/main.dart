@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'theme/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,10 +53,10 @@ class _MainPageState extends State<MainPage> {
       body: Center(child: _pages.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1C2022), // #1C2022 solid color
+          color: AppColors.bottomNavBar,
           boxShadow: [
             BoxShadow(
-              color: const Color.fromRGBO(0, 0, 0, 0.1),
+              color: AppColors.shadow,
               blurRadius: 22,
               offset: const Offset(0, -1),
             ),
@@ -68,8 +69,8 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: Colors.white,
-              unselectedItemColor: const Color.fromRGBO(255, 255, 255, 0.7),
+              selectedItemColor: AppColors.textPrimary,
+              unselectedItemColor: AppColors.navBarUnselected,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
@@ -105,7 +106,7 @@ class TransactionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF0C0F11), // Dark background color
+      color: AppColors.backgroundDark,
       child: Stack(
         children: [
           // Background gradient
@@ -114,7 +115,7 @@ class TransactionsPage extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFF1A1E1F), Color(0xFF0C0F11)],
+                colors: AppColors.backgroundGradient,
               ),
             ),
           ),
@@ -156,7 +157,7 @@ class TransactionsPage extends StatelessWidget {
                       'Add your first transaction to start.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: const Color(0xFF8A8A8A),
+                        color: AppColors.textSecondary,
                         fontSize: 13.0,
                         height: 1.5,
                         fontFamily: fontFamily,
@@ -179,13 +180,13 @@ class TransactionsPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.0),
                               border: Border.all(
-                                color: Colors.white,
+                                color: AppColors.borderLight,
                                 width: 2.0,
                               ),
                               gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [Color(0xFFEFF2F6), Color(0xFFDFDFDF)],
+                                colors: AppColors.buttonGradient,
                                 stops: [0.01, 1.0],
                               ),
                             ),
@@ -193,7 +194,7 @@ class TransactionsPage extends StatelessWidget {
                               'Add expense',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: const Color(0xFF151A1F),
+                                color: AppColors.textDark,
                                 fontFamily: fontFamily,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
@@ -219,9 +220,9 @@ class TransactionsPage extends StatelessWidget {
   //   return Container(
   //     height: 80.0,
   //     decoration: BoxDecoration(
-  //       color: const Color(0xFF1A1E1F),
+  //       color: AppColors.cardBackground,
   //       borderRadius: BorderRadius.circular(12.0),
-  //       border: Border.all(color: const Color(0xFF2A2F31), width: 1.0),
+  //       border: Border.all(color: AppColors.divider, width: 1.0),
   //     ),
   //     child: const Opacity(
   //       opacity: 0.3,
