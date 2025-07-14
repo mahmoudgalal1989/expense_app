@@ -24,17 +24,17 @@ void main() {
   testWidgets('App builds and shows initial screen', (tester) async {
     // Build our app and trigger a frame with proper localization
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
+      const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en', ''), // English, no country code
+        supportedLocales: [
+          Locale('en'), // English, no country code
         ],
-        home: const app.TransactionsPage(),
+        home: app.TransactionsPage(),
       ),
     );
     

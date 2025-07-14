@@ -65,13 +65,13 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Center(child: _pages.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.bottomNavBar,
           boxShadow: [
             BoxShadow(
               color: AppColors.shadow,
               blurRadius: 22,
-              offset: const Offset(0, -1),
+              offset: Offset(0, -1),
             ),
           ],
         ),
@@ -154,7 +154,7 @@ class TransactionsPage extends StatelessWidget {
                     Text(
                       AppLocalizations.of(context)!.startJourney,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.w400,
@@ -169,7 +169,7 @@ class TransactionsPage extends StatelessWidget {
                     Text(
                       AppLocalizations.of(context)!.addFirstTransaction,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13.0,
                         height: 1.5,
@@ -206,7 +206,7 @@ class TransactionsPage extends StatelessWidget {
                             child: Text(
                               AppLocalizations.of(context)!.addExpense,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.textDark,
                                 fontFamily: fontFamily,
                                 fontSize: 14.0,
@@ -227,27 +227,6 @@ class TransactionsPage extends StatelessWidget {
       ),
     );
   }
-
-  // TODO: Implement transaction card widget
-  // Widget _buildPlaceholderCard() {
-  //   return Container(
-  //     height: 80.0,
-  //     decoration: BoxDecoration(
-  //       color: AppColors.cardBackground,
-  //       borderRadius: BorderRadius.circular(12.0),
-  //       border: Border.all(color: AppColors.divider, width: 1.0),
-  //     ),
-  //     child: const Opacity(
-  //       opacity: 0.3,
-  //       child: Center(
-  //         child: Text(
-  //           'Transaction Card',
-  //           style: TextStyle(color: Colors.white),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
 class SummaryPage extends StatelessWidget {
