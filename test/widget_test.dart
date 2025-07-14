@@ -28,8 +28,9 @@ void main() {
       expect(find.byIcon(Icons.bar_chart), findsOneWidget);
       expect(find.byIcon(Icons.settings), findsOneWidget);
 
-      // Verify initial page is Transactions
-      expect(find.text('Transactions Page'), findsOneWidget);
+      // Verify initial page shows the welcome message
+      expect(find.text("Let's start your journey!"), findsOneWidget);
+      expect(find.text('Add your first transaction to start.'), findsOneWidget);
     });
 
     testWidgets('Switches between pages when bottom nav items are tapped', (
@@ -37,8 +38,8 @@ void main() {
     ) async {
       await tester.pumpWidget(const MaterialApp(home: MainPage()));
 
-      // Verify initial page is Transactions
-      expect(find.text('Transactions Page'), findsOneWidget);
+      // Verify initial page is Transactions with the welcome message
+      expect(find.text("Let's start your journey!"), findsOneWidget);
       expect(find.text('Summary Page'), findsNothing);
       expect(find.text('Settings Page'), findsNothing);
 
@@ -47,7 +48,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify Summary page is shown
-      expect(find.text('Transactions Page'), findsNothing);
+      expect(find.text("Let's start your journey!"), findsNothing);
       expect(find.text('Summary Page'), findsOneWidget);
       expect(find.text('Settings Page'), findsNothing);
 
@@ -56,7 +57,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify Settings page is shown
-      expect(find.text('Transactions Page'), findsNothing);
+      expect(find.text("Let's start your journey!"), findsNothing);
       expect(find.text('Summary Page'), findsNothing);
       expect(find.text('Settings Page'), findsOneWidget);
 
@@ -64,8 +65,8 @@ void main() {
       await tester.tap(find.byIcon(Icons.receipt));
       await tester.pumpAndSettle();
 
-      // Verify Transactions page is shown again
-      expect(find.text('Transactions Page'), findsOneWidget);
+      // Verify Transactions page is shown again with welcome message
+      expect(find.text("Let's start your journey!"), findsOneWidget);
       expect(find.text('Summary Page'), findsNothing);
       expect(find.text('Settings Page'), findsNothing);
     });
