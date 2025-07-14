@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> {
 // Placeholder pages
 class TransactionsPage extends StatelessWidget {
   const TransactionsPage({super.key});
-  
+
   // Font family constant for consistent usage
   static const String fontFamily = 'Sora';
 
@@ -118,7 +118,7 @@ class TransactionsPage extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Main content - Centered with Stack
           SafeArea(
             child: Center(
@@ -133,9 +133,9 @@ class TransactionsPage extends StatelessWidget {
                       height: 192.0,
                       fit: BoxFit.contain,
                     ),
-                    
+
                     const SizedBox(height: 24.0),
-                    
+
                     // Main message
                     Text(
                       "Let's start your journey!",
@@ -148,9 +148,9 @@ class TransactionsPage extends StatelessWidget {
                         fontFamily: fontFamily,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8.0),
-                    
+
                     // Subtitle
                     Text(
                       'Add your first transaction to start.',
@@ -162,9 +162,9 @@ class TransactionsPage extends StatelessWidget {
                         fontFamily: fontFamily,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24.0),
-                    
+
                     // Add expense button
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -185,10 +185,7 @@ class TransactionsPage extends StatelessWidget {
                               gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xFFEFF2F6),
-                                  Color(0xFFDFDFDF),
-                                ],
+                                colors: [Color(0xFFEFF2F6), Color(0xFFDFDFDF)],
                                 stops: [0.01, 1.0],
                               ),
                             ),
@@ -216,7 +213,7 @@ class TransactionsPage extends StatelessWidget {
       ),
     );
   }
-  
+
   // TODO: Implement transaction card widget
   // Widget _buildPlaceholderCard() {
   //   return Container(
