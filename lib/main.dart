@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -63,7 +64,7 @@ class _MainPageState extends State<MainPage> {
         ),
         child: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
+            filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: BottomNavigationBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
