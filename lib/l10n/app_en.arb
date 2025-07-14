@@ -5,7 +5,6 @@
     "description": "The title of the application"
   },
   
-  // Navigation
   "transactions": "Transactions",
   "@transactions": {
     "description": "Label for the transactions tab"
@@ -19,7 +18,6 @@
     "description": "Label for the settings tab"
   },
   
-  // Transactions Page
   "transactionsPageTitle": "Transactions",
   "@transactionsPageTitle": {
     "description": "Title for the transactions page"
@@ -37,13 +35,11 @@
     "description": "Text for the add expense button"
   },
   
-  // Summary Page
   "summaryPageTitle": "Summary",
   "@summaryPageTitle": {
     "description": "Title for the summary page"
   },
   
-  // Settings Page
   "settingsPageTitle": "Settings",
   "@settingsPageTitle": {
     "description": "Title for the settings page"
