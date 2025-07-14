@@ -1,6 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'theme/app_colors.dart';
 
 void main() {
@@ -13,11 +16,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Expense Tracker',
+      title: AppLocalizations.of(context)!.appTitle,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      // Localization setup
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // English, no country code
+      ],
       home: const MainPage(),
     );
   }
@@ -72,18 +85,18 @@ class _MainPageState extends State<MainPage> {
               selectedItemColor: AppColors.textPrimary,
               unselectedItemColor: AppColors.navBarUnselected,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
-              items: const <BottomNavigationBarItem>[
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt),
-                  label: 'Transactions',
+                  icon: const Icon(Icons.receipt),
+                  label: AppLocalizations.of(context)!.transactions,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart),
-                  label: 'Summary',
+                  icon: const Icon(Icons.bar_chart),
+                  label: AppLocalizations.of(context)!.summary,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
+                  icon: const Icon(Icons.settings),
+                  label: AppLocalizations.of(context)!.settings,
                 ),
               ],
               currentIndex: _selectedIndex,
@@ -139,7 +152,7 @@ class TransactionsPage extends StatelessWidget {
 
                     // Main message
                     Text(
-                      "Let's start your journey!",
+                      AppLocalizations.of(context)!.startJourney,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -154,7 +167,7 @@ class TransactionsPage extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      'Add your first transaction to start.',
+                      AppLocalizations.of(context)!.addFirstTransaction,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.textSecondary,
@@ -191,7 +204,7 @@ class TransactionsPage extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              'Add expense',
+                              AppLocalizations.of(context)!.addExpense,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: AppColors.textDark,
@@ -242,7 +255,12 @@ class SummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Summary Page'));
+    return Center(
+      child: Text(
+        AppLocalizations.of(context)!.summaryPageTitle,
+        style: const TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    );
   }
 }
 
@@ -251,6 +269,11 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Settings Page'));
+    return Center(
+      child: Text(
+        AppLocalizations.of(context)!.settingsPageTitle,
+        style: const TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    );
   }
 }

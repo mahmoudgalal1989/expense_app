@@ -1,0 +1,51 @@
+{
+  "@@locale": "en",
+  "appTitle": "Expense Tracker",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  
+  // Navigation
+  "transactions": "Transactions",
+  "@transactions": {
+    "description": "Label for the transactions tab"
+  },
+  "summary": "Summary",
+  "@summary": {
+    "description": "Label for the summary tab"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Label for the settings tab"
+  },
+  
+  // Transactions Page
+  "transactionsPageTitle": "Transactions",
+  "@transactionsPageTitle": {
+    "description": "Title for the transactions page"
+  },
+  "startJourney": "Let's start your journey!",
+  "@startJourney": {
+    "description": "Welcome message on the transactions page"
+  },
+  "addFirstTransaction": "Add your first transaction to start.",
+  "@addFirstTransaction": {
+    "description": "Subtitle text prompting user to add their first transaction"
+  },
+  "addExpense": "Add expense",
+  "@addExpense": {
+    "description": "Text for the add expense button"
+  },
+  
+  // Summary Page
+  "summaryPageTitle": "Summary",
+  "@summaryPageTitle": {
+    "description": "Title for the summary page"
+  },
+  
+  // Settings Page
+  "settingsPageTitle": "Settings",
+  "@settingsPageTitle": {
+    "description": "Title for the settings page"
+  }
+}
