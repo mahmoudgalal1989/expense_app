@@ -101,15 +101,27 @@ class _MainPageState extends State<MainPage> {
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
               items: [
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.receipt),
+                  icon: SvgPicture.asset(
+                    _selectedIndex == 0
+                        ? 'assets/svg/Transactions_active.svg'
+                        : 'assets/svg/Transactions_inactive.svg',
+                  ),
                   label: AppLocalizations.of(context)!.transactions,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.bar_chart),
+                  icon: SvgPicture.asset(
+                    _selectedIndex == 1
+                        ? 'assets/svg/Summary_active.svg'
+                        : 'assets/svg/Summary_inactive.svg',
+                  ),
                   label: AppLocalizations.of(context)!.summary,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.settings),
+                  icon: SvgPicture.asset(
+                    _selectedIndex == 2
+                        ? 'assets/svg/Settings_active.svg'
+                        : 'assets/svg/Settings_inactive.svg',
+                  ),
                   label: AppLocalizations.of(context)!.settings,
                 ),
               ],

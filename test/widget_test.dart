@@ -52,7 +52,8 @@ void main() {
 
   testWidgets('Bottom navigation switches between pages', (tester) async {
     // Create a test app with the MainPage and proper localization
-    await tester.pumpWidget(createTestableWidget(const app.MainPage(title: 'Expense Tracker')));
+    await tester.pumpWidget(
+        createTestableWidget(const app.MainPage(title: 'Expense Tracker')));
     await tester.pumpAndSettle();
 
     // Get the localizations
