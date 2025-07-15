@@ -35,6 +35,15 @@
     "description": "Text for the add expense button"
   },
   
+  "date": "Date",
+  "@date": {
+    "description": "Label for date selection button"
+  },
+  "note": "Note",
+  "@note": {
+    "description": "Label for note selection button"
+  },
+  
   "summaryPageTitle": "Summary",
   "@summaryPageTitle": {
     "description": "Title for the summary page"

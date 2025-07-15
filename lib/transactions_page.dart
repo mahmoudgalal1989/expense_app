@@ -1,4 +1,5 @@
 import 'package:expense_app/theme/app_colors.dart';
+import 'add_expense_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -80,7 +81,14 @@ class TransactionsPage extends StatelessWidget {
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AddExpenseScreen(),
+                              ),
+                            );
+                          },
                           borderRadius: BorderRadius.circular(16.0),
                           child: Ink(
                             width: double.infinity,
