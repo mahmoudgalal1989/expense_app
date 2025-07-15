@@ -37,59 +37,68 @@ void main() {
         home: app.TransactionsPage(),
       ),
     );
-    
+
     // Wait for the app to finish building
     await tester.pumpAndSettle();
-    
+
     // Verify the welcome message is displayed
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    
+    final localizations =
+        await AppLocalizations.delegate.load(const Locale('en'));
+
     // Find the welcome message in the widget tree
-    expect(find.text(localizations.startJourney, skipOffstage: false), findsOneWidget);
+    expect(find.text(localizations.startJourney, skipOffstage: false),
+        findsOneWidget);
   });
 
   testWidgets('Bottom navigation switches between pages', (tester) async {
     // Create a test app with the MainPage and proper localization
     await tester.pumpWidget(createTestableWidget(const app.MainPage()));
     await tester.pumpAndSettle();
-    
+
     // Get the localizations
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    
+    final localizations =
+        await AppLocalizations.delegate.load(const Locale('en'));
+
     // Verify initial page shows the welcome message
-    expect(find.text(localizations.startJourney, skipOffstage: false), findsOneWidget);
-    expect(find.text(localizations.addFirstTransaction, skipOffstage: false), findsOneWidget);
+    expect(find.text(localizations.startJourney, skipOffstage: false),
+        findsOneWidget);
+    expect(find.text(localizations.addFirstTransaction, skipOffstage: false),
+        findsOneWidget);
 
     // Find and tap the Summary tab
     final summaryIcon = find.byIcon(Icons.bar_chart);
     await tester.tap(summaryIcon);
     await tester.pumpAndSettle();
-    
+
     // Verify we see the summary page content (using find.byType to be more specific)
     expect(find.byType(app.SummaryPage), findsOneWidget);
-    
+
     // The welcome message should not be visible in the summary page
-    expect(find.text(localizations.startJourney, skipOffstage: false), findsNothing);
+    expect(find.text(localizations.startJourney, skipOffstage: false),
+        findsNothing);
 
     // Find and tap the Settings tab
     final settingsIcon = find.byIcon(Icons.settings);
     await tester.tap(settingsIcon);
     await tester.pumpAndSettle();
-    
+
     // Verify we see the settings page content (using find.byType to be more specific)
     expect(find.byType(app.SettingsPage), findsOneWidget);
-    
+
     // The welcome message and summary should not be visible in settings
-    expect(find.text(localizations.startJourney, skipOffstage: false), findsNothing);
+    expect(find.text(localizations.startJourney, skipOffstage: false),
+        findsNothing);
     expect(find.byType(app.SummaryPage), findsNothing);
 
     // Find and tap the Transactions tab
     final transactionsIcon = find.byIcon(Icons.receipt);
     await tester.tap(transactionsIcon);
     await tester.pumpAndSettle();
-    
+
     // The welcome message should be visible again
-    expect(find.text(localizations.startJourney, skipOffstage: false), findsOneWidget);
-    expect(find.text(localizations.addFirstTransaction, skipOffstage: false), findsOneWidget);
+    expect(find.text(localizations.startJourney, skipOffstage: false),
+        findsOneWidget);
+    expect(find.text(localizations.addFirstTransaction, skipOffstage: false),
+        findsOneWidget);
   });
 }

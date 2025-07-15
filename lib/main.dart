@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'theme/app_colors.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppLocalizations.of(context)!.appTitle,
+      title: 'Expense Tracker', // Fallback title
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -31,14 +32,27 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', ''), // English, no country code
       ],
-      home: const MainPage(),
+      home: Builder(
+        builder: (context) {
+          // Initialize localization
+          final localizations = AppLocalizations.of(context);
+          return MainPage(
+            title: localizations?.appTitle ?? 'Expense Tracker',
+          );
+        },
+      ),
     );
   }
 }
 
 // Main page with bottom navigation
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final String title;
+
+  const MainPage({
+    super.key,
+    required this.title,
+  });
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -141,8 +155,8 @@ class TransactionsPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Progress Items Container Image
-                    Image.asset(
-                      'assets/svg/Progress Items Container.png',
+                    SvgPicture.asset(
+                      'assets/svg/Illustration from Figma.svg',
                       width: 244.0,
                       height: 192.0,
                       fit: BoxFit.contain,
@@ -152,7 +166,7 @@ class TransactionsPage extends StatelessWidget {
 
                     // Main message
                     Text(
-                      AppLocalizations.of(context)!.startJourney,
+                      AppLocalizations.of(context)?.startJourney ?? 'Let\'s start your journey!',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -167,7 +181,7 @@ class TransactionsPage extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      AppLocalizations.of(context)!.addFirstTransaction,
+                      AppLocalizations.of(context)?.addFirstTransaction ?? 'Add your first transaction to start.',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
@@ -204,7 +218,7 @@ class TransactionsPage extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              AppLocalizations.of(context)!.addExpense,
+                              AppLocalizations.of(context)?.addExpense ?? 'Add expense',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: AppColors.textDark,
