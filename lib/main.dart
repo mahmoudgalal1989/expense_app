@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'widgets/setting_item.dart';
 
 import 'theme/app_colors.dart';
 
@@ -332,7 +333,7 @@ class SettingsPage extends StatelessWidget {
                         letterSpacing: 0,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
 
                     // Main Settings Container
                     Container(
@@ -344,207 +345,137 @@ class SettingsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Currency Section
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 10),
-                                    SvgPicture.asset(
-                                      'assets/svg/settings_currency.svg',
-                                      color: Colors.white,
-                                      width: 36,
-                                      height: 36,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Currency',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Text(
-                                          'USD',
-                                          style: TextStyle(
-                                            color: AppColors.textSecondary,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-                              ],
+                          const SettingItem(
+                            title: 'Currency',
+                            subtitle: 'AED',
+                            svgAsset: 'assets/svg/settings_currency.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
                           ),
-                          const SizedBox(height: 1),
+                          Container(color: AppColors.divider, height: 0.5),
 
                           // Categories Section
-                          // _buildSettingItem(
-                          //   context,
-                          //   icon: SvgPicture.asset(
-                          //             'assets/svg/settings_categories.svg',
-                          //             color: Colors.white,
-                          //             width: 24,
-                          //             height: 24,
-                          //           ),,
-                          //   title: 'Categories',
-                          //   subtitle: '12 Categories',
-                          //   onTap: () {},
-                          // ),
-                          // const Divider(color: AppColors.divider),
+                          SettingItem(
+                            title: 'Categories',
+                            svgAsset: 'assets/svg/settings_categories.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
+                            onTap: () {},
+                          ),
+                          Container(color: AppColors.divider, height: 0.5),
 
                           // Accounts Section
-                          _buildSettingItem(
-                            context,
-                            icon: Icons.account_balance_wallet,
+                          SettingItem(
                             title: 'Accounts',
-                            subtitle: '2 Accounts',
+                            svgAsset: 'assets/svg/settings_account.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
                             onTap: () {},
                           ),
-                          const Divider(color: AppColors.divider),
+                          Container(color: AppColors.divider, height: 0.5),
 
                           // Reminder Section
-                          _buildSettingItem(
-                            context,
-                            icon: Icons.notifications,
+                          SettingItem(
                             title: 'Reminder',
-                            subtitle: 'Off',
+                            subtitle: 'Never',
+                            svgAsset: 'assets/svg/settings_remiders.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
                             onTap: () {},
                           ),
-                          const SizedBox(height: 24),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Erase Data Section
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.settingsContainerBg,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: SettingItem(
+                        title: 'Erase Data',
+                        svgAsset: 'assets/svg/settings_trash.svg',
+                        iconColor: Colors.white,
+                        textColor: Colors.white,
+                        subtitleColor: AppColors.textSecondary,
+                        arrowColor: Colors.white,
+                        onTap: () {},
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Feedback Section
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.settingsContainerBg,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        children: [
+                          SettingItem(
+                            title: 'Report a Bug',
+                            svgAsset: 'assets/svg/settings_bug.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
+                            onTap: () {},
+                          ),
+                          Container(color: AppColors.divider, height: 0.5),
+                          SettingItem(
+                            title: 'Feature Request',
+                            svgAsset: 'assets/svg/settings_feature.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
+                            onTap: () {},
+                          ),
+                          Container(color: AppColors.divider, height: 0.5),
+                          SettingItem(
+                            title: 'Rate on App Store',
+                            svgAsset: 'assets/svg/settings_star.svg',
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                            subtitleColor: AppColors.textSecondary,
+                            arrowColor: Colors.white,
+                            onTap: () {},
+                          ),
                         ],
                       ),
                     ),
 
-                    // Erase Data Section
-                    _buildSettingItem(
-                      context,
-                      icon: Icons.delete,
-                      title: 'Erase Data',
-                      subtitle: 'Delete all transactions',
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Feedback Section
-                    _buildSettingItem(
-                      context,
-                      icon: Icons.bug_report,
-                      title: 'Report a Bug',
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppColors.divider),
-
-                    _buildSettingItem(
-                      context,
-                      icon: Icons.lightbulb,
-                      title: 'Feature Request',
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppColors.divider),
-
-                    _buildSettingItem(
-                      context,
-                      icon: Icons.star,
-                      title: 'Rate on App Store',
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: 24),
-
                     // Info Section
-                    _buildInfoItem(
-                      context,
-                      title: 'Version',
-                      value: '1.0.0',
-                    ),
-                    _buildInfoItem(
-                      context,
-                      title: 'Made with ❤️ by',
-                      value: 'Your Name',
-                    ),
+                    // SettingItem(
+                    //   title: 'Version',
+                    //   subtitle: '1.0.0',
+                    //   svgAsset: 'assets/svg/info.svg',
+                    //   iconColor: Colors.white,
+                    //   textColor: Colors.white,
+                    //   subtitleColor: AppColors.textSecondary,
+                    //   arrowColor: Colors.white,
+                    // ),
+                    // SettingItem(
+                    //   title: 'Made with ❤️ by',
+                    //   subtitle: 'Your Name',
+                    //   svgAsset: 'assets/svg/heart.svg',
+                    //   iconColor: Colors.white,
+                    //   textColor: Colors.white,
+                    //   subtitleColor: AppColors.textSecondary,
+                    //   arrowColor: Colors.white,
+                    // ),
                   ],
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingItem(BuildContext context, {
-    required IconData icon,
-    required String title,
-    String? subtitle,
-    VoidCallback? onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  if (subtitle != null)
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoItem(BuildContext context, {
-    required String title,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
             ),
           ),
         ],
