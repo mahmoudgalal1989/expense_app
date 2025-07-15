@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -66,9 +67,9 @@ void main() {
     expect(find.text(localizations.addFirstTransaction, skipOffstage: false),
         findsOneWidget);
 
-    // Find and tap the Summary tab
-    final summaryIcon = find.byIcon(Icons.bar_chart);
-    await tester.tap(summaryIcon);
+    // Find and tap the Summary tab using its label
+    final summaryLabel = find.text(localizations.summary);
+    await tester.tap(summaryLabel);
     await tester.pumpAndSettle();
 
     // Verify we see the summary page content (using find.byType to be more specific)
@@ -78,9 +79,9 @@ void main() {
     expect(find.text(localizations.startJourney, skipOffstage: false),
         findsNothing);
 
-    // Find and tap the Settings tab
-    final settingsIcon = find.byIcon(Icons.settings);
-    await tester.tap(settingsIcon);
+    // Find and tap the Settings tab using its label
+    final settingsLabel = find.text(localizations.settings);
+    await tester.tap(settingsLabel);
     await tester.pumpAndSettle();
 
     // Verify we see the settings page content (using find.byType to be more specific)
@@ -91,9 +92,9 @@ void main() {
         findsNothing);
     expect(find.byType(app.SummaryPage), findsNothing);
 
-    // Find and tap the Transactions tab
-    final transactionsIcon = find.byIcon(Icons.receipt);
-    await tester.tap(transactionsIcon);
+    // Find and tap the Transactions tab using its label
+    final transactionsLabel = find.text(localizations.transactions);
+    await tester.tap(transactionsLabel);
     await tester.pumpAndSettle();
 
     // The welcome message should be visible again
