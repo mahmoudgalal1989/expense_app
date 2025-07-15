@@ -166,7 +166,8 @@ class TransactionsPage extends StatelessWidget {
 
                     // Main message
                     Text(
-                      AppLocalizations.of(context)?.startJourney ?? 'Let\'s start your journey!',
+                      AppLocalizations.of(context)?.startJourney ??
+                          'Let\'s start your journey!',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -181,7 +182,8 @@ class TransactionsPage extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      AppLocalizations.of(context)?.addFirstTransaction ?? 'Add your first transaction to start.',
+                      AppLocalizations.of(context)?.addFirstTransaction ??
+                          'Add your first transaction to start.',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
@@ -218,7 +220,8 @@ class TransactionsPage extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              AppLocalizations.of(context)?.addExpense ?? 'Add expense',
+                              AppLocalizations.of(context)?.addExpense ??
+                                  'Add expense',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: AppColors.textDark,
@@ -248,10 +251,30 @@ class SummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        AppLocalizations.of(context)!.summaryPageTitle,
-        style: const TextStyle(color: Colors.white, fontSize: 24),
+    return Container(
+      color: AppColors.backgroundDark,
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: AppColors.backgroundGradient,
+              ),
+            ),
+          ),
+          // Main content
+          SafeArea(
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.summaryPageTitle,
+                style: const TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -262,10 +285,28 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        AppLocalizations.of(context)!.settingsPageTitle,
-        style: const TextStyle(color: Colors.white, fontSize: 24),
+    return Container(
+      color: AppColors.backgroundDark,
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: AppColors.backgroundGradient,
+              ),
+            ),
+          ),
+          // Main content
+          Center(
+            child: Text(
+              AppLocalizations.of(context)!.settingsPageTitle,
+              style: const TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ),
+        ],
       ),
     );
   }
