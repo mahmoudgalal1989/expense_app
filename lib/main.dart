@@ -312,10 +312,239 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           // Main content
-          Center(
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title
+                    const SizedBox(height: 24),
+                    Text(
+                      AppLocalizations.of(context)!.settingsPageTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Sora',
+                        height: 32 / 25, // line-height: 32px
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+
+                    // Main Settings Container
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.settingsContainerBg,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Currency Section
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 10),
+                                    SvgPicture.asset(
+                                      'assets/svg/settings_currency.svg',
+                                      color: Colors.white,
+                                      width: 36,
+                                      height: 36,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Currency',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          'USD',
+                                          style: TextStyle(
+                                            color: AppColors.textSecondary,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                              ],
+                          ),
+                          const SizedBox(height: 1),
+
+                          // Categories Section
+                          // _buildSettingItem(
+                          //   context,
+                          //   icon: SvgPicture.asset(
+                          //             'assets/svg/settings_categories.svg',
+                          //             color: Colors.white,
+                          //             width: 24,
+                          //             height: 24,
+                          //           ),,
+                          //   title: 'Categories',
+                          //   subtitle: '12 Categories',
+                          //   onTap: () {},
+                          // ),
+                          // const Divider(color: AppColors.divider),
+
+                          // Accounts Section
+                          _buildSettingItem(
+                            context,
+                            icon: Icons.account_balance_wallet,
+                            title: 'Accounts',
+                            subtitle: '2 Accounts',
+                            onTap: () {},
+                          ),
+                          const Divider(color: AppColors.divider),
+
+                          // Reminder Section
+                          _buildSettingItem(
+                            context,
+                            icon: Icons.notifications,
+                            title: 'Reminder',
+                            subtitle: 'Off',
+                            onTap: () {},
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+                    ),
+
+                    // Erase Data Section
+                    _buildSettingItem(
+                      context,
+                      icon: Icons.delete,
+                      title: 'Erase Data',
+                      subtitle: 'Delete all transactions',
+                      onTap: () {},
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Feedback Section
+                    _buildSettingItem(
+                      context,
+                      icon: Icons.bug_report,
+                      title: 'Report a Bug',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppColors.divider),
+
+                    _buildSettingItem(
+                      context,
+                      icon: Icons.lightbulb,
+                      title: 'Feature Request',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppColors.divider),
+
+                    _buildSettingItem(
+                      context,
+                      icon: Icons.star,
+                      title: 'Rate on App Store',
+                      onTap: () {},
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Info Section
+                    _buildInfoItem(
+                      context,
+                      title: 'Version',
+                      value: '1.0.0',
+                    ),
+                    _buildInfoItem(
+                      context,
+                      title: 'Made with ❤️ by',
+                      value: 'Your Name',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingItem(BuildContext context, {
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 24),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (subtitle != null)
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoItem(BuildContext context, {
+    required String title,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
             child: Text(
-              AppLocalizations.of(context)!.settingsPageTitle,
-              style: const TextStyle(color: Colors.white, fontSize: 24),
+              title,
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
             ),
           ),
         ],

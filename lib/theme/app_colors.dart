@@ -5,6 +5,8 @@ class AppColors {
   static const Color backgroundDark = Color(0xFF0C0F11);
   static const Color backgroundLight = Color(0xFF1A1E1F);
   static const Color bottomNavBar = Color(0xFF1C2022);
+  static const Color backgroundBg8 = Color(0x14FFFFFF);  // 20% white opacity
+  static const Color settingsContainerBg = Color(0x21FFFFFF);
 
   // Text colors
   static const Color textPrimary = Colors.white;
