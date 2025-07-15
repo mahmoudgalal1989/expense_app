@@ -1,3 +1,6 @@
+import 'package:expense_app/settings_page.dart' as app;
+import 'package:expense_app/summary_page.dart' as app;
+import 'package:expense_app/transactions_page.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
