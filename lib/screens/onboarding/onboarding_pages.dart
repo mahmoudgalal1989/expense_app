@@ -103,8 +103,8 @@ class OnboardingPage1 extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: const Color.fromRGBO(0, 0, 0, 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              blurRadius: 10.0,
+              offset: const Offset(0.0, 4.0),
             ),
           ],
         ),
@@ -289,8 +289,8 @@ class OnboardingPage3 extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: const Color.fromRGBO(0, 0, 0, 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              blurRadius: 10.0,
+              offset: const Offset(0.0, 4.0),
             ),
           ],
         ),
@@ -335,8 +335,8 @@ class OnboardingPage4 extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: const Color.fromRGBO(0, 0, 0, 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              blurRadius: 10.0,
+              offset: const Offset(0.0, 4.0),
             ),
           ],
         ),
