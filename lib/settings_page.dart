@@ -1,10 +1,43 @@
 import 'package:expense_app/theme/app_colors.dart';
 import 'package:expense_app/widgets/setting_item.dart';
+import 'package:expense_app/currency_screen.dart';
+import 'package:expense_app/services/currency_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  String selectedCurrency = ''; // Will be loaded from storage
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedCurrency();
+  }
+
+  Future<void> _loadSelectedCurrency() async {
+    try {
+      final currency = await CurrencyService.getSelectedCurrency();
+      if (mounted) {
+        setState(() {
+          selectedCurrency = currency ?? 'USD'; // Default to USD if null
+        });
+      }
+    } catch (e) {
+      print('Error loading selected currency: $e');
+      if (mounted) {
+        setState(() {
+          selectedCurrency = 'USD'; // Default to USD on error
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +88,29 @@ class SettingsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Currency Section
-                          const SettingItem(
+                          SettingItem(
                             title: 'Currency',
-                            subtitle: 'AED',
+                            subtitle: selectedCurrency,
                             svgAsset: 'assets/svg/settings_currency.svg',
                             iconColor: Colors.white,
                             textColor: Colors.white,
                             subtitleColor: AppColors.textSecondary,
                             arrowColor: Colors.white,
+                            onTap: () async {
+                              final result = await Navigator.push<String>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CurrencyScreen(),
+                                ),
+                              );
+
+                              if (result != null && mounted) {
+                                setState(() {
+                                  selectedCurrency = result;
+                                });
+                                // The currency is already saved in the CurrencyScreen
+                              }
+                            },
                           ),
                           Container(color: AppColors.divider, height: 0.5),
 

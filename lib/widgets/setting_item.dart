@@ -4,24 +4,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SettingItem extends StatelessWidget {
   final String title;
   final String? subtitle;
-  final String svgAsset;
+  final Widget? leading;
+  final String? svgAsset;
   final VoidCallback? onTap;
   final Color? iconColor;
   final Color? textColor;
   final Color? subtitleColor;
   final Color? arrowColor;
+  final bool showTrailingArrow;
+  final Widget? trailing;
 
   const SettingItem({
     super.key,
     required this.title,
     this.subtitle,
-    required this.svgAsset,
+    this.leading,
+    this.svgAsset,
     this.onTap,
     this.iconColor,
     this.textColor,
     this.subtitleColor,
     this.arrowColor,
-  });
+    this.showTrailingArrow = true,
+    this.trailing,
+  }) : assert(leading != null || svgAsset != null, 'Either leading or svgAsset must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +40,16 @@ class SettingItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                SvgPicture.asset(
-                  svgAsset,
-                  width: 36,
-                  height: 36,
-                ),
-                const SizedBox(width: 12),
+                if (leading != null) 
+                  leading!,
+                if (svgAsset != null)
+                  SvgPicture.asset(
+                    svgAsset!,
+                    width: 36,
+                    height: 36,
+                  ),
+                if (leading != null || svgAsset != null) 
+                  const SizedBox(width: 12),
                 Text(
                   title,
                   style: TextStyle(
@@ -51,8 +61,7 @@ class SettingItem extends StatelessWidget {
                 ),
               ],
             ),
-            const Spacer(),
-            if (subtitle != null)
+            if (subtitle != null) ...[
               Text(
                 subtitle!,
                 textAlign: TextAlign.right,
@@ -64,11 +73,16 @@ class SettingItem extends StatelessWidget {
                   height: 20 / 13, // line-height: 20px
                 ),
               ),
-            SvgPicture.asset(
-              'assets/svg/Chevron Right.svg',
-              width: 24,
-              height: 24,
-            ),
+              const SizedBox(width: 8),
+            ],
+            if (trailing != null)
+              trailing!
+            else if (onTap != null && showTrailingArrow)
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: arrowColor ?? Colors.white.withOpacity(0.5),
+              ),
           ],
         ),
       ),
