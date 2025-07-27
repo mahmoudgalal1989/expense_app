@@ -23,7 +23,8 @@ class NotificationService {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: DarwinInitializationSettings(),
     );
@@ -78,7 +79,7 @@ class NotificationService {
 
   Future<void> cancelReminder() async {
     await _notificationsPlugin.cancel(0);
-    
+
     // Update preferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('reminder_enabled', false);

@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       // Onboarding completed
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_completed', true);
-      
+
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -65,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               OnboardingPage4(),
             ],
           ),
-          
+
           // Page indicator
           Positioned(
             bottom: 100,
@@ -84,7 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          
+
           // Back button (not shown on first page)
           if (_currentPage > 0)
             Positioned(
@@ -103,7 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
-          
+
           // Skip button (not shown on last page)
           if (_currentPage < _totalPages - 1)
             Positioned(

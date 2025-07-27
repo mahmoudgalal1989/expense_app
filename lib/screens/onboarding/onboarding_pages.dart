@@ -163,7 +163,8 @@ class OnboardingPage2 extends StatefulWidget {
 
 class _OnboardingPage2State extends State<OnboardingPage2> {
   final NotificationService _notificationService = NotificationService();
-  TimeOfDay _selectedTime = const TimeOfDay(hour: 21, minute: 0); // Default to 9 PM
+  TimeOfDay _selectedTime =
+      const TimeOfDay(hour: 21, minute: 0); // Default to 9 PM
   bool _isLoading = true;
 
   @override
@@ -240,7 +241,8 @@ class _OnboardingPage2State extends State<OnboardingPage2> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.notifications_none, color: Color(0xFF044C85)),
+                  const Icon(Icons.notifications_none,
+                      color: Color(0xFF044C85)),
                   const SizedBox(width: 8),
                   Text(
                     'Daily at ${_selectedTime.format(context)}',
@@ -278,8 +280,10 @@ class OnboardingPage3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingPage(
       title: 'Understand your spending',
-      subtitle: 'Analyze your breakdowns and see where your money goes each month.',
-      image: const SizedBox(height: 16), // Reduce space since chart takes more vertical space
+      subtitle:
+          'Analyze your breakdowns and see where your money goes each month.',
+      image: const SizedBox(
+          height: 16), // Reduce space since chart takes more vertical space
       extraContent: Container(
         margin: const EdgeInsets.only(top: 0),
         padding: const EdgeInsets.all(16),
@@ -324,8 +328,10 @@ class OnboardingPage4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingPage(
       title: 'Spot patterns, stay in control',
-      subtitle: 'Visualize your daily spending trends and identify areas to save.',
-      image: const SizedBox(height: 16), // Reduce space since chart takes more vertical space
+      subtitle:
+          'Visualize your daily spending trends and identify areas to save.',
+      image: const SizedBox(
+          height: 16), // Reduce space since chart takes more vertical space
       extraContent: Container(
         margin: const EdgeInsets.only(top: 0),
         padding: const EdgeInsets.all(16),
