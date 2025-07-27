@@ -1,3 +1,4 @@
+import 'package:expense_app/main_page.dart' as app;
 import 'package:expense_app/settings_page.dart' as app;
 import 'package:expense_app/summary_page.dart' as app;
 import 'package:expense_app/transactions_page.dart' as app;
@@ -55,8 +56,7 @@ void main() {
 
   testWidgets('Bottom navigation switches between pages', (tester) async {
     // Create a test app with the MainPage and proper localization
-    await tester.pumpWidget(
-        createTestableWidget(const app.MainPage(title: 'Expense Tracker')));
+    await tester.pumpWidget(createTestableWidget(const app.MainPage()));
     await tester.pumpAndSettle();
 
     // Get the localizations
