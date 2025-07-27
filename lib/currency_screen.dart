@@ -19,7 +19,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize currency lists
     mostUsedCurrencies = [
       {'code': 'USD', 'name': 'US Dollar', 'flag': '🇺🇸'},
@@ -37,7 +37,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       {'code': 'AUD', 'name': 'Australian Dollar', 'flag': '🇦🇺'},
       // Add more currencies as needed
     ];
-    
+
     _loadSelectedCurrency();
   }
 
@@ -51,26 +51,12 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
         });
       }
     } catch (e) {
-      print('Error loading selected currency: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // This will be called when the screen is about to be popped
-    ModalRoute.of(context)?.addScopedWillPopCallback(() async {
-      // Save the selected currency when back is pressed
-      if (selectedCurrency != null) {
-        await CurrencyService.setSelectedCurrency(selectedCurrency!);
-      }
-      return true; // Allow the back navigation
-    });
   }
 
   @override
@@ -85,11 +71,29 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
         ),
       );
     }
-    
+
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        // Save the selected currency when back is pressed
+        if (selectedCurrency != null) {
+          await CurrencyService.setSelectedCurrency(selectedCurrency!);
+        }
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: _buildScaffold(),
+    );
+  }
+
+  Widget _buildScaffold() {
     // Filter out most used currencies from all currencies
-    final otherCurrencies = allCurrencies.where(
-      (c) => !mostUsedCurrencies.any((muc) => muc['code'] == c['code'])
-    ).toList();
+    final otherCurrencies = allCurrencies
+        .where(
+            (c) => !mostUsedCurrencies.any((muc) => muc['code'] == c['code']))
+        .toList();
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDark,
@@ -97,11 +101,10 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
         title: const Text(
           'Select Currency',
           style: TextStyle(
-            color: Colors.white, 
-            fontSize: 18, 
-            fontWeight: FontWeight.w600, 
-            fontFamily: 'Sora'
-          ),
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Sora'),
         ),
         backgroundColor: AppColors.backgroundDark,
         elevation: 0,
@@ -122,29 +125,33 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   color: const Color(0xFF2A2A2A),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
                     const Icon(Icons.search, color: Colors.grey, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 14),
                         decoration: InputDecoration(
                           hintText: 'Search currency',
-                          hintStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
+                          hintStyle:
+                              TextStyle(color: Colors.grey[600], fontSize: 14),
                           border: InputBorder.none,
                           isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 8),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Most Used Currencies Section
               const Padding(
                 padding: EdgeInsets.only(left: 8.0, bottom: 12.0),
@@ -179,7 +186,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   itemBuilder: (context, index) {
                     final currency = mostUsedCurrencies[index];
                     final isSelected = currency['code'] == selectedCurrency;
-                    
+
                     return SettingItem(
                       title: '${currency['code']} - ${currency['name']}',
                       leading: Container(
@@ -199,7 +206,8 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                       onTap: () async {
                         setState(() => _isLoading = true);
                         try {
-                          await CurrencyService.setSelectedCurrency(currency['code']!);
+                          await CurrencyService.setSelectedCurrency(
+                              currency['code']!);
                           if (mounted) {
                             setState(() {
                               selectedCurrency = currency['code'];
@@ -207,7 +215,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                             });
                           }
                         } catch (e) {
-                          print('Error selecting currency: $e');
+                          // Error selecting currency
                           if (mounted) {
                             setState(() => _isLoading = false);
                           }
@@ -225,9 +233,9 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // All Other Currencies Section
               const Padding(
                 padding: EdgeInsets.only(left: 8.0, bottom: 12.0),
@@ -258,7 +266,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       itemBuilder: (context, index) {
         final currency = currencies[index];
         final isSelected = currency['code'] == selectedCurrency;
-        
+
         return Container(
           decoration: BoxDecoration(
             color: const Color(0xFF2A2A2A),
@@ -282,7 +290,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                     });
                   }
                 } catch (e) {
-                  print('Error selecting currency: $e');
+                  // Error selecting currency
                   if (mounted) {
                     setState(() => _isLoading = false);
                   }
@@ -290,7 +298,8 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
               },
               borderRadius: BorderRadius.circular(12.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 14.0),
                 child: Row(
                   children: [
                     // Flag
@@ -307,9 +316,9 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // Currency Code and Name
                     Expanded(
                       child: Column(
@@ -337,7 +346,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                         ],
                       ),
                     ),
-                    
+
                     // Checkmark if selected
                     if (isSelected)
                       const Icon(

@@ -19,10 +19,10 @@ class CurrencyService {
           await _prefs?.setString(_currencyKey, currencyCode) ?? false;
       if (success) {
       } else {
-        print('Failed to save currency: $currencyCode');
+        // Loaded currencies
       }
     } catch (e) {
-      print('Error saving currency: $e');
+      // Error loading currencies
     }
   }
 
@@ -30,10 +30,10 @@ class CurrencyService {
     try {
       await _ensureInitialized();
       final currency = _prefs?.getString(_currencyKey);
-      print('Retrieved currency from prefs: $currency');
+      // Loading currencies from assets: $currency');
       return currency;
     } catch (e) {
-      print('Error getting currency: $e');
+      // Error getting currency
       return null;
     }
   }
@@ -43,7 +43,7 @@ class CurrencyService {
       await _ensureInitialized();
       await _prefs?.remove(_currencyKey);
     } catch (e) {
-      print('Error clearing currency: $e');
+      // Error clearing currency
     }
   }
 }

@@ -30,7 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
         });
       }
     } catch (e) {
-      print('Error loading selected currency: $e');
+      // Theme changed
       if (mounted) {
         setState(() {
           selectedCurrency = 'USD'; // Default to USD on error

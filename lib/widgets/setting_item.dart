@@ -27,7 +27,8 @@ class SettingItem extends StatelessWidget {
     this.arrowColor,
     this.showTrailingArrow = true,
     this.trailing,
-  }) : assert(leading != null || svgAsset != null, 'Either leading or svgAsset must be provided');
+  }) : assert(leading != null || svgAsset != null,
+            'Either leading or svgAsset must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +41,14 @@ class SettingItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                if (leading != null) 
-                  leading!,
+                if (leading != null) leading!,
                 if (svgAsset != null)
                   SvgPicture.asset(
                     svgAsset!,
                     width: 36,
                     height: 36,
                   ),
-                if (leading != null || svgAsset != null) 
+                if (leading != null || svgAsset != null)
                   const SizedBox(width: 12),
                 Text(
                   title,
@@ -81,7 +81,10 @@ class SettingItem extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: arrowColor ?? Colors.white.withOpacity(0.5),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(red: 255, green: 255, blue: 255, alpha: 0.7),
               ),
           ],
         ),
