@@ -102,7 +102,7 @@ class OnboardingPage1 extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: const Color.fromRGBO(0, 0, 0, 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -288,7 +288,7 @@ class OnboardingPage3 extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: const Color.fromRGBO(0, 0, 0, 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -334,7 +334,7 @@ class OnboardingPage4 extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: const Color.fromRGBO(0, 0, 0, 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
