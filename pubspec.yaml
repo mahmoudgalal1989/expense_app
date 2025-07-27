@@ -30,7 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  equatable: ^2.0.5
   shared_preferences: ^2.2.2
+  get_it: ^7.6.7
+  dartz: ^0.10.1
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0  # For internationalization and message formatting
@@ -43,11 +46,17 @@ dependencies:
   cupertino_icons: ^1.0.8
   go_router: ^13.2.0  # For declarative routing
   flutter_native_splash: ^2.4.6
+  logger: ^2.0.2  # For logging
+  flutter_bloc: ^8.1.4  # For state management with BLoC pattern
+  bloc: ^8.1.2  # Core BLoC library
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   intl_utils: ^2.8.2  # For generating localization files
+  mocktail: ^1.0.3  # For mocking in tests
+  bloc_test: ^9.1.4  # For testing BLoCs
+  test: ^1.24.0  # Core test package
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -73,6 +82,8 @@ flutter:
   assets:
     - assets/svg/
     - assets/fonts/
+    - assets/data/currencies.json
+    - assets/flags/
     
   # Fonts configuration
   fonts:

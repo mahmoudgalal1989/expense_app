@@ -36,13 +36,13 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Center(child: _pages.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.bottomNavBar,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadow,
+              color: Theme.of(context).colorScheme.shadow,
               blurRadius: 22,
-              offset: Offset(0, -1),
+              offset: const Offset(0, -1),
             ),
           ],
         ),

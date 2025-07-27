@@ -1,4 +1,3 @@
-import 'package:expense_app/theme/app_colors.dart';
 import 'add_expense_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,18 +12,21 @@ class TransactionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backgroundDark,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
           // Background gradient
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: AppColors.backgroundGradient,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.secondary,
+                  ],
+                ),
               ),
-            ),
           ),
 
           // Main content - Centered with Stack
@@ -65,8 +67,8 @@ class TransactionsPage extends StatelessWidget {
                       AppLocalizations.of(context)?.addFirstTransaction ??
                           'Add your first transaction to start.',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 13.0,
                         height: 1.5,
                         fontFamily: fontFamily,
@@ -96,22 +98,25 @@ class TransactionsPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.0),
                               border: Border.all(
-                                color: AppColors.borderLight,
+                                color: Theme.of(context).colorScheme.outline,
                                 width: 2.0,
                               ),
-                              gradient: const LinearGradient(
+                              gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: AppColors.buttonGradient,
-                                stops: [0.01, 1.0],
+                                colors: [
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.secondary,
+                                ],
+                                stops: const [0.01, 1.0],
                               ),
                             ),
                             child: Text(
                               AppLocalizations.of(context)?.addExpense ??
                                   'Add expense',
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: AppColors.textDark,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontFamily: fontFamily,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,

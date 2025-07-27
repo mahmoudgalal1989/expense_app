@@ -1,0 +1,62 @@
+[
+  {
+    "code": "USD",
+    "isMostUsed": true,
+    "countryName": "United States Dollar",
+    "flagIconPath": "assets/flags/usd.png"
+  },
+  {
+    "code": "EUR",
+    "isMostUsed": true,
+    "countryName": "Euro",
+    "flagIconPath": "assets/flags/eur.png"
+  },
+  {
+    "code": "GBP",
+    "isMostUsed": true,
+    "countryName": "British Pound",
+    "flagIconPath": "assets/flags/gbp.png"
+  },
+  {
+    "code": "JPY",
+    "isMostUsed": true,
+    "countryName": "Japanese Yen",
+    "flagIconPath": "assets/flags/jpy.png"
+  },
+  {
+    "code": "AUD",
+    "isMostUsed": true,
+    "countryName": "Australian Dollar",
+    "flagIconPath": "assets/flags/aud.png"
+  },
+  {
+    "code": "CAD",
+    "isMostUsed": true,
+    "countryName": "Canadian Dollar",
+    "flagIconPath": "assets/flags/cad.png"
+  },
+  {
+    "code": "CHF",
+    "isMostUsed": true,
+    "countryName": "Swiss Franc",
+    "flagIconPath": "assets/flags/chf.png"
+  },
+  {
+    "code": "CNY",
+    "isMostUsed": true,
+    "countryName": "Chinese Yuan",
+    "flagIconPath": "assets/flags/cny.png"
+  },
+  {
+    "code": "AED",
+    "isMostUsed": false,
+    "countryName": "UAE Dirham",
+    "flagIconPath": "assets/flags/aed.png"
+  },
+  {
+    "code": "EGP",
+    "isMostUsed": false,
+    "countryName": "Egyptian Pound",
+    "flagIconPath": "assets/flags/egp.png"
+  }
+]

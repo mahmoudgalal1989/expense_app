@@ -53,10 +53,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF283339),
+      // Set background to transparent to avoid flash of white during transition
+      backgroundColor: Colors.transparent,
       body: Container(
         width: double.infinity,
         height: double.infinity,
+        // Match the native splash screen gradient
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -72,6 +74,10 @@ class _SplashScreenState extends State<SplashScreen> {
               'assets/svg/splash.svg',
               width: 200,
               height: 200,
+              // Ensure the logo is rendered with the correct blending
+              theme: const SvgTheme(
+                currentColor: Colors.white,
+              ),
             ),
           ),
         ),
