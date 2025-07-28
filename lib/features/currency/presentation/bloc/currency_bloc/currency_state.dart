@@ -8,9 +8,13 @@ abstract class CurrencyState extends Equatable {
   List<Object> get props => [];
 }
 
-class CurrencyInitial extends CurrencyState {}
+class CurrencyInitial extends CurrencyState {
+  const CurrencyInitial();
+}
 
-class CurrencyLoading extends CurrencyState {}
+class CurrencyLoading extends CurrencyState {
+  const CurrencyLoading();
+}
 
 class CurrenciesLoaded extends CurrencyState {
   final List<Currency> currencies;

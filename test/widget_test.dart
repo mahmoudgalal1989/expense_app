@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
+import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
+import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:expense_app/main_page.dart' as app;
 import 'package:expense_app/settings_page.dart' as app;
 import 'package:expense_app/summary_page.dart' as app;
@@ -14,44 +17,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockCurrencyBloc extends Mock implements CurrencyBloc {
-  final StreamController<CurrencyState> _stateController = StreamController<CurrencyState>.broadcast();
-  CurrencyState _currentState = CurrencyInitial();
+  final BehaviorSubject<CurrencyState> _stateController = BehaviorSubject<CurrencyState>.seeded(const CurrencyInitial());
+  
+  @override
+  CurrencyState get state => _stateController.value;
   
   @override
   Stream<CurrencyState> get stream => _stateController.stream;
   
   @override
-  CurrencyState get state => _currentState;
-  
-  void emit(CurrencyState state) {
-    _currentState = state;
-    _stateController.add(state);
-  }
-  
-  @override
   void add(CurrencyEvent event) {
     if (event is LoadCurrencies) {
-      emit(CurrencyLoading());
+      _stateController.add(CurrencyLoading());
       // Emit a state with some test currencies
-      final currencies = [
-        const Currency(
-          code: 'USD',
-          countryName: 'United States',
-          flagIconPath: 'assets/flags/us.png',
-          isMostUsed: true,
-          isSelected: true,
-        ),
-        const Currency(
-          code: 'EUR',
-          countryName: 'European Union',
-          flagIconPath: 'assets/flags/eu.png',
-          isMostUsed: true,
-          isSelected: false,
-        ),
-      ];
-      emit(CurrenciesLoaded(
+      final usd = const Currency(
+        code: 'USD',
+        countryName: 'United States',
+        flagIconPath: 'assets/flags/us.png',
+        isMostUsed: true,
+        isSelected: true,
+      );
+      final eur = const Currency(
+        code: 'EUR',
+        countryName: 'European Union',
+        flagIconPath: 'assets/flags/eu.png',
+        isMostUsed: true,
+        isSelected: false,
+      );
+      final currencies = [usd, eur];
+      _stateController.add(CurrenciesLoaded(
         currencies: currencies,
         mostUsedCurrencies: currencies.where((c) => c.isMostUsed).toList(),
+        selectedCurrency: usd,
       ));
     }
   }
