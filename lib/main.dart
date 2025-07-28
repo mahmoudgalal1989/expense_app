@@ -182,7 +182,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system, // Use system theme mode
+        themeMode: ThemeMode.dark, // Use system theme mode
         // Localization setup
         localizationsDelegates: const [
           AppLocalizations.delegate,

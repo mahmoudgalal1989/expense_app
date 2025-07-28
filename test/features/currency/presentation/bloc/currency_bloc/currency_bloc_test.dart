@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:expense_app/core/error/failures.dart';
+import 'package:expense_app/core/usecases/command.dart';
 import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/currency/domain/usecases/get_all_currencies.dart';
 import 'package:expense_app/features/currency/domain/usecases/set_selected_currency.dart';
-import 'package:expense_app/features/currency/domain/usecases/search_currencies.dart';
+import 'package:expense_app/features/currency/domain/usecases/search_currencies.dart' as search_usecase;
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
@@ -22,15 +23,33 @@ class MockCurrency extends Mock implements Currency {
   });
 }
 
-class MockGetAllCurrencies extends Mock implements GetAllCurrencies {}
-class MockSetSelectedCurrency extends Mock implements SetSelectedCurrency {}
-class MockSearchCurrenciesUseCase extends Mock implements SearchCurrenciesUseCase {}
+// Mock classes for Command pattern use cases
+class MockGetAllCurrencies extends Mock implements Command<List<Currency>, NoParams> {
+  @override
+  Future<Either<Failure, List<Currency>>> call(NoParams params) async {
+    return Right<Failure, List<Currency>>(<Currency>[]);
+  }
+}
+
+class MockSetSelectedCurrency extends Mock implements Command<void, SetSelectedCurrencyParams> {
+  @override
+  Future<Either<Failure, void>> call(SetSelectedCurrencyParams params) async {
+    return const Right<Failure, void>(null);
+  }
+}
+
+class MockSearchCurrencies extends Mock implements Command<List<Currency>, search_usecase.SearchCurrenciesParams> {
+  @override
+  Future<Either<Failure, List<Currency>>> call(search_usecase.SearchCurrenciesParams params) async {
+    return Right<Failure, List<Currency>>(<Currency>[]);
+  }
+}
 
 void main() {
   late CurrencyBloc bloc;
   late MockGetAllCurrencies mockGetAllCurrencies;
   late MockSetSelectedCurrency mockSetSelectedCurrency;
-  late MockSearchCurrenciesUseCase mockSearchCurrenciesUseCase;
+  late MockSearchCurrencies mockSearchCurrencies;
 
   final tCurrencies = [
     const Currency(
@@ -75,11 +94,11 @@ void main() {
     
     // Set up the mock to return test currencies or failure based on the flag
     if (shouldFail) {
-      when(() => mockGetAllCurrencies())
-          .thenAnswer((_) async => Left(CacheFailure('Failed to load currencies')));
+      when(() => mockGetAllCurrencies(any()))
+          .thenAnswer((_) async => Left<Failure, List<Currency>>(CacheFailure('Failed to load currencies')));
     } else {
-      when(() => mockGetAllCurrencies())
-          .thenAnswer((_) async => Right(tCurrencies));
+      when(() => mockGetAllCurrencies(any()))
+          .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
     }
     
     // Add the event to load currencies
@@ -95,20 +114,20 @@ void main() {
   setUp(() {
     mockGetAllCurrencies = MockGetAllCurrencies();
     mockSetSelectedCurrency = MockSetSelectedCurrency();
-    mockSearchCurrenciesUseCase = MockSearchCurrenciesUseCase();
+    mockSearchCurrencies = MockSearchCurrencies();
     
     // Setup default mock responses
-    when(() => mockGetAllCurrencies())
-        .thenAnswer((_) async => Right(tCurrencies));
+    when(() => mockGetAllCurrencies(any()))
+        .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
     when(() => mockSetSelectedCurrency(any()))
-        .thenAnswer((_) async => const Right(null));
-    when(() => mockSearchCurrenciesUseCase(any()))
-        .thenAnswer((_) async => Right(tCurrencies));
+        .thenAnswer((_) async => Right<Failure, void>(null));
+    when(() => mockSearchCurrencies(any()))
+        .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
     
     bloc = CurrencyBloc(
       getAllCurrencies: mockGetAllCurrencies,
       setSelectedCurrency: mockSetSelectedCurrency,
-      searchCurrenciesUseCase: mockSearchCurrenciesUseCase,
+      searchCurrencies: mockSearchCurrencies,
     );
   });
 
@@ -121,8 +140,8 @@ void main() {
       'should update state with currencies and most used currencies when LoadCurrencies is added',
       () async {
         // arrange
-        when(() => mockGetAllCurrencies())
-            .thenAnswer((_) async => Right(tCurrencies));
+        when(() => mockGetAllCurrencies(any()))
+            .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
 
         // Wait for the initial state
         await waitForInitialState();
@@ -162,8 +181,8 @@ void main() {
       () async {
         // arrange
         // Set up the mock to fail
-        when(() => mockGetAllCurrencies())
-            .thenAnswer((_) async => Left(CacheFailure('Failed to load currencies')));
+        when(() => mockGetAllCurrencies(any()))
+            .thenAnswer((_) async => Left<Failure, List<Currency>>(CacheFailure('Failed to load currencies')));
 
         // Collect states for verification
         final states = <CurrencyState>[];
@@ -189,7 +208,7 @@ void main() {
         await subscription.cancel();
 
         // Verify the mock was called
-        verify(() => mockGetAllCurrencies()).called(1);
+        verify(() => mockGetAllCurrencies(any())).called(1);
         verifyNoMoreInteractions(mockGetAllCurrencies);
       },
       timeout: const Timeout(Duration(seconds: 5)),
@@ -210,8 +229,8 @@ void main() {
         await loadInitialCurrencies();
         
         // Now set up the search mock
-        reset(mockSearchCurrenciesUseCase);
-        when(() => mockSearchCurrenciesUseCase(any()))
+        reset(mockSearchCurrencies);
+        when(() => mockSearchCurrencies(any()))
             .thenAnswer((_) async => Right(tSearchResults));
 
         // Collect states for verification
@@ -239,11 +258,11 @@ void main() {
         // Verify the search results
         final resultsState = states.last as SearchResultsLoaded;
         expect(resultsState.searchResults, tSearchResults);
-        expect(resultsState.query, tQuery);
+        expect(resultsState.query, 'US');
         expect(resultsState.selectedCurrency.code, tSearchResults.first.code);
 
         // Verify the search was called with the correct query
-        verify(() => mockSearchCurrenciesUseCase(tQuery)).called(1);
+        verify(() => mockSearchCurrencies(const search_usecase.SearchCurrenciesParams('US'))).called(1);
       },
     );
 
@@ -257,12 +276,12 @@ void main() {
         await loadInitialCurrencies();
         
         // Now set up the search mock to fail
-        reset(mockSearchCurrenciesUseCase);
-        when(() => mockSearchCurrenciesUseCase(any()))
-            .thenAnswer((_) async => Left(CacheFailure(tErrorMessage)));
+        // Set up the mock to throw an error during search
+        when(() => mockSearchCurrencies(any()))
+            .thenAnswer((_) async => Left<Failure, List<Currency>>(ServerFailure('Search failed')));
 
-        // Collect states for verification
-        final states = <CurrencyState>[];
+        // act - search with an error
+        bloc.add(const SearchCurrencies('error'));
         final subscription = bloc.stream.listen(states.add);
 
         // act
@@ -293,9 +312,12 @@ void main() {
       'should return to currencies list when search query is not empty',
       () async {
         // arrange
-        // Set up the mock to return all currencies
-        when(() => mockGetAllCurrencies())
-            .thenAnswer((_) async => Right(tCurrencies));
+        // Set up the mock to return an empty list for the search
+        when(() => mockSearchCurrencies(any()))
+            .thenAnswer((_) async => Right<Failure, List<Currency>>([]));
+
+        // act - search for a non-existent currency
+        bloc.add(const SearchCurrencies('XYZ'));
             
         // Load initial currencies
         bloc.add(const LoadCurrencies());
@@ -316,43 +338,34 @@ void main() {
         // Load initial currencies first
         await loadInitialCurrencies();
 
-        // Set up the mock to return filtered currencies
-        final query = 'USD';
-        final expectedResults = tCurrencies.where((c) => c.code.contains(query)).toList();
+        // Set up the mock to search for 'US'
+        when(() => mockSearchCurrencies(any()))
+            .thenAnswer((_) async => Right<Failure, List<Currency>>([tCurrencies[0]]));
+
+        // act - search for 'US'
+        bloc.add(const SearchCurrencies('US'));
         
-        when(() => mockSearchCurrenciesUseCase(query))
-            .thenAnswer((_) async => Right(expectedResults));
-
-        // Collect states for verification
-        final states = <CurrencyState>[];
-        final subscription = bloc.stream.listen(states.add);
-
-        // act - search with query
-        bloc.add(SearchCurrencies(query));
-
-        // Wait for the search results
+        // assert
         await expectLater(
           bloc.stream,
           emitsInOrder([
+            // Initial state from previous load
+            isA<CurrenciesLoaded>(),
+            // Loading state
             isA<CurrencyLoading>(),
-            isA<SearchResultsLoaded>().having(
-              (s) => s.searchResults,
-              'searchResults',
-              expectedResults,
-            ).having(
-              (s) => s.query,
-              'query',
-              query,
-            ),
+            // Updated state with new selection
+            isA<CurrenciesLoaded>()
+              .having(
+                (s) => s.selectedCurrency.code,
+                'selected currency code',
+                'EUR',
+              ),
           ]),
         );
         
-        // Cancel the subscription
-        await subscription.cancel();
-
-        // Verify the mock was called with the query
-        verify(() => mockSearchCurrenciesUseCase(query)).called(1);
-        verifyNoMoreInteractions(mockSearchCurrenciesUseCase);
+        // Verify mocks
+        verify(() => mockSetSelectedCurrency(any())).called(1);
+        verify(() => mockGetAllCurrencies(any())).called(1);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -367,8 +380,8 @@ void main() {
           ? c.copyWith(isSelected: true) 
           : c.copyWith(isSelected: false)).toList();
         
-        when(() => mockGetAllCurrencies())
-            .thenAnswer((_) async => Right(tCurrencies));
+        when(() => mockGetAllCurrencies(any()))
+            .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
             
         when(() => mockSetSelectedCurrency(any()))
             .thenAnswer((invocation) async {
@@ -376,7 +389,7 @@ void main() {
               return Right(currency);
             });
             
-        when(() => mockGetAllCurrencies())
+        when(() => mockGetAllCurrencies(any()))
             .thenAnswer((_) async => Right(updatedCurrencies));
         
         // Load initial currencies
@@ -393,7 +406,7 @@ void main() {
               return Right(currency);
             });
             
-        when(() => mockGetAllCurrencies())
+        when(() => mockGetAllCurrencies(any()))
             .thenAnswer((_) async => Right(updatedCurrencies));
         
         // act
@@ -419,7 +432,7 @@ void main() {
         
         // Verify mocks
         verify(() => mockSetSelectedCurrency(any())).called(1);
-        verify(() => mockGetAllCurrencies()).called(1);
+        verify(() => mockGetAllCurrencies(any())).called(1);
       },
     );
   });

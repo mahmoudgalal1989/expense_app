@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:expense_app/theme/app_colors.dart';
 
 class AppTheme with ChangeNotifier {
-  static bool _isDarkMode = true;
+  static bool _isDarkMode = false;
 
   static bool get isDarkMode => _isDarkMode;
 

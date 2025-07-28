@@ -59,8 +59,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.secondary,
+                      AppColors.backgroundGradient[0],
+                      AppColors.backgroundGradient[1],
                     ],
                   ),
                 ),

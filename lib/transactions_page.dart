@@ -1,3 +1,6 @@
+import 'package:expense_app/theme/app_colors.dart';
+import 'package:expense_app/theme/app_theme.dart';
+
 import 'add_expense_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,16 +20,16 @@ class TransactionsPage extends StatelessWidget {
         children: [
           // Background gradient
           Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary,
-                  ],
-                ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  AppColors.backgroundGradient[0],
+                  AppColors.backgroundGradient[1],
+                ],
               ),
+            ),
           ),
 
           // Main content - Centered with Stack
