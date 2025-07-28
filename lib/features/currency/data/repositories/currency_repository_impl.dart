@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expense_app/core/error/exceptions.dart';
@@ -32,24 +31,43 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
         throw CacheException('Failed to load currencies: $e');
       }
     }
-    return _cachedModels!.map((model) => model.toEntity()).toList();
+    
+    // Get the currently selected currency code from shared preferences
+    final selectedCurrencyCode = prefs.getString(_selectedCurrencyKey);
+    
+    // Convert models to entities and set isSelected based on the stored preference
+    return _cachedModels!.map((model) {
+      return model.toEntity().copyWith(
+        isSelected: model.code == selectedCurrencyCode,
+      );
+    }).toList();
   }
 
   @override
-  Future<List<Currency>> getMostUsedCurrencies() async {
-    final allCurrencies = await getAllCurrencies();
-    return allCurrencies.where((currency) => currency.isMostUsed).toList();
+  Future<List<Currency>> searchCurrencies(String query) async {
+    if (_cachedModels == null) {
+      await getAllCurrencies();
+    }
+    
+    if (_cachedModels == null) {
+      return [];
+    }
+
+    final lowercaseQuery = query.toLowerCase();
+    return _cachedModels!
+        .where((currency) =>
+            currency.code.toLowerCase().contains(lowercaseQuery) ||
+            currency.countryName.toLowerCase().contains(lowercaseQuery))
+        .map((model) => model.toEntity())
+        .toList();
   }
 
   @override
   Future<void> setSelectedCurrency(Currency currency) async {
-    await prefs.setString(_selectedCurrencyKey, currency.code);
-    
-    // Update the selected status in the cached models
-    _cachedModels = _cachedModels?.map((model) {
-      return model.copyWith(
-        isSelected: model.code == currency.code,
-      );
-    }).toList();
+    try {
+      await prefs.setString(_selectedCurrencyKey, currency.code);
+    } catch (e) {
+      throw CacheException('Failed to save selected currency');
+    }
   }
 }

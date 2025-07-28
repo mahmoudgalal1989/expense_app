@@ -6,14 +6,12 @@ class CurrencyModel extends Equatable {
   final bool isMostUsed;
   final String countryName;
   final String flagIconPath;
-  final bool isSelected;
 
   const CurrencyModel({
     required this.code,
     required this.isMostUsed,
     required this.countryName,
     required this.flagIconPath,
-    this.isSelected = false,
   });
 
   factory CurrencyModel.fromJson(Map<String, dynamic> json) {
@@ -21,8 +19,8 @@ class CurrencyModel extends Equatable {
       code: json['code'] as String,
       isMostUsed: json['isMostUsed'] as bool? ?? false,
       countryName: json['countryName'] as String,
-      flagIconPath: json['flagIconPath'] as String? ?? 'assets/flags/${(json['code'] as String).toLowerCase()}.png',
-      isSelected: json['isSelected'] as bool? ?? false,
+      flagIconPath: json['flagIconPath'] as String? ??
+          'assets/flags/${(json['code'] as String).toLowerCase()}.png',
     );
   }
 
@@ -31,7 +29,6 @@ class CurrencyModel extends Equatable {
         'isMostUsed': isMostUsed,
         'countryName': countryName,
         'flagIconPath': flagIconPath,
-        'isSelected': isSelected,
       };
 
   CurrencyModel copyWith({
@@ -39,20 +36,18 @@ class CurrencyModel extends Equatable {
     bool? isMostUsed,
     String? countryName,
     String? flagIconPath,
-    bool? isSelected,
   }) {
     return CurrencyModel(
       code: code ?? this.code,
       isMostUsed: isMostUsed ?? this.isMostUsed,
       countryName: countryName ?? this.countryName,
       flagIconPath: flagIconPath ?? this.flagIconPath,
-      isSelected: isSelected ?? this.isSelected,
     );
   }
 
   @override
-  List<Object?> get props => [code, isMostUsed, countryName, flagIconPath, isSelected];
-  
+  List<Object?> get props => [code, isMostUsed, countryName, flagIconPath];
+
   // Convert CurrencyModel to Currency entity
   Currency toEntity() {
     return Currency(
@@ -60,10 +55,9 @@ class CurrencyModel extends Equatable {
       isMostUsed: isMostUsed,
       countryName: countryName,
       flagIconPath: flagIconPath,
-      isSelected: isSelected,
     );
   }
-  
+
   // Create CurrencyModel from Currency entity
   factory CurrencyModel.fromEntity(Currency currency) {
     return CurrencyModel(
@@ -71,7 +65,6 @@ class CurrencyModel extends Equatable {
       isMostUsed: currency.isMostUsed,
       countryName: currency.countryName,
       flagIconPath: currency.flagIconPath,
-      isSelected: currency.isSelected,
     );
   }
 }

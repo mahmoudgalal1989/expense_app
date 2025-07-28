@@ -1,3 +1,5 @@
+import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
+import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
 import 'package:expense_app/theme/app_colors.dart';
 import 'package:expense_app/widgets/setting_item.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
@@ -14,13 +16,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String selectedCurrency = 'USD'; // Default to USD
+  String selectedCurrency = ''; // Default to empty
 
   @override
   void initState() {
     super.initState();
     // Load currencies when the page initializes
-    context.read<CurrencyBloc>().add(LoadCurrencies());
+    context.read<CurrencyBloc>().add(const LoadCurrencies());
   }
 
   @override
@@ -33,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
             orElse: () => state.currencies.firstWhere(
               (c) => c.code == selectedCurrency,
               orElse: () => state.currencies.firstWhere(
-                (c) => c.code == 'USD',
+                (c) => c.code == '',
                 orElse: () => state.currencies.first,
               ),
             ),
@@ -108,7 +110,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const CurrencyScreen(),
+                                      builder: (context) =>
+                                          const CurrencyScreen(),
                                     ),
                                   );
                                 },
@@ -148,7 +151,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_help.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey,
+                                subtitleColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.7) ??
+                                    Colors.grey,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement help center
@@ -163,7 +171,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_contact.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey,
+                                subtitleColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.7) ??
+                                    Colors.grey,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement contact us
@@ -178,7 +191,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_privacy.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey,
+                                subtitleColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.7) ??
+                                    Colors.grey,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement privacy policy
@@ -193,7 +211,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_terms.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey,
+                                subtitleColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.7) ??
+                                    Colors.grey,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement terms of service

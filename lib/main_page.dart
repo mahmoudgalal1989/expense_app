@@ -53,7 +53,7 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: AppColors.textPrimary,
+              selectedItemColor: AppColors.textPrimaryDark,
               unselectedItemColor: AppColors.navBarUnselected,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
               items: [

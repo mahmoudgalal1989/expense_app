@@ -1,4 +1,4 @@
-part of 'currency_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class CurrencyEvent extends Equatable {
   const CurrencyEvent();
@@ -22,4 +22,13 @@ class SelectCurrency extends CurrencyEvent {
 
 class LoadMostUsedCurrencies extends CurrencyEvent {
   const LoadMostUsedCurrencies();
+}
+
+class SearchCurrencies extends CurrencyEvent {
+  final String query;
+
+  const SearchCurrencies(this.query);
+
+  @override
+  List<Object> get props => [query];
 }

@@ -3,17 +3,17 @@ import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/currency/domain/repositories/currency_repository.dart';
 
-class SetSelectedCurrency {
+class SearchCurrenciesUseCase {
   final CurrencyRepository repository;
 
-  SetSelectedCurrency(this.repository);
+  SearchCurrenciesUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(Currency currency) async {
+  Future<Either<Failure, List<Currency>>> call(String query) async {
     try {
-      await repository.setSelectedCurrency(currency);
-      return const Right(null);
+      final results = await repository.searchCurrencies(query);
+      return Right(results);
     } catch (e) {
-      return const Left(CacheFailure('Failed to set selected currency'));
+      return const Left(CacheFailure('Failed to search currencies'));
     }
   }
 }

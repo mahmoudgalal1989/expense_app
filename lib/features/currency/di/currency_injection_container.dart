@@ -6,7 +6,7 @@ import '../data/repositories/currency_repository_impl.dart';
 import '../domain/repositories/currency_repository.dart';
 import '../domain/usecases/get_all_currencies.dart';
 import '../domain/usecases/set_selected_currency.dart';
-import '../domain/usecases/get_most_used_currencies.dart';
+import '../domain/usecases/search_currencies.dart';
 import '../presentation/bloc/currency_bloc/currency_bloc.dart';
 
 final getIt = GetIt.instance;
@@ -40,17 +40,17 @@ Future<void> initCurrencyFeature() async {
   getIt.registerLazySingleton(
     () => SetSelectedCurrency(getIt<CurrencyRepository>()),
   );
-  
+
   getIt.registerLazySingleton(
-    () => GetMostUsedCurrencies(getIt<CurrencyRepository>()),
+    () => SearchCurrenciesUseCase(getIt<CurrencyRepository>()),
   );
 
   // BLoC
   getIt.registerFactory(
     () => CurrencyBloc(
       getAllCurrencies: getIt<GetAllCurrencies>(),
-      getMostUsedCurrencies: getIt<GetMostUsedCurrencies>(),
       setSelectedCurrency: getIt<SetSelectedCurrency>(),
+      searchCurrenciesUseCase: getIt<SearchCurrenciesUseCase>(),
     ),
   );
 }

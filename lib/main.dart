@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/di/currency_injection_container.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
+import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
