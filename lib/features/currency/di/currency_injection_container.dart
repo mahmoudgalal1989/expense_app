@@ -1,8 +1,10 @@
+import 'package:expense_app/core/usecases/command.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/datasources/currency_local_data_source.dart';
 import '../data/repositories/currency_repository_impl.dart';
+import '../domain/entities/currency.dart';
 import '../domain/repositories/currency_repository.dart';
 import '../domain/usecases/get_all_currencies.dart';
 import '../domain/usecases/set_selected_currency.dart';
@@ -32,25 +34,26 @@ Future<void> initCurrencyFeature() async {
     ),
   );
 
-  // Use cases
-  getIt.registerLazySingleton(
+  // Use cases as Commands
+  getIt.registerLazySingleton<Command<List<Currency>, NoParams>>(
     () => GetAllCurrencies(getIt<CurrencyRepository>()),
   );
-  
-  getIt.registerLazySingleton(
+
+  getIt.registerLazySingleton<Command<void, SetSelectedCurrencyParams>>(
     () => SetSelectedCurrency(getIt<CurrencyRepository>()),
   );
 
-  getIt.registerLazySingleton(
-    () => SearchCurrenciesUseCase(getIt<CurrencyRepository>()),
+  getIt.registerLazySingleton<Command<List<Currency>, SearchCurrenciesParams>>(
+    () => SearchCurrencies(getIt<CurrencyRepository>()),
   );
 
   // BLoC
   getIt.registerFactory(
     () => CurrencyBloc(
-      getAllCurrencies: getIt<GetAllCurrencies>(),
-      setSelectedCurrency: getIt<SetSelectedCurrency>(),
-      searchCurrenciesUseCase: getIt<SearchCurrenciesUseCase>(),
+      getAllCurrencies: getIt<Command<List<Currency>, NoParams>>(),
+      setSelectedCurrency: getIt<Command<void, SetSelectedCurrencyParams>>(),
+      searchCurrencies:
+          getIt<Command<List<Currency>, SearchCurrenciesParams>>(),
     ),
   );
 }
