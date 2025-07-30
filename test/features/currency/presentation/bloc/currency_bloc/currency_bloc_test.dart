@@ -254,111 +254,55 @@ void main() {
     });
 
     test('should update selected currency when a valid currency is selected', () async {
-      print('Test started');
-      
-      // Print initial state
-      print('Initial state: ${testBloc.state}');
-      
       // First, ensure we have a valid CurrenciesLoaded state
       testBloc.add(const LoadCurrencies());
-      print('Added LoadCurrencies event');
-      
-      // Print all state changes for debugging
-      final subscription = testBloc.stream.listen((state) {
-        print('State changed to: $state');
-      });
       
       // Wait for the initial state to be loaded
-      print('Waiting for CurrenciesLoaded state...');
       final initialState = await testBloc.stream.firstWhere(
-        (state) {
-          final match = state is CurrenciesLoaded;
-          if (match) print('Found CurrenciesLoaded state: $state');
-          return match;
-        },
-        orElse: () {
-          print('No CurrenciesLoaded state found, current state: ${testBloc.state}');
-          return testBloc.state;
-        },
+        (state) => state is CurrenciesLoaded,
+        orElse: () => testBloc.state,
       );
       
       // Verify we have a valid initial state
-      print('Verifying initial state...');
       expect(initialState, isA<CurrenciesLoaded>());
       if (initialState is! CurrenciesLoaded) {
-        print('Test failed: Initial state is not CurrenciesLoaded');
-        return;
+        fail('Initial state is not CurrenciesLoaded');
       }
-      
-      print('Initial state verified: ${initialState.runtimeType}');
       
       // Find a currency to select (different from the currently selected one)
       final newCurrency = initialState.currencies.firstWhere(
         (c) => c.code != initialState.selectedCurrency.code,
-        orElse: () {
-          print('No different currency found, using first one');
-          return initialState.currencies.first;
-        },
+        orElse: () => initialState.currencies.first,
       );
-      
-      print('Selected new currency: ${newCurrency.code} (current: ${initialState.selectedCurrency.code})');
       
       // Set up the mock to return the updated currencies list
       when(() => mockGetAllCurrencies(any()))
-          .thenAnswer((_) async {
-            print('getAllCurrencies called, returning updated currencies');
-            return Right(updatedCurrencies);
-          });
+          .thenAnswer((_) async => Right(updatedCurrencies));
       
       // Set up the mock for setSelectedCurrency to handle SetSelectedCurrencyParams
       when(() => mockSetSelectedCurrency(any()))
-          .thenAnswer((invocation) async {
-            final params = invocation.positionalArguments[0] as SetSelectedCurrencyParams;
-            final currency = params.currency;
-            print('setSelectedCurrency called with: ${currency.code}');
-            return Right(null); // Return Right with void
-          });
+          .thenAnswer((_) async => Right(null));
       
       // Act - select a different currency
-      print('Dispatching SelectCurrency event for ${newCurrency.code}');
       testBloc.add(SelectCurrency(newCurrency.code));
       
       // Wait for the state to update
-      print('Waiting for state update with selected currency: ${newCurrency.code}');
       final state = await testBloc.stream.firstWhere(
-        (state) {
-          final match = state is CurrenciesLoaded && state.selectedCurrency.code == newCurrency.code;
-          if (match) print('Found matching state with selected currency: ${newCurrency.code}');
-          return match;
-        },
-        orElse: () {
-          print('No matching state found, current state: ${testBloc.state}');
-          return testBloc.state;
-        },
+        (state) => state is CurrenciesLoaded && state.selectedCurrency.code == newCurrency.code,
+        orElse: () => testBloc.state,
       );
 
-      // Print final state for debugging
-      print('Final state: $state');
-      
       // Assert - check final state
-      print('Verifying final state...');
       expect(state, isA<CurrenciesLoaded>());
       
       if (state is CurrenciesLoaded) {
-        print('Verifying selected currency is ${newCurrency.code}...');
         expect(state.selectedCurrency.code, newCurrency.code);
       } else {
-        print('Test failed: Expected CurrenciesLoaded but got ${state.runtimeType}');
         fail('Expected CurrenciesLoaded but got ${state.runtimeType}');
       }
       
       // Verify the setSelectedCurrency use case was called
-      print('Verifying setSelectedCurrency was called...');
       verify(() => mockSetSelectedCurrency(any())).called(1);
-      print('Test completed successfully');
-      
-      // Clean up
-      await subscription.cancel();
     }, timeout: const Timeout(Duration(seconds: 10)));
   });
 }
