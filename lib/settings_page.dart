@@ -103,8 +103,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 subtitle: selectedCurrency,
                                 svgAsset: 'assets/svg/settings_currency.svg',
                                 iconColor: Colors.white,
-                                textColor: Colors.white,
-                                subtitleColor: AppColors.textSecondary,
+                                textColor: AppColors.textPrimaryDark,
+                                subtitleColor: AppColors.textSecondaryLight,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   Navigator.push(
@@ -117,20 +117,80 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               ),
                               Container(
-                                color: Theme.of(context).dividerColor,
+                                color: AppColors.borderPrimaryDark,
                                 height: 1,
                               ),
                               // Theme Section
                               SettingItem(
-                                title: 'Theme',
-                                subtitle: 'System',
-                                svgAsset: 'assets/svg/settings_theme.svg',
+                                title: 'Categories',
+                                subtitle: '',
+                                svgAsset: 'assets/svg/settings_categories.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
                                 subtitleColor: AppColors.textSecondary,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement theme selection
+                                },
+                              ),
+                              Container(
+                                color: AppColors.borderPrimaryDark,
+                                height: 1,
+                              ),
+                              SettingItem(
+                                title: 'Accounts',
+                                subtitle: '',
+                                svgAsset: 'assets/svg/Accounts.svg',
+                                iconColor: Colors.white,
+                                textColor: Colors.white,
+                                subtitleColor: AppColors.textSecondary,
+                                arrowColor: Colors.white,
+                                onTap: () {
+                                  // TODO: Implement theme selection
+                                },
+                              ),
+                              Container(
+                                color: AppColors.borderPrimaryDark,
+                                height: 1,
+                              ),
+                              SettingItem(
+                                title: 'Reminder',
+                                subtitle: 'Never',
+                                svgAsset: 'assets/svg/settings_remiders.svg',
+                                iconColor: Colors.white,
+                                textColor: Colors.white,
+                                subtitleColor: AppColors.textSecondary,
+                                arrowColor: Colors.white,
+                                onTap: () {
+                                  // TODO: Implement theme selection
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: [
+                              SettingItem(
+                                title: 'Erase data',
+                                svgAsset: 'assets/svg/settings_trash.svg',
+                                iconColor: Colors.white,
+                                textColor: Colors.white,
+                                subtitleColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.7) ??
+                                    Colors.grey,
+                                arrowColor: Colors.white,
+                                onTap: () {
+                                  // TODO: Implement help center
                                 },
                               ),
                             ],
@@ -147,8 +207,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Column(
                             children: [
                               SettingItem(
-                                title: 'Help Center',
-                                svgAsset: 'assets/svg/settings_help.svg',
+                                title: 'Report a bug',
+                                svgAsset: 'assets/svg/settings_bug.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
                                 subtitleColor: Theme.of(context)
@@ -163,12 +223,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               ),
                               Container(
-                                color: Theme.of(context).dividerColor,
+                                color: AppColors.borderPrimaryDark,
                                 height: 1,
                               ),
                               SettingItem(
-                                title: 'Contact Us',
-                                svgAsset: 'assets/svg/settings_contact.svg',
+                                title: 'Feature request',
+                                svgAsset: 'assets/svg/settings_feature.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
                                 subtitleColor: Theme.of(context)
@@ -183,12 +243,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               ),
                               Container(
-                                color: Theme.of(context).dividerColor,
+                                color: AppColors.borderPrimaryDark,
                                 height: 1,
                               ),
                               SettingItem(
-                                title: 'Privacy Policy',
-                                svgAsset: 'assets/svg/settings_privacy.svg',
+                                title: 'Rate on App Store',
+                                svgAsset: 'assets/svg/settings_star.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
                                 subtitleColor: Theme.of(context)
@@ -200,26 +260,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement privacy policy
-                                },
-                              ),
-                              Container(
-                                color: Theme.of(context).dividerColor,
-                                height: 1,
-                              ),
-                              SettingItem(
-                                title: 'Terms of Service',
-                                svgAsset: 'assets/svg/settings_terms.svg',
-                                iconColor: Colors.white,
-                                textColor: Colors.white,
-                                subtitleColor: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color
-                                        ?.withOpacity(0.7) ??
-                                    Colors.grey,
-                                arrowColor: Colors.white,
-                                onTap: () {
-                                  // TODO: Implement terms of service
                                 },
                               ),
                             ],
