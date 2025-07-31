@@ -42,8 +42,8 @@ class TransactionsPage extends StatelessWidget {
                     // Progress Items Container Image
                     SvgPicture.asset(
                       'assets/svg/Illustration from Figma.svg',
-                      width: 244.0,
-                      height: 192.0,
+                      width: 343.0,
+                      height: 217.0,
                       fit: BoxFit.contain,
                     ),
 
