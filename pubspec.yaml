@@ -49,6 +49,7 @@ dependencies:
   logger: ^2.0.2  # For logging
   flutter_bloc: ^8.1.4  # For state management with BLoC pattern
   bloc: ^8.1.2  # Core BLoC library
+  firebase_core: ^2.24.2
 
 dev_dependencies:
   flutter_test:

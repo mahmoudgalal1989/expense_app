@@ -3,6 +3,7 @@ import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/di/currency_injection_container.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'firebase_options.dart';
 import 'theme/app_theme.dart';
 
 final logger = Logger(
@@ -36,6 +38,11 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       try {
+        // Initialize Firebase
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        
         // Initialize dependency injection
         await initCurrencyFeature();
 
