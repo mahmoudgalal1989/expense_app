@@ -32,20 +32,23 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocConsumer<CurrencyBloc, CurrencyState>(
       listener: (context, state) {
         if (state is CurrenciesLoaded) {
-          final selected = state.currencies.firstWhere(
-            (c) => c.isSelected,
-            orElse: () => state.currencies.firstWhere(
+          if (state.selectedCurrency.code.isNotEmpty) {
+            setState(() {
+              selectedCurrency = state.selectedCurrency.code;
+            });
+          } else {
+            final selected = state.currencies.firstWhere(
               (c) => c.code == selectedCurrency,
               orElse: () => state.currencies.firstWhere(
-                (c) => c.code == '',
+                (c) => c.isSelected,
                 orElse: () => state.currencies.first,
               ),
-            ),
-          );
-          if (mounted) {
-            setState(() {
-              selectedCurrency = selected.code;
-            });
+            );
+            if (mounted) {
+              setState(() {
+                selectedCurrency = selected.code;
+              });
+            }
           }
         }
       },
@@ -95,20 +98,20 @@ class _SettingsPageState extends State<SettingsPage> {
                               // Currency Section
                               SettingItem(
                                 title: 'Currency',
-                                subtitle: selectedCurrency,
+                                subtitle: selectedCurrency.isEmpty ? 'Select currency' : selectedCurrency,
                                 svgAsset: 'assets/svg/settings_currency.svg',
                                 iconColor: Colors.white,
                                 textColor: AppColors.textPrimaryDark,
                                 subtitleColor: AppColors.textSecondaryLight,
                                 arrowColor: Colors.white,
-                                onTap: () {
-                                  Navigator.push(
+                                onTap: () async {
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CurrencyScreen(),
+                                      builder: (context) => const CurrencyScreen(),
                                     ),
                                   );
+                                  // The BLoC listener will handle the update
                                 },
                               ),
                               const QuantoDivider(),

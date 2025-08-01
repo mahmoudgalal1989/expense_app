@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
 import 'package:expense_app/theme/app_colors.dart';
+import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
 import 'package:expense_app/widgets/setting_item.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:expense_app/widgets/quanto_divider.dart';
 
 class CurrencyScreen extends StatefulWidget {
   const CurrencyScreen({super.key});
@@ -16,33 +19,34 @@ class CurrencyScreen extends StatefulWidget {
 }
 
 class _CurrencyScreenState extends State<CurrencyScreen> {
-  // Controller for the search text field
-  final _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    // Load currencies when the screen is first opened
     context.read<CurrencyBloc>().add(const LoadCurrencies());
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _focusNode.dispose();
     _debounce?.cancel();
     super.dispose();
   }
 
   void _onSearchChanged(String query) {
-    // Cancel the previous timer if it exists
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-
-    // Set a new timer to debounce the search
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      setState(() {
-        // Rebuild the UI with filtered results
-      });
+      setState(() {});
     });
   }
 
@@ -52,27 +56,29 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       prefixText: currency.code,
       flagIcon: currency.flagIconPath,
       showTrailingArrow: false,
-      textColor: isSelected ? Theme.of(context).primaryColor : Colors.white,
-      prefixTextColor:
-          isSelected ? Theme.of(context).primaryColor : const Color(0xFF868A8D),
+      textColor: Colors.white,
+      prefixTextColor: const Color(0xFF868A8D),
       trailing: isSelected
-          ? Icon(
-              Icons.check_circle,
-              color: Theme.of(context).primaryColor,
-              size: 20,
+          ? SizedBox(
+              width: 16,
+              height: 16,
+              child: SvgPicture.asset(
+                'assets/svg/check_ic.svg',
+              ),
             )
           : null,
       onTap: () {
         if (!isSelected) {
+          // Update the selected currency in the BLoC
           context.read<CurrencyBloc>().add(SelectCurrency(currency.code));
-          Navigator.of(context).pop(currency);
+          // Navigate back to settings screen
+          Navigator.of(context).pop();
         }
       },
     );
   }
 
   Widget _buildScaffold(CurrencyState state) {
-    // Background widget to be reused
     final background = Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -86,8 +92,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       ),
     );
 
-    // Show loading state
-    if (state is CurrencyLoading) {
+    if (state is CurrencyLoading || state is CurrencyInitial) {
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Stack(
@@ -103,7 +108,6 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       );
     }
 
-    // Show error state
     if (state is CurrencyError) {
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -135,173 +139,197 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       );
     }
 
-    // Show initial state (empty state)
-    if (state is! CurrenciesLoaded || state.currencies.isEmpty) {
+    if (state is CurrenciesLoaded) {
+      final searchQuery = _searchController.text.toLowerCase();
+      final filteredMostUsed = state.currencies
+          .where((c) =>
+              c.isMostUsed &&
+              (c.countryName.toLowerCase().contains(searchQuery) ||
+                  c.code.toLowerCase().contains(searchQuery)))
+          .toList();
+
+      final filteredCurrencies = state.currencies
+          .where((c) =>
+              c.countryName.toLowerCase().contains(searchQuery) ||
+              c.code.toLowerCase().contains(searchQuery))
+          .toList();
+
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Stack(
           children: [
             background,
-            const Center(
-              child: Text(
-                'No currencies available',
-                style: TextStyle(color: Colors.white),
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      icon: SvgPicture.asset('assets/svg/back_btn.svg'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: QuantoText.h1(
+                      'Currency',
+                      color: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      focusNode: _focusNode,
+                      onChanged: _onSearchChanged,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Search currency',
+                        hintStyle: QuantoText.getTextStyle(
+                            'Body/B1-R', AppColors.textSecondaryDark),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, top: 8, bottom: 8, right: 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svg/search_ic.svg',
+                                color: _isFocused
+                                    ? AppColors.bgFgInvertedDark
+                                    : AppColors.dark300,
+                              ),
+                            ],
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.08),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: const BorderSide(
+                              color: AppColors.bgFgInvertedDark),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        if (filteredMostUsed.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8.0),
+                              child: QuantoText.bodyLarge(
+                                'Most Used',
+                                color: const Color(0xFF868A8D),
+                              ),
+                            ),
+                          ),
+                        if (filteredMostUsed.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: AppColors.opacity8,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                children: List.generate(filteredMostUsed.length,
+                                    (index) {
+                                  final currency = filteredMostUsed[index];
+                                  final isLast =
+                                      index == filteredMostUsed.length - 1;
+                                  return Column(
+                                    children: [
+                                      _buildCurrencyItem(
+                                        currency,
+                                        currency.code ==
+                                            state.selectedCurrency.code,
+                                      ),
+                                      if (!isLast) const QuantoDivider(),
+                                    ],
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        if (filteredCurrencies.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  16.0, 24.0, 16.0, 10.0),
+                              child: QuantoText.bodyLarge(
+                                'All Currencies',
+                                color: const Color(0xFF868A8D),
+                              ),
+                            ),
+                          ),
+                        SliverToBoxAdapter(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: AppColors.opacity8,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              children: List.generate(filteredCurrencies.length,
+                                  (index) {
+                                final currency = filteredCurrencies[index];
+                                final isLast =
+                                    index == filteredCurrencies.length - 1;
+                                return Column(
+                                  children: [
+                                    _buildCurrencyItem(
+                                      currency,
+                                      currency.code ==
+                                          state.selectedCurrency.code,
+                                    ),
+                                    if (!isLast) const QuantoDivider(),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                        if (filteredCurrencies.isEmpty &&
+                            filteredMostUsed.isEmpty)
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  'No currencies found for "$searchQuery"',
+                                  style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       );
     }
-
-    // Get the current search query
-    final searchQuery = _searchController.text.toLowerCase();
-
-    // Filter currencies based on search query
-    final filteredCurrencies = state.currencies.where((currency) {
-      if (searchQuery.isEmpty) return true;
-      return currency.code.toLowerCase().contains(searchQuery) ||
-          currency.countryName.toLowerCase().contains(searchQuery);
-    }).toList();
-
-    // Filter most used currencies based on search query
-    final filteredMostUsed = state.mostUsedCurrencies.where((currency) {
-      if (searchQuery.isEmpty) return true;
-      return currency.code.toLowerCase().contains(searchQuery) ||
-          currency.countryName.toLowerCase().contains(searchQuery);
-    }).toList();
-
-    return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: TextField(
-            controller: _searchController,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-            decoration: InputDecoration(
-              hintText: 'Search by code or country',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-              border: InputBorder.none,
-              suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear,
-                          color: Colors.white70, size: 20),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {
-                          // Rebuild with all currencies
-                        });
-                      },
-                    )
-                  : null,
-            ),
-            onChanged: _onSearchChanged,
-          ),
-          backgroundColor: Colors.black,
-          elevation: 0,
-          leading: IconButton(
-            icon:
-                const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-            onPressed: () => Navigator.of(context).pop(state.selectedCurrency),
-          ),
-        ),
-        body: Stack(
-          children: [
-            // Background gradient
-            background,
-            // Content
-            CustomScrollView(
-              slivers: [
-                // Most Used Currencies Section (only show if there are results)
-                if (filteredMostUsed.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'Most Used',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                      ),
-                    ),
-                  ),
-
-                if (filteredMostUsed.isNotEmpty)
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildCurrencyItem(
-                        filteredMostUsed[index],
-                        filteredMostUsed[index].code ==
-                            state.selectedCurrency.code,
-                      ),
-                      childCount: filteredMostUsed.length,
-                    ),
-                  ),
-
-                // Divider between most used and all currencies
-                if (filteredMostUsed.isNotEmpty &&
-                    filteredCurrencies.isNotEmpty)
-                  const SliverToBoxAdapter(
-                    child: Divider(
-                      height: 8,
-                      thickness: 1,
-                      color: Color(0xFF2A2D2E),
-                    ),
-                  ),
-
-                // All Currencies Section
-                if (filteredCurrencies.isNotEmpty && searchQuery.isEmpty)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-                      child: Text(
-                        'All Currencies',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                      ),
-                    ),
-                  ),
-
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildCurrencyItem(
-                      filteredCurrencies[index],
-                      filteredCurrencies[index].code ==
-                          state.selectedCurrency.code,
-                    ),
-                    childCount: filteredCurrencies.length,
-                  ),
-                ),
-
-                // Empty state when no results
-                if (filteredCurrencies.isEmpty && filteredMostUsed.isEmpty)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'No currencies found for "$searchQuery"',
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            )
-          ],
-        ));
+    return const SizedBox.shrink(); // Should not happen
   }
 
   @override
@@ -309,9 +337,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
     return BlocConsumer<CurrencyBloc, CurrencyState>(
       listener: (context, state) {
         if (state is CurrencyError) {
-          // Only show error if it's not already being shown
           if (!ScaffoldMessenger.of(context).mounted) return;
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),

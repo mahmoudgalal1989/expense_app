@@ -54,7 +54,7 @@ class SettingItem extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: Text(
                       flagIcon!,
-                      style: const TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   )
                 else if (leading != null)
