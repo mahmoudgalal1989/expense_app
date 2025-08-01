@@ -57,6 +57,12 @@ class QuantoText extends StatelessWidget {
       letterSpacing: 0,
     ),
 
+    'Body/B1-L': TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w300, // Regular
+      height: 20.0 / 13.0, // line-height: 20px
+      letterSpacing: 0,
+    ),
     // Body Styles - Regular
     'Body/B1-R': TextStyle(
       fontSize: 13,
