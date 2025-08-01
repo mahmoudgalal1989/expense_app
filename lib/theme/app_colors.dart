@@ -205,7 +205,7 @@ class AppColors {
 
   // ===== Gradients =====
   static const List<Color> backgroundGradient = [
-    Color(0xFF1A1E1F),
+    Color(0xFF283339),
     Color(0xFF0C0F11),
   ];
 

@@ -1,3 +1,5 @@
+import 'package:expense_app/theme/app_colors.dart';
+import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -80,14 +82,10 @@ class SettingItem extends StatelessWidget {
                     ),
                   ),
                 if (title.isNotEmpty)
-                  Text(
+                  QuantoText(
                     title,
-                    style: TextStyle(
-                      color: textColor ?? Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Sora',
-                    ),
+                    styleVariant: 'Body/B1-R',
+                    color: textColor ?? Colors.white,
                   ),
               ],
             ),
@@ -95,16 +93,11 @@ class SettingItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (subtitle != null)
-                  Text(
+                  QuantoText(
                     subtitle!,
+                    styleVariant: 'Body/B1-R',
+                    color: AppColors.textSecondaryDark,
                     textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: subtitleColor ?? const Color(0xFF868A8D),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Sora',
-                      height: 20 / 13, // line-height: 20px
-                    ),
                   ),
                 if (trailing != null)
                   trailing!

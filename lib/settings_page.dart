@@ -2,6 +2,8 @@ import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/cu
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
 import 'package:expense_app/theme/app_colors.dart';
 import 'package:expense_app/widgets/setting_item.dart';
+import 'package:expense_app/widgets/quanto_divider.dart';
+import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/screens/currency_screen.dart';
 import 'package:flutter/material.dart';
@@ -74,24 +76,17 @@ class _SettingsPageState extends State<SettingsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Title
-                        const SizedBox(height: 24),
-                        Text(
+                        const SizedBox(height: 40),
+                        QuantoText.h1(
                           AppLocalizations.of(context)!.settingsPageTitle,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Sora',
-                            height: 32 / 25, // line-height: 32px
-                            letterSpacing: 0,
-                          ),
+                          color: Colors.white,
                         ),
                         const SizedBox(height: 24),
 
                         // Main Settings Container
                         Container(
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
+                            color: AppColors.opacity8,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
@@ -116,10 +111,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   );
                                 },
                               ),
-                              Container(
-                                color: AppColors.borderPrimaryDark,
-                                height: 1,
-                              ),
+                              const QuantoDivider(),
                               // Theme Section
                               SettingItem(
                                 title: 'Categories',
@@ -133,10 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   // TODO: Implement theme selection
                                 },
                               ),
-                              Container(
-                                color: AppColors.borderPrimaryDark,
-                                height: 1,
-                              ),
+                              const QuantoDivider(),
                               SettingItem(
                                 title: 'Accounts',
                                 subtitle: '',
@@ -149,10 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   // TODO: Implement theme selection
                                 },
                               ),
-                              Container(
-                                color: AppColors.borderPrimaryDark,
-                                height: 1,
-                              ),
+                              const QuantoDivider(),
                               SettingItem(
                                 title: 'Reminder',
                                 subtitle: 'Never',
@@ -172,7 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                         Container(
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
+                            color: AppColors.opacity8,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
@@ -201,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         // Support Section
                         Container(
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
+                            color: AppColors.opacity8,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
@@ -222,10 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   // TODO: Implement help center
                                 },
                               ),
-                              Container(
-                                color: AppColors.borderPrimaryDark,
-                                height: 1,
-                              ),
+                              const QuantoDivider(),
                               SettingItem(
                                 title: 'Feature request',
                                 svgAsset: 'assets/svg/settings_feature.svg',
@@ -242,10 +225,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   // TODO: Implement contact us
                                 },
                               ),
-                              Container(
-                                color: AppColors.borderPrimaryDark,
-                                height: 1,
-                              ),
+                              const QuantoDivider(),
                               SettingItem(
                                 title: 'Rate on App Store',
                                 svgAsset: 'assets/svg/settings_star.svg',
@@ -268,21 +248,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         const SizedBox(height: 16),
 
                         // App Info Section
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                        Center(
                           child: Column(
                             children: [
-                              SettingItem(
-                                title: 'App Version',
-                                subtitle: '1.0.0',
-                                svgAsset: 'assets/svg/settings_version.svg',
-                                iconColor: Colors.white,
-                                textColor: Colors.white,
-                                subtitleColor: AppColors.textSecondary,
-                                arrowColor: Colors.white,
+                              QuantoText(
+                                'Version 1.0.0',
+                                styleVariant: 'Body/B1-R',
+                                color: AppColors.textSecondaryDark,
+                              ),
+                              const SizedBox(height: 16),
+                              RichText(
+                                text: TextSpan(
+                                  style: QuantoText.getTextStyle(
+                                      'Body/B1-R', AppColors.textSecondaryDark),
+                                  children: const <TextSpan>[
+                                    TextSpan(text: 'Made with '),
+                                    TextSpan(
+                                        text: '❤️',
+                                        style: TextStyle(
+                                            color: Color(0xFFF44336))),
+                                    TextSpan(text: ' by Alejandro Ausejo'),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

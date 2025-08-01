@@ -28,7 +28,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:20867294289:android:ba0a62bfd0392a55b48470",
         "android_client_info": {
-          "package_name": "com.example.expense_app"
+          "package_name": "app.quanto.quanto"
         }
       },
       "oauth_client": [],
