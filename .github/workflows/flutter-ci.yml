@@ -24,7 +24,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.19.6'  # Match local Flutter version
+          flutter-version: '3.29.2'  # Match local Flutter version
           
       - name: Run Flutter doctor
         run: flutter doctor -v
