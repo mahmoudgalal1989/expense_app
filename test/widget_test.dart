@@ -28,16 +28,16 @@ class MockCurrencyBloc extends Mock implements CurrencyBloc {
   @override
   void add(CurrencyEvent event) {
     if (event is LoadCurrencies) {
-      _stateController.add(CurrencyLoading());
+      _stateController.add(const CurrencyLoading());
       // Emit a state with some test currencies
-      final usd = const Currency(
+      const usd = Currency(
         code: 'USD',
         countryName: 'United States',
         flagIconPath: 'assets/flags/us.png',
         isMostUsed: true,
         isSelected: true,
       );
-      final eur = const Currency(
+      const eur = Currency(
         code: 'EUR',
         countryName: 'European Union',
         flagIconPath: 'assets/flags/eu.png',
@@ -65,7 +65,7 @@ Widget createTestableWidgetWithDependencies(Widget child) {
   return MultiBlocProvider(
     providers: [
       BlocProvider<CurrencyBloc>(
-        create: (context) => MockCurrencyBloc()..add(LoadCurrencies()),
+        create: (context) => MockCurrencyBloc()..add(const LoadCurrencies()),
       ),
     ],
     child: MaterialApp(

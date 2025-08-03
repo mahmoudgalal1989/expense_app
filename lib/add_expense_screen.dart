@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -153,7 +150,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: category['selected'] == true
-                                      ? Theme.of(context).colorScheme.surfaceVariant
+                                      ? Theme.of(context).colorScheme.surfaceContainerHighest
                                       : Theme.of(context).scaffoldBackgroundColor,
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
@@ -187,7 +184,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: moreButton['selected'] == true
-                                ? Theme.of(context).colorScheme.surfaceVariant
+                                ? Theme.of(context).colorScheme.surfaceContainerHighest
                                 : Theme.of(context).scaffoldBackgroundColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
@@ -267,7 +264,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         child: ElevatedButton(
           onPressed: () => _onNumberPressed(number),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
             foregroundColor: Colors.white,
             padding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(

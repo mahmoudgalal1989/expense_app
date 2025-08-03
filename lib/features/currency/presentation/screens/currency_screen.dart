@@ -192,15 +192,17 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                             children: [
                               SvgPicture.asset(
                                 'assets/svg/search_ic.svg',
-                                color: _isFocused
-                                    ? AppColors.bgFgInvertedDark
-                                    : AppColors.dark300,
+                                colorFilter: ColorFilter.mode(
+                                    _isFocused
+                                        ? AppColors.bgFgInvertedDark
+                                        : AppColors.dark300,
+                                    BlendMode.srcIn),
                               ),
                             ],
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white.withOpacity(0.08),
+                        fillColor: AppColors.opacity8,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 14, horizontal: 16),
                         enabledBorder: OutlineInputBorder(

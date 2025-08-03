@@ -79,7 +79,7 @@ void main() {
     when(() => mockGetAllCurrencies(any()))
         .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
     when(() => mockSetSelectedCurrency(any()))
-        .thenAnswer((_) async => Right<Failure, void>(null));
+        .thenAnswer((_) async => const Right<Failure, void>(null));
     when(() => mockSearchCurrencies(any()))
         .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
   }
@@ -134,7 +134,7 @@ void main() {
         
         // Set up the mock to fail
         when(() => mockGetAllCurrencies(any()))
-            .thenAnswer((_) async => Left<Failure, List<Currency>>(CacheFailure('Failed to load')));
+            .thenAnswer((_) async => const Left<Failure, List<Currency>>(CacheFailure('Failed to load')));
 
         // act - load currencies (should fail)
         testBloc.add(const LoadCurrencies());
@@ -207,7 +207,7 @@ void main() {
       const tErrorMessage = 'Search failed';
       
       when(() => mockSearchCurrencies(any()))
-          .thenAnswer((_) async => Left<Failure, List<Currency>>(ServerFailure(tErrorMessage)));
+          .thenAnswer((_) async => const Left<Failure, List<Currency>>(ServerFailure(tErrorMessage)));
 
       // Wait for initial state to be loaded
       await testBloc.stream.firstWhere((state) => state is CurrenciesLoaded);
@@ -243,10 +243,7 @@ void main() {
           .thenAnswer((_) async => Right<Failure, List<Currency>>(tCurrencies));
           
       when(() => mockSetSelectedCurrency(any()))
-          .thenAnswer((invocation) async {
-            final currency = invocation.positionalArguments[0] as Currency;
-            return Right(currency);
-          });
+          .thenAnswer((_) async => const Right(null));
     });
     
     tearDown(() async {
@@ -281,7 +278,7 @@ void main() {
       
       // Set up the mock for setSelectedCurrency to handle SetSelectedCurrencyParams
       when(() => mockSetSelectedCurrency(any()))
-          .thenAnswer((_) async => Right(null));
+          .thenAnswer((_) async => const Right(null));
       
       // Act - select a different currency
       testBloc.add(SelectCurrency(newCurrency.code));
@@ -303,6 +300,6 @@ void main() {
       
       // Verify the setSelectedCurrency use case was called
       verify(() => mockSetSelectedCurrency(any())).called(1);
-    }, timeout: const Timeout(Duration(seconds: 10)));
+        }, timeout: const Timeout(Duration(seconds: 10)));
   });
 }

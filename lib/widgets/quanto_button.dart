@@ -44,7 +44,7 @@ class _QuantoButtonState extends State<QuantoButton> {
         case QuantoButtonType.secondary:
           return AppColors.bg15PressedDark;
         case QuantoButtonType.premium:
-          return AppColors.premium.withOpacity(0.8);
+          return AppColors.premium.withAlpha(204); // 0.8 * 255 = 204
         case QuantoButtonType.icon:
           return Colors.transparent;
       }

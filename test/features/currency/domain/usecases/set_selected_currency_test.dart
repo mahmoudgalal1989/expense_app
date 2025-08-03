@@ -14,7 +14,7 @@ import 'set_selected_currency_test.mocks.dart';
 void main() {
   late SetSelectedCurrency useCase;
   late MockCurrencyRepository mockCurrencyRepository;
-  final tCurrency = const Currency(
+  const tCurrency = Currency(
     code: 'USD',
     countryName: 'United States',
     flagIconPath: 'assets/flags/us.png',
@@ -33,7 +33,7 @@ void main() {
         .thenAnswer((_) async => Future.value());
 
     // act
-    final result = await useCase(SetSelectedCurrencyParams(tCurrency));
+    final result = await useCase(const SetSelectedCurrencyParams(tCurrency));
 
     // assert
     expect(result, const Right(null));
@@ -48,7 +48,7 @@ void main() {
         .thenThrow(tFailure);
 
     // act
-    final result = await useCase(SetSelectedCurrencyParams(tCurrency));
+    final result = await useCase(const SetSelectedCurrencyParams(tCurrency));
 
     // assert
     expect(result, const Left(tFailure));
@@ -63,7 +63,7 @@ void main() {
 
   test('should create SetSelectedCurrencyParams with currency', () {
     // arrange
-    final currency = const Currency(
+    const currency = Currency(
       code: 'EUR',
       countryName: 'European Union',
       flagIconPath: 'assets/flags/eu.png',
@@ -72,7 +72,7 @@ void main() {
     );
     
     // act
-    final params = SetSelectedCurrencyParams(currency);
+    const params = SetSelectedCurrencyParams(currency);
     
     // assert
     expect(params.currency, currency);

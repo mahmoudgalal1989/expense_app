@@ -1,5 +1,4 @@
 import 'package:expense_app/theme/app_colors.dart';
-import 'package:expense_app/theme/app_theme.dart';
 
 import 'add_expense_screen.dart';
 import 'package:flutter/material.dart';

@@ -10,15 +10,15 @@ class AppTheme with ChangeNotifier {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.light500,
         secondary: AppColors.light300,
         surface: AppColors.light0,
-        background: AppColors.light50,
+        // background: AppColors.light50, // deprecated
         error: AppColors.error500,
       ),
       scaffoldBackgroundColor: AppColors.light50,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.light50,
         foregroundColor: AppColors.dark900,
         elevation: 0,
@@ -30,7 +30,7 @@ class AppTheme with ChangeNotifier {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         displayLarge: TextStyle(color: AppColors.dark900),
         displayMedium: TextStyle(color: AppColors.dark900),
         bodyLarge: TextStyle(color: AppColors.dark900),
@@ -40,15 +40,15 @@ class AppTheme with ChangeNotifier {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.light100),
+          borderSide: const BorderSide(color: AppColors.light100),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.light100),
+          borderSide: const BorderSide(color: AppColors.light100),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.light500),
+          borderSide: const BorderSide(color: AppColors.light500),
         ),
       ),
     );
@@ -58,15 +58,15 @@ class AppTheme with ChangeNotifier {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.dark0,
         secondary: AppColors.dark300,
         surface: AppColors.dark800,
-        background: AppColors.dark900,
+        // background: AppColors.dark900, // deprecated
         error: AppColors.error500,
       ),
       scaffoldBackgroundColor: AppColors.dark900,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.dark900,
         foregroundColor: AppColors.dark0,
         elevation: 0,
@@ -78,7 +78,7 @@ class AppTheme with ChangeNotifier {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         displayLarge: TextStyle(color: AppColors.dark0),
         displayMedium: TextStyle(color: AppColors.dark0),
         bodyLarge: TextStyle(color: AppColors.dark0),
@@ -88,15 +88,15 @@ class AppTheme with ChangeNotifier {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.dark600),
+          borderSide: const BorderSide(color: AppColors.dark600),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.dark600),
+          borderSide: const BorderSide(color: AppColors.dark600),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.dark300),
+          borderSide: const BorderSide(color: AppColors.dark300),
         ),
       ),
     );

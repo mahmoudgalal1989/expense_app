@@ -123,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_categories.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: AppColors.textSecondary,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   Navigator.push(
@@ -141,7 +141,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/Accounts.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: AppColors.textSecondary,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement theme selection
@@ -154,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_remiders.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: AppColors.textSecondary,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement theme selection
@@ -177,12 +177,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_trash.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color
-                                        ?.withOpacity(0.7) ??
-                                    Colors.grey,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement help center
@@ -206,12 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_bug.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color
-                                        ?.withOpacity(0.7) ??
-                                    Colors.grey,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement help center
@@ -223,12 +213,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_feature.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color
-                                        ?.withOpacity(0.7) ??
-                                    Colors.grey,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement contact us
@@ -240,12 +225,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 svgAsset: 'assets/svg/settings_star.svg',
                                 iconColor: Colors.white,
                                 textColor: Colors.white,
-                                subtitleColor: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color
-                                        ?.withOpacity(0.7) ??
-                                    Colors.grey,
+                                subtitleColor: AppColors.textSecondaryDark,
                                 arrowColor: Colors.white,
                                 onTap: () {
                                   // TODO: Implement privacy policy
@@ -260,7 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         Center(
                           child: Column(
                             children: [
-                              QuantoText(
+                              const QuantoText(
                                 'Version 1.0.0',
                                 styleVariant: 'Body/B1-R',
                                 color: AppColors.textSecondaryDark,

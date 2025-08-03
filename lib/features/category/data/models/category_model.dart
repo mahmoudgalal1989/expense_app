@@ -13,7 +13,7 @@ class CategoryModel extends Category {
       id: json['id'],
       name: json['name'],
       icon: json['icon'],
-      type: CategoryType.values.firstWhere((e) => e.toString() == 'CategoryType.' + json['type']),
+      type: CategoryType.values.firstWhere((e) => e.toString() == 'CategoryType.${json['type']}'),
     );
   }
 

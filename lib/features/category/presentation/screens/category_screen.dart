@@ -30,14 +30,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void _addCategory() {
     // TODO: Implement add category logic
-    print('Add new category');
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          sl<CategoryBloc>()..add(LoadCategories(CategoryType.expense)),
+          sl<CategoryBloc>()..add(const LoadCategories(CategoryType.expense)),
       child: Scaffold(
         body: Stack(
           children: [

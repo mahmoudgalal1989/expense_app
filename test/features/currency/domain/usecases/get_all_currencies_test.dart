@@ -52,7 +52,7 @@ void main() {
 
   test('should return a failure when getting all currencies fails', () async {
     // arrange
-    final tFailure = CacheFailure('Failed to load currencies');
+    const tFailure = CacheFailure('Failed to load currencies');
     when(mockCurrencyRepository.getAllCurrencies())
         .thenThrow(tFailure);
 
@@ -60,7 +60,7 @@ void main() {
     final result = await useCase(const NoParams());
 
     // assert
-    expect(result, Left(tFailure));
+    expect(result, const Left(tFailure));
     verify(mockCurrencyRepository.getAllCurrencies());
     verifyNoMoreInteractions(mockCurrencyRepository);
   });

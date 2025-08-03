@@ -14,7 +14,7 @@ import 'search_currencies_test.mocks.dart';
 void main() {
   late SearchCurrencies useCase;
   late MockCurrencyRepository mockCurrencyRepository;
-  final tQuery = 'USD';
+  const tQuery = 'USD';
   final tSearchResults = [
     const Currency(
       code: 'USD',
@@ -36,7 +36,7 @@ void main() {
         .thenAnswer((_) async => tSearchResults);
 
     // act
-    final result = await useCase(SearchCurrenciesParams(tQuery));
+    final result = await useCase(const SearchCurrenciesParams(tQuery));
 
     // assert
     expect(result, Right(tSearchResults));
@@ -51,7 +51,7 @@ void main() {
         .thenThrow(tFailure);
 
     // act
-    final result = await useCase(SearchCurrenciesParams(tQuery));
+    final result = await useCase(const SearchCurrenciesParams(tQuery));
 
     // assert
     expect(result, const Left(tFailure));
@@ -69,7 +69,7 @@ void main() {
     const query = 'test';
     
     // act
-    final params = SearchCurrenciesParams(query);
+    const params = SearchCurrenciesParams(query);
     
     // assert
     expect(params.query, query);

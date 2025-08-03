@@ -15,7 +15,6 @@ class CategoryRepositoryImpl implements CategoryRepository {
   @override
   Future<void> addUserCategory(Category category) async {
     // TODO: Implement logic to add user category to a persistent storage
-    print('Adding category: ${category.name}');
   }
 
   @override
