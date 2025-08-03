@@ -12,13 +12,15 @@ class SearchCurrenciesParams {
 }
 
 /// Command to search for currencies based on a query.
-class SearchCurrencies implements Command<List<Currency>, SearchCurrenciesParams> {
+class SearchCurrencies
+    implements Command<List<Currency>, SearchCurrenciesParams> {
   final CurrencyRepository repository;
 
   const SearchCurrencies(this.repository);
 
   @override
-  Future<Either<Failure, List<Currency>>> call(SearchCurrenciesParams params) async {
+  Future<Either<Failure, List<Currency>>> call(
+      SearchCurrenciesParams params) async {
     try {
       final results = await repository.searchCurrencies(params.query);
       return Right(results);

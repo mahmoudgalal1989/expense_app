@@ -25,7 +25,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     try {
       final suggested = await getSuggestedCategories(event.type);
       // In a real app, you would also fetch user categories here.
-      emit(CategoryLoaded(suggestedCategories: suggested, userCategories: const []));
+      emit(CategoryLoaded(
+          suggestedCategories: suggested, userCategories: const []));
     } catch (e) {
       emit(CategoryError('Failed to load categories: ${e.toString()}'));
     }
@@ -40,8 +41,12 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       try {
         await addUserCategory(event.category);
         // Optimistically update the UI
-        final updatedUserCategories = List<Category>.from(currentState.userCategories)..add(event.category);
-        final updatedSuggestedCategories = List<Category>.from(currentState.suggestedCategories)..removeWhere((c) => c.id == event.category.id);
+        final updatedUserCategories =
+            List<Category>.from(currentState.userCategories)
+              ..add(event.category);
+        final updatedSuggestedCategories =
+            List<Category>.from(currentState.suggestedCategories)
+              ..removeWhere((c) => c.id == event.category.id);
 
         emit(CategoryLoaded(
           suggestedCategories: updatedSuggestedCategories,

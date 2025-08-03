@@ -41,7 +41,8 @@ void main() {
     verifyNoMoreInteractions(mockCurrencyRepository);
   });
 
-  test('should return a failure when setting the selected currency fails', () async {
+  test('should return a failure when setting the selected currency fails',
+      () async {
     // arrange
     const tFailure = CacheFailure('Failed to set selected currency');
     when(mockCurrencyRepository.setSelectedCurrency(tCurrency))
@@ -70,10 +71,10 @@ void main() {
       isSelected: false,
       isMostUsed: true,
     );
-    
+
     // act
     const params = SetSelectedCurrencyParams(currency);
-    
+
     // assert
     expect(params.currency, currency);
   });

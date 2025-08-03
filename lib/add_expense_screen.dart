@@ -95,7 +95,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 // Handle Today/Note button press
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 foregroundColor: Colors.white,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12),
@@ -150,8 +151,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: category['selected'] == true
-                                      ? Theme.of(context).colorScheme.surfaceContainerHighest
-                                      : Theme.of(context).scaffoldBackgroundColor,
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerHighest
+                                      : Theme.of(context)
+                                          .scaffoldBackgroundColor,
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
@@ -184,7 +188,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: moreButton['selected'] == true
-                                ? Theme.of(context).colorScheme.surfaceContainerHighest
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest
                                 : Theme.of(context).scaffoldBackgroundColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
@@ -264,7 +270,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         child: ElevatedButton(
           onPressed: () => _onNumberPressed(number),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+            backgroundColor:
+                Theme.of(context).colorScheme.surfaceContainerHighest,
             foregroundColor: Colors.white,
             padding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(

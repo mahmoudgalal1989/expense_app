@@ -62,89 +62,89 @@ class AppColors {
   // ===== Text Colors =====
   static const textPrimaryLight = light500;
   static const textPrimaryDark = dark0;
-  
+
   static const textSecondaryLight = light300;
   static const textSecondaryDark = dark300;
-  
+
   static const textTertiaryLight = light300;
   static const textTertiaryDark = dark400;
-  
+
   static const textInvertedLight = light0;
   static const textInvertedDark = dark900;
-  
+
   static const textSuccessLight = success500;
   static const textSuccessDark = success300;
-  
+
   static const textErrorLight = error500;
   static const textErrorDark = error300;
-  
+
   static const textPremiumLight = premium;
   static const textPremiumDark = premium;
-  
+
   static const textOpacityLight = light300;
   static const textOpacityDark = opacity40;
 
   // ===== Background Colors =====
-  
+
   // Background - Base
   static const bgPrimaryLight = light50;
   static const bgPrimaryDark = dark900;
-  
+
   static const bgSecondaryLight = light0;
   static const bgSecondaryDark = dark800;
-  
+
   static const bgTertiaryLight = light50;
   static const bgTertiaryDark = dark700;
-  
+
   // Background - Inverted
   static const bgInvertedPrimaryLight = light500;
   static const bgInvertedPrimaryDark = dark0;
-  
+
   static const bgInvertedSecondaryLight = light0;
   static const bgInvertedSecondaryDark = dark100;
-  
+
   // Background - Opacity
   static const bg5Light = light50;
   static const bg5Dark = opacity5;
-  
+
   static const bg8Light = light0;
   static const bg8Dark = opacity8;
-  
+
   static const bg15PressedLight = light0;
   static const bg15PressedDark = opacity15;
-  
+
   static const bg20Light = light0;
   static const bg20Dark = opacity20;
-  
+
   static const bg40Light = light0;
   static const bg40Dark = opacity40;
-  
+
   // Background - Status
   static const bgDeleteLight = light0;
   static const bgDeleteDark = error500;
-  
+
   static const bgSuccessPrimaryLight = success100;
   static const bgSuccessPrimaryDark = success500;
-  
+
   static const bgSuccessSecondaryLight = success500;
   static const bgSuccessSecondaryDark = success50;
-  
+
   static const bgErrorPrimaryLight = error100;
   static const bgErrorPrimaryDark = error500;
-  
+
   static const bgErrorSecondaryLight = error500;
   static const bgErrorSecondaryDark = error50;
-  
+
   // Background - Foreground
   static const bgFgPrimaryLight = light0;
   static const bgFgPrimaryDark = dark900;
-  
+
   static const bgFgSecondaryLight = light100;
   static const bgFgSecondaryDark = dark500;
-  
+
   static const bgFgTertiaryLight = light300;
   static const bgFgTertiaryDark = dark300;
-  
+
   static const bgFgInvertedLight = light500;
   static const bgFgInvertedDark = dark0;
 

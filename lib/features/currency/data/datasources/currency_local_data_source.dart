@@ -5,9 +5,9 @@ import 'package:expense_app/core/error/exceptions.dart';
 /// Contract for local data source that handles currency data operations
 abstract class CurrencyLocalDataSource {
   /// Loads currencies from the local data source
-  /// 
+  ///
   /// Returns a list of currency data as a list of maps
-  /// 
+  ///
   /// Throws a [CacheException] if there's an error loading or parsing the data
   Future<List<Map<String, dynamic>>> getCurrencies();
 }
@@ -21,7 +21,7 @@ class CurrencyLocalDataSourceImpl implements CurrencyLocalDataSource {
     try {
       // Load the JSON file as a string
       final jsonString = await rootBundle.loadString(_currenciesPath);
-      
+
       // Parse the JSON string into a list of dynamic objects
       final List<dynamic> jsonList;
       try {
@@ -29,7 +29,7 @@ class CurrencyLocalDataSourceImpl implements CurrencyLocalDataSource {
       } catch (e) {
         throw const FormatException('Invalid JSON format in currencies file');
       }
-      
+
       // Convert each item in the list to a Map<String, dynamic>
       return jsonList.map((item) {
         if (item is! Map<String, dynamic>) {

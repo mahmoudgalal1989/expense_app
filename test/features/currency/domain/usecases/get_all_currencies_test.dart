@@ -53,8 +53,7 @@ void main() {
   test('should return a failure when getting all currencies fails', () async {
     // arrange
     const tFailure = CacheFailure('Failed to load currencies');
-    when(mockCurrencyRepository.getAllCurrencies())
-        .thenThrow(tFailure);
+    when(mockCurrencyRepository.getAllCurrencies()).thenThrow(tFailure);
 
     // act
     final result = await useCase(const NoParams());

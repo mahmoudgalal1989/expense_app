@@ -24,7 +24,8 @@ class AnimatedToggleSwitch extends StatefulWidget {
   State<AnimatedToggleSwitch> createState() => _AnimatedToggleSwitchState();
 }
 
-class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch> with SingleTickerProviderStateMixin {
+class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   double _fraction = 0.0;
@@ -36,12 +37,13 @@ class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch> with Single
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
-      ..addListener(() {
-        setState(() {
-          _fraction = _animation.value;
-        });
-      });
+    _animation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController)
+          ..addListener(() {
+            setState(() {
+              _fraction = _animation.value;
+            });
+          });
   }
 
   @override
@@ -67,7 +69,9 @@ class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch> with Single
               AnimatedAlign(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeIn,
-                alignment: _fraction == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                alignment: _fraction == 0
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
                 child: Container(
                   width: width / 2,
                   height: 40,

@@ -16,7 +16,8 @@ class Currency extends Equatable {
   });
 
   @override
-  List<Object?> get props => [code, isMostUsed, countryName, flagIconPath, isSelected];
+  List<Object?> get props =>
+      [code, isMostUsed, countryName, flagIconPath, isSelected];
 
   Currency copyWith({
     String? code,

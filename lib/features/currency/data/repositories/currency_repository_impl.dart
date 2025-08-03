@@ -9,11 +9,11 @@ import 'package:expense_app/features/currency/data/datasources/currency_local_da
 class CurrencyRepositoryImpl implements CurrencyRepository {
   final CurrencyLocalDataSource localDataSource;
   final SharedPreferences prefs;
-  
+
   static const String _selectedCurrencyKey = 'selected_currency';
-  
+
   List<CurrencyModel>? _cachedModels;
-  
+
   CurrencyRepositoryImpl({
     required this.localDataSource,
     required this.prefs,
@@ -24,22 +24,21 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
     if (_cachedModels == null) {
       try {
         final jsonList = await localDataSource.getCurrencies();
-        _cachedModels = jsonList
-            .map((json) => CurrencyModel.fromJson(json))
-            .toList();
+        _cachedModels =
+            jsonList.map((json) => CurrencyModel.fromJson(json)).toList();
       } catch (e) {
         throw CacheException('Failed to load currencies: $e');
       }
     }
-    
+
     // Get the currently selected currency code from shared preferences
     final selectedCurrencyCode = prefs.getString(_selectedCurrencyKey);
-    
+
     // Convert models to entities and set isSelected based on the stored preference
     return _cachedModels!.map((model) {
       return model.toEntity().copyWith(
-        isSelected: model.code == selectedCurrencyCode,
-      );
+            isSelected: model.code == selectedCurrencyCode,
+          );
     }).toList();
   }
 
@@ -48,7 +47,7 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
     if (_cachedModels == null) {
       await getAllCurrencies();
     }
-    
+
     if (_cachedModels == null) {
       return [];
     }

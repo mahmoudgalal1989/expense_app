@@ -47,8 +47,7 @@ void main() {
   test('should return a failure when searching currencies fails', () async {
     // arrange
     const tFailure = CacheFailure('Failed to search currencies');
-    when(mockCurrencyRepository.searchCurrencies(tQuery))
-        .thenThrow(tFailure);
+    when(mockCurrencyRepository.searchCurrencies(tQuery)).thenThrow(tFailure);
 
     // act
     final result = await useCase(const SearchCurrenciesParams(tQuery));
@@ -67,10 +66,10 @@ void main() {
   test('should create SearchCurrenciesParams with query', () {
     // arrange
     const query = 'test';
-    
+
     // act
     const params = SearchCurrenciesParams(query);
-    
+
     // assert
     expect(params.query, query);
   });

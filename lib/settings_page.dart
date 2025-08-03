@@ -99,7 +99,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               // Currency Section
                               SettingItem(
                                 title: 'Currency',
-                                subtitle: selectedCurrency.isEmpty ? 'Select currency' : selectedCurrency,
+                                subtitle: selectedCurrency.isEmpty
+                                    ? 'Select currency'
+                                    : selectedCurrency,
                                 svgAsset: 'assets/svg/settings_currency.svg',
                                 iconColor: Colors.white,
                                 textColor: AppColors.textPrimaryDark,
@@ -109,7 +111,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const CurrencyScreen(),
+                                      builder: (context) =>
+                                          const CurrencyScreen(),
                                     ),
                                   );
                                   // The BLoC listener will handle the update
@@ -129,7 +132,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const CategoryScreen(),
+                                      builder: (context) =>
+                                          const CategoryScreen(),
                                     ),
                                   );
                                 },

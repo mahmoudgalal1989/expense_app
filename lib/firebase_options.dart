@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'quanto-60485.firebasestorage.app',
     iosBundleId: 'app.quanto.quanto',
   );
-
 }

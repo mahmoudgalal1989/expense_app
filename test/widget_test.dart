@@ -17,14 +17,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockCurrencyBloc extends Mock implements CurrencyBloc {
-  final BehaviorSubject<CurrencyState> _stateController = BehaviorSubject<CurrencyState>.seeded(const CurrencyInitial());
-  
+  final BehaviorSubject<CurrencyState> _stateController =
+      BehaviorSubject<CurrencyState>.seeded(const CurrencyInitial());
+
   @override
   CurrencyState get state => _stateController.value;
-  
+
   @override
   Stream<CurrencyState> get stream => _stateController.stream;
-  
+
   @override
   void add(CurrencyEvent event) {
     if (event is LoadCurrencies) {
@@ -52,7 +53,7 @@ class MockCurrencyBloc extends Mock implements CurrencyBloc {
       ));
     }
   }
-  
+
   @override
   Future<void> close() async {
     await _stateController.close();
@@ -131,13 +132,15 @@ void main() {
 
   testWidgets('Bottom navigation switches between pages', (tester) async {
     // Create a test app with the MainPage and proper dependencies
-    await tester.pumpWidget(createTestableWidgetWithDependencies(const app.MainPage()));
-    
+    await tester
+        .pumpWidget(createTestableWidgetWithDependencies(const app.MainPage()));
+
     // Wait for the app to finish building and animations to complete
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
     // Get the localizations
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    final localizations =
+        await AppLocalizations.delegate.load(const Locale('en'));
 
     // Verify initial page shows the welcome message
     expect(
@@ -155,7 +158,7 @@ void main() {
     final summaryLabel = find.text(localizations.summary);
     expect(summaryLabel, findsOneWidget);
     await tester.tap(summaryLabel);
-    
+
     // Wait for the navigation animation to complete
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -170,7 +173,7 @@ void main() {
     final settingsLabel = find.text(localizations.settings);
     expect(settingsLabel, findsOneWidget);
     await tester.tap(settingsLabel);
-    
+
     // Wait for the navigation animation and any async operations to complete
     await tester.pumpAndSettle(const Duration(seconds: 2));
 
@@ -185,7 +188,7 @@ void main() {
     final transactionsLabel = find.text(localizations.transactions);
     expect(transactionsLabel, findsOneWidget);
     await tester.tap(transactionsLabel);
-    
+
     // Wait for the navigation animation to complete
     await tester.pumpAndSettle(const Duration(seconds: 1));
 

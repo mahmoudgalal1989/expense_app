@@ -124,8 +124,9 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.read<CurrencyBloc>().add(const LoadCurrencies()),
+                    onPressed: () => context
+                        .read<CurrencyBloc>()
+                        .add(const LoadCurrencies()),
                     child: const Text('Retry'),
                   ),
                 ],
