@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/di/currency_injection_container.dart';
+import 'package:expense_app/features/category/di/category_injection_container.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,6 +46,7 @@ Future<void> main() async {
 
         // Initialize dependency injection
         await initCurrencyFeature();
+        initCategoryFeature();
 
         // Run the app
         runApp(const MyApp());
