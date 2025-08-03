@@ -6,6 +6,7 @@ import 'package:expense_app/widgets/quanto_divider.dart';
 import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/screens/currency_screen.dart';
+import 'package:expense_app/features/category/presentation/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -125,7 +126,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                 subtitleColor: AppColors.textSecondary,
                                 arrowColor: Colors.white,
                                 onTap: () {
-                                  // TODO: Implement theme selection
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CategoryScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                               const QuantoDivider(),

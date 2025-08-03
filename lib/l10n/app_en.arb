@@ -52,5 +52,9 @@
   "settingsPageTitle": "Settings",
   "@settingsPageTitle": {
     "description": "Title for the settings page"
+  },
+  "categories": "Categories",
+  "@categories": {
+    "description": "Title for the categories screen"
   }
 }

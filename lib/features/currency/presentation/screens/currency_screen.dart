@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
 import 'package:expense_app/theme/app_colors.dart';
+import 'package:expense_app/widgets/country_item.dart';
 import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
 import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
-import 'package:expense_app/widgets/setting_item.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:expense_app/widgets/quanto_divider.dart';
 
@@ -51,7 +51,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
   }
 
   Widget _buildCurrencyItem(Currency currency, bool isSelected) {
-    return SettingItem(
+    return CountryItem(
       title: currency.countryName,
       prefixText: currency.code,
       flagIcon: currency.flagIconPath,
@@ -71,8 +71,6 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
         if (!isSelected) {
           // Update the selected currency in the BLoC
           context.read<CurrencyBloc>().add(SelectCurrency(currency.code));
-          // Navigate back to settings screen
-          Navigator.of(context).pop();
         }
       },
     );
@@ -126,9 +124,8 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => context
-                        .read<CurrencyBloc>()
-                        .add(const LoadCurrencies()),
+                    onPressed: () =>
+                        context.read<CurrencyBloc>().add(const LoadCurrencies()),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -141,14 +138,12 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
 
     if (state is CurrenciesLoaded) {
       final searchQuery = _searchController.text.toLowerCase();
-      final filteredMostUsed = state.currencies
-          .where((c) =>
-              c.isMostUsed &&
-              (c.countryName.toLowerCase().contains(searchQuery) ||
-                  c.code.toLowerCase().contains(searchQuery)))
-          .toList();
-
       final filteredCurrencies = state.currencies
+          .where((c) =>
+              c.countryName.toLowerCase().contains(searchQuery) ||
+              c.code.toLowerCase().contains(searchQuery))
+          .toList();
+      final filteredMostUsed = state.mostUsedCurrencies
           .where((c) =>
               c.countryName.toLowerCase().contains(searchQuery) ||
               c.code.toLowerCase().contains(searchQuery))
@@ -171,12 +166,13 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: QuantoText.h1(
                       'Currency',
                       color: Colors.white,
                     ),
                   ),
+                  const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
@@ -276,7 +272,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                           ),
                         SliverToBoxAdapter(
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                             decoration: BoxDecoration(
                               color: AppColors.opacity8,
                               borderRadius: BorderRadius.circular(16),
