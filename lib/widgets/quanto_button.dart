@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 
 enum QuantoButtonType { primary, secondary, icon, premium }
 
+enum QuantoButtonSize { large, medium, small }
+
 class QuantoButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final String text;
   final QuantoButtonType buttonType;
+  final QuantoButtonSize size;
   final Widget? leftIcon;
   final Widget? rightIcon;
   final bool isDisabled;
@@ -18,6 +21,7 @@ class QuantoButton extends StatefulWidget {
     required this.onPressed,
     required this.text,
     this.buttonType = QuantoButtonType.primary,
+    this.size = QuantoButtonSize.large,
     this.leftIcon,
     this.rightIcon,
     this.isDisabled = false,
@@ -51,7 +55,7 @@ class _QuantoButtonState extends State<QuantoButton> {
     }
     switch (widget.buttonType) {
       case QuantoButtonType.primary:
-        return AppColors.bgInvertedPrimaryDark;
+        return AppColors.bgInvertedPrimaryDark; // Original white
       case QuantoButtonType.secondary:
         return Colors.transparent;
       case QuantoButtonType.premium:
@@ -67,7 +71,7 @@ class _QuantoButtonState extends State<QuantoButton> {
     }
     switch (widget.buttonType) {
       case QuantoButtonType.primary:
-        return AppColors.textInvertedDark;
+        return AppColors.textInvertedDark; // Original dark text
       case QuantoButtonType.secondary:
       case QuantoButtonType.icon:
         return AppColors.textPrimaryDark;
@@ -83,6 +87,45 @@ class _QuantoButtonState extends State<QuantoButton> {
     return const BorderSide(color: AppColors.borderPrimaryDark);
   }
 
+  // --- Size Helper Methods ---
+
+  double _getButtonWidth() {
+    switch (widget.size) {
+      case QuantoButtonSize.large:
+        return 343;
+      case QuantoButtonSize.medium:
+        return 78;
+      case QuantoButtonSize.small:
+        return 53; // Original size to match reference image dimensions
+    }
+  }
+
+  double _getButtonHeight() {
+    switch (widget.size) {
+      case QuantoButtonSize.large:
+        return 56;
+      case QuantoButtonSize.medium:
+        return 48;
+      case QuantoButtonSize.small:
+        return 38;
+    }
+  }
+
+  double _getTotalHeight() {
+    return _getButtonHeight() + 4;
+  }
+
+  Widget _getTextWidget(String text, Color color) {
+    switch (widget.size) {
+      case QuantoButtonSize.large:
+        return QuantoText.buttonLarge(text, color: color);
+      case QuantoButtonSize.medium:
+        return QuantoText.buttonMedium(text, color: color);
+      case QuantoButtonSize.small:
+        return QuantoText.buttonSmall(text, color: color);
+    }
+  }
+
   // --- Build Method ---
   @override
   Widget build(BuildContext context) {
@@ -90,18 +133,20 @@ class _QuantoButtonState extends State<QuantoButton> {
     final borderSide = _getBorderSide(context);
 
     BoxDecoration decoration;
-
-    if (widget.buttonType == QuantoButtonType.primary) {
+    if (widget.buttonType == QuantoButtonType.primary && !widget.isDisabled) {
       decoration = BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: widget.isDisabled
-              ? [AppColors.bgFgSecondaryDark, AppColors.bgFgSecondaryDark]
-              : _isPressed
-                  ? AppColors.buttonGradient // Inset/Pressed gradient
-                  : AppColors.buttonGradient, // Default gradient
+          colors: [
+            Color(0xFFEFF2F6), // #EFF2F6 at start
+            Color(0xFFDFDFDF), // #DFDFDF at end
+          ],
+        ),
+        border: Border.all(
+          width: 2.0,
+          color: Colors.transparent, // We'll use a gradient border overlay
         ),
       );
     } else {
@@ -135,8 +180,8 @@ class _QuantoButtonState extends State<QuantoButton> {
             splashColor: Colors.transparent, // Redundant for safety
           ),
           child: SizedBox(
-            width: widget.isExpanded ? double.infinity : null,
-            height: 60, // Total height for button (56) + shadow (4)
+            width: widget.isExpanded ? double.infinity : _getButtonWidth(),
+            height: _getTotalHeight(),
             child: Stack(
               children: [
                 // Shadow Layer: Sits behind the button.
@@ -144,7 +189,7 @@ class _QuantoButtonState extends State<QuantoButton> {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  height: 56, // Height of the shadow slot
+                  height: _getButtonHeight(),
                   child: Container(
                     decoration: BoxDecoration(
                       color: widget.isDisabled
@@ -161,7 +206,7 @@ class _QuantoButtonState extends State<QuantoButton> {
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 56,
+                    height: _getButtonHeight(),
                     decoration: decoration,
                     child: Center(
                       child: Row(
@@ -171,9 +216,11 @@ class _QuantoButtonState extends State<QuantoButton> {
                             widget.leftIcon!,
                             const SizedBox(width: 8),
                           ],
-                          QuantoText.buttonLarge(
-                            widget.text,
-                            color: textColor,
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: _getTextWidget(widget.text, textColor),
+                            ),
                           ),
                           if (widget.rightIcon != null) ...[
                             const SizedBox(width: 8),

@@ -125,9 +125,9 @@ class QuantoText extends StatelessWidget {
       letterSpacing: 0.1,
     ),
     'Button/Small': TextStyle(
+      fontWeight: FontWeight.w600, // Reverted to 600 - better pixel match
       fontSize: 12,
-      fontWeight: FontWeight.w600, // SemiBold
-      height: 16.0 / 12.0,
+      height: 18.0 / 12.0, // 18px line height as specified
       letterSpacing: 0.1,
     ),
   };

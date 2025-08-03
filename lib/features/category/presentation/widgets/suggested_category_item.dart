@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:expense_app/theme/app_colors.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:expense_app/widgets/quanto_text.dart';
 
 class SuggestedCategoryItem extends StatelessWidget {
@@ -31,7 +31,11 @@ class SuggestedCategoryItem extends StatelessWidget {
               color: Colors.white,
             ),
             const Spacer(),
-            const Icon(Icons.add, color: AppColors.textSecondaryDark, size: 28),
+            SvgPicture.asset(
+              'assets/svg/add_btn.svg',
+              width: 28,
+              height: 28,
+            ),
           ],
         ),
       ),

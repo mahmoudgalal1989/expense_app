@@ -1,4 +1,5 @@
 import 'package:expense_app/features/category/presentation/widgets/suggested_category_item.dart';
+import 'package:expense_app/features/category/presentation/widgets/my_category_item.dart';
 import 'package:expense_app/widgets/quanto_button.dart';
 import 'package:expense_app/widgets/quanto_divider.dart';
 import 'package:expense_app/widgets/animated_toggle_switch.dart';
@@ -23,9 +24,27 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  late CategoryBloc _categoryBloc;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _categoryBloc = sl<CategoryBloc>()
+      ..add(const LoadCategories(CategoryType.expense));
+    _isInitialized = true;
+  }
+
+  @override
+  void dispose() {
+    _categoryBloc.close();
+    super.dispose();
+  }
+
   void _onSegmentChanged(int index) {
+    if (!_isInitialized) return;
     final type = index == 0 ? CategoryType.expense : CategoryType.income;
-    context.read<CategoryBloc>().add(LoadCategories(type));
+    _categoryBloc.add(LoadCategories(type));
   }
 
   void _addCategory() {
@@ -34,9 +53,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          sl<CategoryBloc>()..add(const LoadCategories(CategoryType.expense)),
+    if (!_isInitialized) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: Colors.white),
+        ),
+      );
+    }
+
+    return BlocProvider.value(
+      value: _categoryBloc,
       child: Scaffold(
         body: Stack(
           children: [
@@ -54,7 +80,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
             ),
             BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, state) {
-                if (state is CategoryLoading || state is CategoryInitial) {
+                // Only show loading spinner on initial load, not during toggle switches
+                if (state is CategoryInitial) {
                   return const Center(
                     child: CircularProgressIndicator(color: Colors.white),
                   );
@@ -95,10 +122,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             ),
                             centerTitle: true,
                             actions: [
-                              TextButton(
-                                onPressed: _addCategory,
-                                child: QuantoText.buttonMedium('New',
-                                    color: AppColors.light0),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 16.0, top: 4.0, bottom: 4.0),
+                                child: QuantoButton(
+                                  onPressed: _addCategory,
+                                  text: 'New',
+                                  buttonType: QuantoButtonType.primary,
+                                  size: QuantoButtonSize.small,
+                                ),
                               ),
                             ],
                             pinned: true,
@@ -156,16 +188,53 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   Widget _buildUserCategoriesList(List<Category> categories) {
-    // TODO: Implement UI for user-added categories
+
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            QuantoText.h3('Your Categories', color: Colors.white),
-            const SizedBox(height: 16),
-            ...categories.map((c) => QuantoText(c.name, color: Colors.white))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+              child: QuantoText.bodyMedium('My categories',
+                  color: AppColors.textSecondaryDark),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.opacity8,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: categories.length,
+                onReorder: (oldIndex, newIndex) {
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  _categoryBloc.add(
+                    ReorderUserCategories(oldIndex, newIndex),
+                  );
+                },
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  return Container(
+                    key: ValueKey(category.id),
+                    child: Column(
+                      children: [
+                        MyCategoryItem(
+                          icon: category.icon,
+                          name: category.name,
+                          borderColor: category.borderColor ?? const Color(0xFF6366F1),
+                        ),
+                        if (index < categories.length - 1) const QuantoDivider(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

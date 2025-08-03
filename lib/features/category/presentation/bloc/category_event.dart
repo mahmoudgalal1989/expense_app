@@ -25,3 +25,13 @@ class AddCategory extends CategoryEvent {
   @override
   List<Object> get props => [category];
 }
+
+class ReorderUserCategories extends CategoryEvent {
+  final int oldIndex;
+  final int newIndex;
+
+  const ReorderUserCategories(this.oldIndex, this.newIndex);
+
+  @override
+  List<Object> get props => [oldIndex, newIndex];
+}

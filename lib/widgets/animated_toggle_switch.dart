@@ -54,30 +54,45 @@ class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch>
 
   @override
   Widget build(BuildContext context) {
+    // Get the available size from parent constraints
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
+        final width = 166.0;
+        final height =
+            constraints.maxHeight.isFinite ? constraints.maxHeight : 40.0;
+        final borderRadius = height / 2; // Always make it fully rounded
+        final padding = height * 0.075; // Proportional padding (3% of height)
+
         return Container(
-          height: 40,
+          height: height,
           width: width,
           decoration: BoxDecoration(
             color: widget.backgroundColor,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
+          padding: EdgeInsets.all(padding),
           child: Stack(
             children: [
               AnimatedAlign(
                 duration: const Duration(milliseconds: 200),
-                curve: Curves.easeIn,
+                curve: Curves.easeInOut,
                 alignment: _fraction == 0
                     ? Alignment.centerLeft
                     : Alignment.centerRight,
                 child: Container(
-                  width: width / 2,
-                  height: 40,
+                  width: (width - padding * 2) / 2,
+                  height: height - padding * 2,
                   decoration: BoxDecoration(
                     color: widget.buttonColor,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(borderRadius - padding),
+                    // Add subtle shadow for depth
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -90,12 +105,17 @@ class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch>
                         _animationController.animateTo(index.toDouble());
                         widget.onToggleCallback(index);
                       },
-                      child: Center(
-                        child: QuantoText.bodySmall(
-                          widget.values[index],
-                          color: _fraction.round() == index
-                              ? widget.selectedTextColor
-                              : widget.unselectedTextColor,
+                      behavior:
+                          HitTestBehavior.opaque, // Makes entire area clickable
+                      child: Container(
+                        height: double.infinity, // Fill the entire height
+                        child: Center(
+                          child: QuantoText.bodySmall(
+                            widget.values[index],
+                            color: _fraction.round() == index
+                                ? widget.selectedTextColor
+                                : widget.unselectedTextColor,
+                          ),
                         ),
                       ),
                     ),
