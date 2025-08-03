@@ -84,60 +84,111 @@ class _QuantoButtonState extends State<QuantoButton> {
   }
 
   // --- Build Method ---
-
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = _getBackgroundColor(context);
     final textColor = _getTextColor(context);
     final borderSide = _getBorderSide(context);
 
-    return GestureDetector(
-      onTapDown: (_) {
-        if (!widget.isDisabled) {
-          setState(() => _isPressed = true);
-        }
-      },
-      onTapUp: (_) {
-        if (!widget.isDisabled) {
-          setState(() => _isPressed = false);
-          widget.onPressed?.call();
-        }
-      },
-      onTapCancel: () {
-        if (!widget.isDisabled) {
-          setState(() => _isPressed = false);
-        }
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: widget.isExpanded ? double.infinity : null,
-        height: 56,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.fromBorderSide(borderSide),
+    BoxDecoration decoration;
+
+    if (widget.buttonType == QuantoButtonType.primary) {
+      decoration = BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: widget.isDisabled
+              ? [AppColors.bgFgSecondaryDark, AppColors.bgFgSecondaryDark]
+              : _isPressed
+                  ? AppColors.buttonGradient // Inset/Pressed gradient
+                  : AppColors.buttonGradient, // Default gradient
         ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.leftIcon != null) ...[
-                widget.leftIcon!,
-                const SizedBox(width: 8),
+      );
+    } else {
+      final backgroundColor = _getBackgroundColor(context);
+      decoration = BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.fromBorderSide(borderSide),
+      );
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: widget.isDisabled ? null : widget.onPressed,
+        onTapDown:
+            widget.isDisabled ? null : (_) => setState(() => _isPressed = true),
+        onTapUp: widget.isDisabled
+            ? null
+            : (_) => setState(() => _isPressed = false),
+        onTapCancel:
+            widget.isDisabled ? null : () => setState(() => _isPressed = false),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent, // Redundant for safety
+            splashColor: Colors.transparent, // Redundant for safety
+          ),
+          child: SizedBox(
+            width: widget.isExpanded ? double.infinity : null,
+            height: 60, // Total height for button (56) + shadow (4)
+            child: Stack(
+              children: [
+                // Shadow Layer: Sits behind the button.
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 56, // Height of the shadow slot
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: widget.isDisabled
+                          ? Colors.transparent
+                          : AppColors.bgInvertedSecondaryDark,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+                // Button Face Layer: Animates on top of the shadow.
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 100),
+                  top: _isPressed || widget.isDisabled ? 3.0 : 0.0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 56,
+                    decoration: decoration,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (widget.leftIcon != null) ...[
+                            widget.leftIcon!,
+                            const SizedBox(width: 8),
+                          ],
+                          QuantoText.buttonLarge(
+                            widget.text,
+                            color: textColor,
+                          ),
+                          if (widget.rightIcon != null) ...[
+                            const SizedBox(width: 8),
+                            widget.rightIcon!,
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              QuantoText.buttonLarge(
-                widget.text,
-                color: textColor,
-              ),
-              if (widget.rightIcon != null) ...[
-                const SizedBox(width: 8),
-                widget.rightIcon!,
-              ],
-            ],
+            ),
           ),
         ),
       ),
     );
   }
-
 }
