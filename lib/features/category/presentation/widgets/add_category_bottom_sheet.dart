@@ -120,7 +120,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
         itemCount: _colorPalette.length,
         itemBuilder: (context, index) {
           final color = _colorPalette[index];
-          final isSelected = color.value == _selectedColor.value;
+          final isSelected = color == _selectedColor;
 
           return GestureDetector(
             onTap: () => _onColorSelected(color),
@@ -137,7 +137,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: color.withOpacity(0.5),
+                          color: color.withValues(alpha: 0.5),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),
@@ -218,7 +218,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                         color: Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: _selectedColor.withOpacity(0.3),
+                          color: _selectedColor.withValues(alpha: 0.3),
                           width: 2,
                         ),
                       ),
@@ -258,7 +258,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                           decoration: InputDecoration(
                             hintText: 'Category name',
                             hintStyle: TextStyle(
-                              color: Colors.white.withOpacity(0.5),
+                              color: Colors.white.withValues(alpha: 0.5),
                               fontSize: 16,
                               fontFamily: 'Sora',
                             ),
