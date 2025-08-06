@@ -20,6 +20,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<LoadCategories>(_onLoadCategories);
     on<AddCategory>(_onAddCategory);
     on<ReorderUserCategories>(_onReorderUserCategories);
+    on<CreateCategory>(_onCreateCategory);
   }
 
   Future<void> _onLoadCategories(
@@ -105,6 +106,40 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       } catch (e) {
         // If persistence fails, revert to the original state
         emit(CategoryError('Failed to reorder categories: ${e.toString()}'));
+        emit(currentState);
+      }
+    }
+  }
+
+  Future<void> _onCreateCategory(
+    CreateCategory event,
+    Emitter<CategoryState> emit,
+  ) async {
+    if (state is CategoryLoaded) {
+      final currentState = state as CategoryLoaded;
+      try {
+        // Generate a unique ID for the new category
+        final newId = DateTime.now().millisecondsSinceEpoch.toString();
+        
+        final newCategory = Category(
+          id: newId,
+          name: event.name,
+          icon: event.icon,
+          type: event.type,
+          borderColor: event.borderColor,
+        );
+        
+        await manageUserCategories.addUserCategory(newCategory, event.type);
+        
+        // Reload categories to get updated data
+        final userCategories = await manageUserCategories.getUserCategories(event.type);
+        
+        emit(CategoryLoaded(
+          suggestedCategories: currentState.suggestedCategories,
+          userCategories: userCategories,
+        ));
+      } catch (e) {
+        emit(CategoryError('Failed to create category: ${e.toString()}'));
         emit(currentState);
       }
     }

@@ -1,5 +1,6 @@
 import 'package:expense_app/features/category/presentation/widgets/suggested_category_item.dart';
 import 'package:expense_app/features/category/presentation/widgets/my_category_item.dart';
+import 'package:expense_app/features/category/presentation/widgets/add_category_bottom_sheet.dart';
 import 'package:expense_app/widgets/quanto_button.dart';
 import 'package:expense_app/widgets/quanto_divider.dart';
 import 'package:expense_app/widgets/animated_toggle_switch.dart';
@@ -48,7 +49,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _addCategory() {
-    // TODO: Implement add category logic
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: AddCategoryBottomSheet(
+          onSave: (name, icon, type, borderColor) {
+            _categoryBloc.add(CreateCategory(
+              name: name,
+              icon: icon,
+              type: type,
+              borderColor: borderColor,
+            ));
+          },
+        ),
+      ),
+    );
   }
 
   @override

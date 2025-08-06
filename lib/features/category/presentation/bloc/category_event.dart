@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:expense_app/features/category/domain/entities/category.dart';
 
 abstract class CategoryEvent extends Equatable {
@@ -34,4 +35,21 @@ class ReorderUserCategories extends CategoryEvent {
 
   @override
   List<Object> get props => [oldIndex, newIndex];
+}
+
+class CreateCategory extends CategoryEvent {
+  final String name;
+  final String icon;
+  final CategoryType type;
+  final Color borderColor;
+
+  const CreateCategory({
+    required this.name,
+    required this.icon,
+    required this.type,
+    required this.borderColor,
+  });
+
+  @override
+  List<Object> get props => [name, icon, type, borderColor];
 }
