@@ -11,10 +11,9 @@ import 'package:expense_app/widgets/no_glow_scroll_behavior.dart';
 import 'package:expense_app/theme/app_colors.dart';
 import 'package:expense_app/widgets/quanto_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expense_app/features/category/presentation/bloc/category_bloc.dart';
-import 'package:expense_app/features/category/presentation/bloc/category_event.dart';
-import 'package:expense_app/features/category/presentation/bloc/category_state.dart';
-import 'package:expense_app/features/category/di/category_injection_container.dart';
+import 'package:expense_app/core/bloc/app_settings_bloc.dart';
+import 'package:expense_app/core/bloc/app_settings_event.dart';
+import 'package:expense_app/core/bloc/app_settings_state.dart';
 import 'package:expense_app/features/category/domain/entities/category.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -25,27 +24,19 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  late CategoryBloc _categoryBloc;
-  bool _isInitialized = false;
+  CategoryType _currentType = CategoryType.expense;
 
   @override
   void initState() {
     super.initState();
-    _categoryBloc = sl<CategoryBloc>()
-      ..add(const LoadCategories(CategoryType.expense));
-    _isInitialized = true;
-  }
-
-  @override
-  void dispose() {
-    _categoryBloc.close();
-    super.dispose();
+    // No need to initialize here as main.dart already does it
+    // Just listen to the existing AppSettingsBloc state
   }
 
   void _onSegmentChanged(int index) {
-    if (!_isInitialized) return;
-    final type = index == 0 ? CategoryType.expense : CategoryType.income;
-    _categoryBloc.add(LoadCategories(type));
+    setState(() {
+      _currentType = index == 0 ? CategoryType.expense : CategoryType.income;
+    });
   }
 
   void _addCategory() {
@@ -58,13 +49,67 @@ class _CategoryScreenState extends State<CategoryScreen> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: AddCategoryBottomSheet(
-          onSave: (name, icon, type, borderColor) {
-            _categoryBloc.add(CreateCategory(
-              name: name,
-              icon: icon,
-              type: type,
-              borderColor: borderColor,
-            ));
+          onSave: (name, icon, type, borderColor, {String? categoryId}) {
+            final appSettingsBloc = context.read<AppSettingsBloc>();
+            if (categoryId != null) {
+              final updatedCategory = Category(
+                id: categoryId,
+                name: name,
+                icon: icon,
+                type: type,
+                borderColor: borderColor,
+              );
+              appSettingsBloc.add(CategoryUpdated(updatedCategory));
+            } else {
+              final newId = DateTime.now().millisecondsSinceEpoch.toString();
+              final newCategory = Category(
+                id: newId,
+                name: name,
+                icon: icon,
+                type: type,
+                borderColor: borderColor,
+              );
+              appSettingsBloc.add(CategoryAdded(newCategory));
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  void _editCategory(Category category) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: AddCategoryBottomSheet(
+          categoryToEdit: category,
+          onSave: (name, icon, type, borderColor, {String? categoryId}) {
+            final appSettingsBloc = context.read<AppSettingsBloc>();
+            if (categoryId != null) {
+              final updatedCategory = Category(
+                id: categoryId,
+                name: name,
+                icon: icon,
+                type: type,
+                borderColor: borderColor,
+              );
+              appSettingsBloc.add(CategoryUpdated(updatedCategory));
+            } else {
+              final newId = DateTime.now().millisecondsSinceEpoch.toString();
+              final newCategory = Category(
+                id: newId,
+                name: name,
+                icon: icon,
+                type: type,
+                borderColor: borderColor,
+              );
+              appSettingsBloc.add(CategoryAdded(newCategory));
+            }
           },
         ),
       ),
@@ -73,142 +118,190 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInitialized) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.white),
-        ),
-      );
-    }
-
-    return BlocProvider.value(
-      value: _categoryBloc,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.backgroundGradient[0],
-                    AppColors.backgroundGradient[1],
-                  ],
-                ),
-              ),
+    print('CategoryScreen build method called');
+    return Scaffold(
+      backgroundColor: AppColors.bgPrimaryDark,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/arrow_left.svg',
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
             ),
-            BlocBuilder<CategoryBloc, CategoryState>(
-              builder: (context, state) {
-                // Only show loading spinner on initial load, not during toggle switches
-                if (state is CategoryInitial) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  );
-                }
-                if (state is CategoryError) {
-                  return Center(
-                    child: QuantoText(state.message, color: Colors.white),
-                  );
-                }
-                if (state is CategoryLoaded) {
-                  return SafeArea(
-                    child: ScrollConfiguration(
-                      behavior: NoGlowScrollBehavior(),
-                      child: CustomScrollView(
-                        physics: const ClampingScrollPhysics(),
-                        slivers: [
-                          SliverAppBar(
-                            backgroundColor: Colors.transparent,
-                            flexibleSpace: ClipRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                child: Container(
-                                  color: Colors.transparent,
-                                ),
-                              ),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: QuantoText.h3('Categories', color: Colors.white),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: AnimatedToggleSwitch(
+              values: const ['Expense', 'Income'],
+              onToggleCallback: _onSegmentChanged,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ScrollConfiguration(
+              behavior: NoGlowScrollBehavior(),
+              child: BlocBuilder<AppSettingsBloc, AppSettingsState>(
+                builder: (context, state) {
+                  try {
+                    print('CategoryScreen BlocBuilder - Current state: ${state.runtimeType}');
+                    
+                    if (state is AppSettingsInitial || state is AppSettingsLoading || state is CategoriesUpdating) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is AppSettingsError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            QuantoText.bodyMedium(
+                              state.message,
+                              color: Colors.red,
+                              textAlign: TextAlign.center,
                             ),
-                            leading: IconButton(
-                              icon: SvgPicture.asset(
-                                'assets/svg/back_btn.svg',
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.white, BlendMode.srcIn),
-                              ),
-                              onPressed: () => Navigator.of(context).pop(),
+                            const SizedBox(height: 16),
+                            QuantoButton(
+                              onPressed: () {
+                                context.read<AppSettingsBloc>().add(
+                                  const InitializeAppSettings(),
+                                );
+                              },
+                              text: 'Retry',
+                              buttonType: QuantoButtonType.primary,
                             ),
-                            title: AnimatedToggleSwitch(
-                              values: const ['Expense', 'Income'],
-                              onToggleCallback: _onSegmentChanged,
+                          ],
+                        ),
+                      );
+                    } else if (state is AppSettingsLoaded) {
+                      final userCategories = state.getCategoriesByType(_currentType);
+                      final suggestedCategories = state.getSuggestedCategoriesByType(_currentType);
+                      
+                      print('CategoryScreen - User categories: ${userCategories.length}');
+                      print('CategoryScreen - Suggested categories: ${suggestedCategories.length}');
+                      
+                      if (userCategories.isEmpty && suggestedCategories.isEmpty) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.category_outlined,
+                              size: 64,
+                              color: AppColors.textSecondaryDark,
                             ),
-                            centerTitle: true,
-                            actions: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 16.0, top: 4.0, bottom: 4.0),
-                                child: QuantoButton(
-                                  onPressed: _addCategory,
-                                  text: 'New',
-                                  buttonType: QuantoButtonType.primary,
-                                  size: QuantoButtonSize.small,
-                                ),
-                              ),
-                            ],
-                            pinned: true,
+                            const SizedBox(height: 16),
+                            QuantoText.h2('Add your first categories', color: Colors.white),
+                            const SizedBox(height: 8),
+                            QuantoText.bodyMedium(
+                              'Start organizing your transactions by adding the categories that matter to you.',
+                              color: AppColors.textSecondaryDark,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        );
+                      }
+
+                      // Build list of slivers to show both user and suggested categories
+                      List<Widget> slivers = [];
+                      
+                      if (userCategories.isNotEmpty) {
+                        slivers.add(_buildUserCategoriesList(userCategories));
+                      }
+                      
+                      if (suggestedCategories.isNotEmpty) {
+                        print('Adding suggested categories sliver with ${suggestedCategories.length} categories');
+                        slivers.add(_buildSuggestedCategoriesList(context, suggestedCategories));
+                      } else {
+                        print('No suggested categories to add');
+                      }
+                      
+                      return CustomScrollView(
+                        scrollBehavior: NoGlowScrollBehavior(),
+                        slivers: slivers,
+                      );
+                    }
+
+                    return Center(
+                      child: Text(
+                        'Unknown state',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  } catch (e, stackTrace) {
+                    print('Error in CategoryScreen BlocBuilder: $e');
+                    print('StackTrace: $stackTrace');
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Error rendering categories',
+                            style: TextStyle(color: Colors.white),
                           ),
-                          if (state.userCategories.isEmpty)
-                            _buildEmptyState()
-                          else
-                            _buildUserCategoriesList(state.userCategories),
-                          if (state.suggestedCategories.isNotEmpty)
-                            _buildSuggestedCategoriesList(
-                                context, state.suggestedCategories),
-                          const SliverToBoxAdapter(
-                              child:
-                                  SizedBox(height: 40)), // Add bottom padding
+                          SizedBox(height: 8),
+                          Text(
+                            e.toString(),
+                            style: TextStyle(color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
+                    );
+                  }
+                },
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addCategory,
+        backgroundColor: AppColors.premium,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
   Widget _buildEmptyState() {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 16.0),
-        child: Column(
-          children: [
-            SvgPicture.asset('assets/svg/category_empty.svg', height: 100),
-            const SizedBox(height: 24),
-            QuantoText.h2('Add your first categories', color: Colors.white),
-            const SizedBox(height: 8),
-            QuantoText.bodyMedium(
-              'Start organizing your transactions by adding the categories that matter to you.',
-              color: AppColors.textSecondaryDark,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            QuantoButton(
-              onPressed: _addCategory,
-              text: 'New category',
-              buttonType: QuantoButtonType.primary,
-              isExpanded: true,
-            ),
-          ],
-        ),
+    return SliverFillRemaining(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.category_outlined,
+            size: 64,
+            color: AppColors.textSecondaryDark,
+          ),
+          const SizedBox(height: 16),
+          QuantoText.h2('Add your first categories', color: Colors.white),
+          const SizedBox(height: 8),
+          QuantoText.bodyMedium(
+            'Start organizing your transactions by adding the categories that matter to you.',
+            color: AppColors.textSecondaryDark,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          QuantoButton(
+            onPressed: _addCategory,
+            text: 'New category',
+            buttonType: QuantoButtonType.primary,
+            isExpanded: true,
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildUserCategoriesList(List<Category> categories) {
-
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -233,9 +326,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   if (oldIndex < newIndex) {
                     newIndex -= 1;
                   }
-                  _categoryBloc.add(
-                    ReorderUserCategories(oldIndex, newIndex),
-                  );
+                  // For now, we'll handle reordering by getting current categories and reordering them
+                  final currentState = context.read<AppSettingsBloc>().state;
+                  if (currentState is AppSettingsLoaded) {
+                    final currentCategories = currentState.getCategoriesByType(_currentType);
+                    final reorderedCategories = List<Category>.from(currentCategories);
+                    final item = reorderedCategories.removeAt(oldIndex);
+                    reorderedCategories.insert(newIndex, item);
+                    
+                    context.read<AppSettingsBloc>().add(
+                      CategoriesReordered(
+                        reorderedCategories: reorderedCategories,
+                        type: _currentType,
+                      ),
+                    );
+                  }
                 },
                 itemBuilder: (context, index) {
                   final category = categories[index];
@@ -247,6 +352,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           icon: category.icon,
                           name: category.name,
                           borderColor: category.borderColor ?? const Color(0xFF6366F1),
+                          onTap: () => _editCategory(category),
                         ),
                         if (index < categories.length - 1) const QuantoDivider(),
                       ],
@@ -289,7 +395,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     icon: category.icon,
                     name: category.name,
                     onAdd: () {
-                      context.read<CategoryBloc>().add(AddCategory(category));
+                      context.read<AppSettingsBloc>().add(CategoryAdded(category));
                     },
                   );
                 },

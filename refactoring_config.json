@@ -1,0 +1,168 @@
+{
+  "globalBlocRefactoring": {
+    "version": "1.0.0",
+    "description": "Configuration for global BLoC refactoring validation",
+    
+    "scopeControl": {
+      "allowedGlobalState": [
+        "Currency",
+        "Category", 
+        "Theme",
+        "Locale",
+        "UserPreferences",
+        "AppConfiguration"
+      ],
+      "prohibitedGlobalState": [
+        "Transaction",
+        "Search",
+        "Filter",
+        "Form",
+        "Navigation",
+        "Loading",
+        "Error",
+        "Temporary",
+        "Cache",
+        "Modal",
+        "Dialog"
+      ],
+      "maxEventsInGlobalBloc": 15,
+      "maxPropertiesInGlobalState": 10
+    },
+    
+    "performanceProtection": {
+      "enforceGranularSelectors": true,
+      "preventFullTreeRebuilds": true,
+      "requireStateSplitting": true,
+      "maxRebuildScope": "feature",
+      "allowedBlocBuilders": [
+        "BlocSelector",
+        "BlocListener", 
+        "BlocConsumer"
+      ],
+      "prohibitedPatterns": [
+        "MaterialApp inside BlocBuilder",
+        "Scaffold inside BlocBuilder",
+        "Navigator inside BlocBuilder"
+      ]
+    },
+    
+    "testability": {
+      "requireHandlerPattern": true,
+      "enforceHandlerInterfaces": true,
+      "requireDependencyInjection": true,
+      "minTestCoverage": 80,
+      "requireHandlerUnitTests": true,
+      "requireIntegrationTests": true
+    },
+    
+    "dependencyBoundaries": {
+      "maxDirectRepositories": 1,
+      "requireServiceLayer": true,
+      "enforceRepositoryAggregation": true,
+      "allowedDependencies": [
+        "SettingsService",
+        "Logger",
+        "Analytics"
+      ],
+      "prohibitedDependencies": [
+        "Multiple Repositories",
+        "External APIs",
+        "Platform Channels"
+      ]
+    },
+    
+    "initialization": {
+      "preventBlockingInit": true,
+      "requireLazyLoading": true,
+      "supportPartialRendering": true,
+      "maxInitializationTime": 500,
+      "allowedInitPatterns": [
+        "Lazy Loading",
+        "Progressive Loading",
+        "Background Loading"
+      ]
+    },
+    
+    "godBlocPrevention": {
+      "maxComplexity": 15,
+      "maxEventTypes": 15,
+      "maxStateProperties": 10,
+      "maxHandlers": 8,
+      "requireJustification": true,
+      "qualificationCriteria": {
+        "minDependentFeatures": 3,
+        "maxChangesPerSession": 10,
+        "requiresFundamentalState": true,
+        "causesSyncIssues": true
+      }
+    },
+    
+    "migration": {
+      "requireIncrementalRollout": true,
+      "requireFeatureFlags": true,
+      "requireParityValidation": true,
+      "maxMigrationPhases": 3,
+      "rollbackStrategy": "immediate",
+      "validationGates": [
+        "unit_tests_pass",
+        "integration_tests_pass", 
+        "performance_benchmarks_pass",
+        "manual_qa_complete"
+      ]
+    },
+    
+    "codeQuality": {
+      "enforceSOLIDPrinciples": true,
+      "requireCleanArchitecture": true,
+      "maxCyclomaticComplexity": 10,
+      "requireDocumentation": true,
+      "enforceNamingConventions": true,
+      "requireTypeAnnotations": true
+    },
+    
+    "monitoring": {
+      "trackPerformanceMetrics": true,
+      "monitorRebuildCounts": true,
+      "trackMemoryUsage": true,
+      "measureStartupTime": true,
+      "alertThresholds": {
+        "rebuildIncrease": 20,
+        "memoryIncrease": 15,
+        "startupTimeIncrease": 10
+      }
+    }
+  },
+  
+  "validationRules": {
+    "critical": [
+      "no_prohibited_state_in_global_bloc",
+      "no_blocking_initialization", 
+      "no_full_tree_rebuilds",
+      "handler_pattern_implemented",
+      "service_layer_exists"
+    ],
+    "important": [
+      "granular_selectors_used",
+      "state_properly_split",
+      "handlers_have_tests",
+      "dependency_boundaries_respected"
+    ],
+    "recommended": [
+      "documentation_complete",
+      "performance_benchmarks_exist",
+      "migration_strategy_documented",
+      "team_training_completed"
+    ]
+  },
+  
+  "exemptions": {
+    "allowedExceptions": [
+      {
+        "rule": "maxEventsInGlobalBloc",
+        "justification": "Core settings require comprehensive event coverage",
+        "approvedBy": "tech_lead",
+        "expiryDate": "2024-12-31"
+      }
+    ]
+  }
+}

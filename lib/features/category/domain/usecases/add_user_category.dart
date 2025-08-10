@@ -6,7 +6,7 @@ class AddUserCategory {
 
   AddUserCategory(this.repository);
 
-  Future<void> call(Category category) async {
-    await repository.addUserCategory(category);
+  Future<void> call(Category category, CategoryType type) async {
+    await repository.addUserCategory(category, type);
   }
 }

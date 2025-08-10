@@ -21,6 +21,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<AddCategory>(_onAddCategory);
     on<ReorderUserCategories>(_onReorderUserCategories);
     on<CreateCategory>(_onCreateCategory);
+    on<UpdateCategory>(_onUpdateCategory);
   }
 
   Future<void> _onLoadCategories(
@@ -140,6 +141,37 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         ));
       } catch (e) {
         emit(CategoryError('Failed to create category: ${e.toString()}'));
+        emit(currentState);
+      }
+    }
+  }
+
+  Future<void> _onUpdateCategory(
+    UpdateCategory event,
+    Emitter<CategoryState> emit,
+  ) async {
+    if (state is CategoryLoaded) {
+      final currentState = state as CategoryLoaded;
+      try {
+        final updatedCategory = Category(
+          id: event.categoryId,
+          name: event.name,
+          icon: event.icon,
+          type: event.type,
+          borderColor: event.borderColor,
+        );
+        
+        await manageUserCategories.updateUserCategory(updatedCategory, event.type);
+        
+        // Reload categories to get updated data
+        final userCategories = await manageUserCategories.getUserCategories(event.type);
+        
+        emit(CategoryLoaded(
+          suggestedCategories: currentState.suggestedCategories,
+          userCategories: userCategories,
+        ));
+      } catch (e) {
+        emit(CategoryError('Failed to update category: ${e.toString()}'));
         emit(currentState);
       }
     }

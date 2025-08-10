@@ -18,23 +18,29 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  // List of pages to display
-  static final List<Widget> _pages = <Widget>[
-    const TransactionsPage(),
-    const SummaryPage(),
-    const SettingsPage(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  Widget _getCurrentPage() {
+    switch (_selectedIndex) {
+      case 0:
+        return const TransactionsPage();
+      case 1:
+        return const SummaryPage();
+      case 2:
+        return const SettingsPage();
+      default:
+        return const TransactionsPage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: _pages.elementAt(_selectedIndex)),
+      body: Center(child: _getCurrentPage()),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,

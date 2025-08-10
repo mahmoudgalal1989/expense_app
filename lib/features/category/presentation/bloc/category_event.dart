@@ -53,3 +53,22 @@ class CreateCategory extends CategoryEvent {
   @override
   List<Object> get props => [name, icon, type, borderColor];
 }
+
+class UpdateCategory extends CategoryEvent {
+  final String categoryId;
+  final String name;
+  final String icon;
+  final CategoryType type;
+  final Color borderColor;
+
+  const UpdateCategory({
+    required this.categoryId,
+    required this.name,
+    required this.icon,
+    required this.type,
+    required this.borderColor,
+  });
+
+  @override
+  List<Object> get props => [categoryId, name, icon, type, borderColor];
+}

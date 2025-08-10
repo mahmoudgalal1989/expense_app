@@ -43,6 +43,32 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
   }
 
   @override
+  Future<Currency?> getSelectedCurrency() async {
+    try {
+      final selectedCurrencyCode = prefs.getString(_selectedCurrencyKey);
+      
+      if (selectedCurrencyCode == null) {
+        // No currency selected, get all currencies and return the first one
+        final allCurrencies = await getAllCurrencies();
+        return allCurrencies.isNotEmpty ? allCurrencies.first : null;
+      }
+
+      // Get all currencies to find the selected one
+      final allCurrencies = await getAllCurrencies();
+      final selectedCurrency = allCurrencies.firstWhere(
+        (currency) => currency.code == selectedCurrencyCode,
+        orElse: () => allCurrencies.isNotEmpty 
+            ? allCurrencies.first 
+            : throw Exception('No currencies available'),
+      );
+      return selectedCurrency;
+    } catch (e) {
+      // Return null on error
+      return null;
+    }
+  }
+
+  @override
   Future<List<Currency>> searchCurrencies(String query) async {
     if (_cachedModels == null) {
       await getAllCurrencies();

@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/di/currency_injection_container.dart';
 import 'package:expense_app/features/category/di/category_injection_container.dart';
-import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
-import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
+import 'package:expense_app/core/di/app_settings_injection_container.dart';
+
+import 'package:expense_app/core/bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expense_app/screens/splash_screen.dart';
@@ -47,6 +48,7 @@ Future<void> main() async {
         // Initialize dependency injection
         await initCurrencyFeature();
         initCategoryFeature();
+        initAppSettings();
 
         // Run the app
         runApp(const MyApp());
@@ -108,10 +110,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initializeApp() async {
     try {
-      // Initialize the currency bloc
-      final currencyBloc = GetIt.instance<CurrencyBloc>();
-      currencyBloc.add(const LoadCurrencies());
-
+      // App settings will be initialized by the global BLoC
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -184,8 +183,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     // Main app
-    return BlocProvider(
-      create: (context) => GetIt.instance<CurrencyBloc>(),
+    return BlocProvider<AppSettingsBloc>(
+      create: (context) => GetIt.instance<AppSettingsBloc>()
+        ..add(const InitializeAppSettings()),
       child: MaterialApp(
         title: 'Quanto',
         debugShowCheckedModeBanner: false,

@@ -6,11 +6,13 @@ import 'package:expense_app/widgets/animated_toggle_switch.dart';
 import 'package:expense_app/features/category/domain/entities/category.dart';
 
 class AddCategoryBottomSheet extends StatefulWidget {
-  final Function(String name, String icon, CategoryType type, Color borderColor) onSave;
+  final Function(String name, String icon, CategoryType type, Color borderColor, {String? categoryId}) onSave;
+  final Category? categoryToEdit;
 
   const AddCategoryBottomSheet({
     super.key,
     required this.onSave,
+    this.categoryToEdit,
   });
 
   @override
@@ -71,7 +73,16 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _iconController.text = '🛍️'; // Default shopping bag icon
+    if (widget.categoryToEdit != null) {
+      // Populate fields for editing mode
+      _nameController.text = widget.categoryToEdit!.name;
+      _iconController.text = widget.categoryToEdit!.icon;
+      _selectedType = widget.categoryToEdit!.type;
+      _selectedColor = widget.categoryToEdit!.borderColor ?? const Color(0xFFF76775);
+    } else {
+      // Default values for new category
+      _iconController.text = '🛍️'; // Default shopping bag icon
+    }
   }
 
   @override
@@ -94,12 +105,14 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
   }
 
   void _onSave() {
-    if (_nameController.text.trim().isNotEmpty && _iconController.text.trim().isNotEmpty) {
+    if (_nameController.text.trim().isNotEmpty &&
+        _iconController.text.trim().isNotEmpty) {
       widget.onSave(
         _nameController.text.trim(),
         _iconController.text.trim(),
         _selectedType,
         _selectedColor,
+        categoryId: widget.categoryToEdit?.id,
       );
       Navigator.of(context).pop();
     }
@@ -205,10 +218,10 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Icon and name input row
+              // Icon and name input column
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
+                child: Column(
                   children: [
                     // Icon input field
                     Container(
@@ -227,7 +240,8 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                           controller: _iconController,
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 24),
-                          maxLength: 2,
+                          maxLength: 1,
+                          // maxLines: 1,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             counterText: '',
@@ -235,55 +249,59 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                             hintStyle: TextStyle(fontSize: 24),
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(2),
+                            LengthLimitingTextInputFormatter(1),
+                            FilteringTextInputFormatter.allow(
+                              RegExp(
+                                  r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]',
+                                  unicode: true),
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(height: 16),
                     // Category name input
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.opacity8,
-                          borderRadius: BorderRadius.circular(12),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.opacity8,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: _nameController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Sora',
                         ),
-                        child: TextField(
-                          controller: _nameController,
-                          style: const TextStyle(
-                            color: Colors.white,
+                        decoration: InputDecoration(
+                          hintText: 'Category name',
+                          hintStyle: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.5),
                             fontSize: 16,
                             fontFamily: 'Sora',
                           ),
-                          decoration: InputDecoration(
-                            hintText: 'Category name',
-                            hintStyle: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.5),
-                              fontSize: 16,
-                              fontFamily: 'Sora',
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                            suffixIcon: GestureDetector(
-                              onTap: _onSave,
-                              child: Container(
-                                margin: const EdgeInsets.all(8),
-                                width: 32,
-                                height: 32,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.black,
-                                  size: 16,
-                                ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.all(16),
+                          suffixIcon: GestureDetector(
+                            onTap: _onSave,
+                            child: Container(
+                              margin: const EdgeInsets.all(8),
+                              width: 32,
+                              height: 32,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.black,
+                                size: 16,
                               ),
                             ),
                           ),
-                          onSubmitted: (_) => _onSave(),
                         ),
+                        onSubmitted: (_) => _onSave(),
                       ),
                     ),
                   ],

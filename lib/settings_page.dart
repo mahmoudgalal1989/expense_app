@@ -1,10 +1,10 @@
-import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_event.dart';
-import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_state.dart';
+import 'package:expense_app/core/bloc/app_settings_bloc.dart';
+import 'package:expense_app/core/bloc/app_settings_state.dart';
 import 'package:expense_app/theme/app_colors.dart';
 import 'package:expense_app/widgets/setting_item.dart';
 import 'package:expense_app/widgets/quanto_divider.dart';
 import 'package:expense_app/widgets/quanto_text.dart';
-import 'package:expense_app/features/currency/presentation/bloc/currency_bloc/currency_bloc.dart';
+
 import 'package:expense_app/features/currency/presentation/screens/currency_screen.dart';
 import 'package:expense_app/features/category/presentation/screens/category_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,32 +24,18 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    // Load currencies when the page initializes
-    context.read<CurrencyBloc>().add(const LoadCurrencies());
+    // App settings are already initialized by the global BLoC
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CurrencyBloc, CurrencyState>(
+    return BlocConsumer<AppSettingsBloc, AppSettingsState>(
       listener: (context, state) {
-        if (state is CurrenciesLoaded) {
-          if (state.selectedCurrency.code.isNotEmpty) {
+        if (state is AppSettingsLoaded) {
+          if (mounted) {
             setState(() {
               selectedCurrency = state.selectedCurrency.code;
             });
-          } else {
-            final selected = state.currencies.firstWhere(
-              (c) => c.code == selectedCurrency,
-              orElse: () => state.currencies.firstWhere(
-                (c) => c.isSelected,
-                orElse: () => state.currencies.first,
-              ),
-            );
-            if (mounted) {
-              setState(() {
-                selectedCurrency = selected.code;
-              });
-            }
           }
         }
       },
