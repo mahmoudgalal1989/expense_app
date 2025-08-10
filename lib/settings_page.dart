@@ -19,26 +19,32 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String selectedCurrency = ''; // Default to empty
-
   @override
   void initState() {
     super.initState();
     // App settings are already initialized by the global BLoC
   }
 
+  String _getCurrencyDisplayText(AppSettingsState state) {
+    if (state is AppSettingsLoaded) {
+      try {
+        final currency = state.selectedCurrency;
+        return currency.code;
+      } catch (e) {
+        return 'Error loading currency';
+      }
+    } else if (state is AppSettingsLoading) {
+      return 'Loading currency...';
+    } else if (state is AppSettingsError) {
+      return 'Error: ${state.message}';
+    } else {
+      return 'Select currency';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppSettingsBloc, AppSettingsState>(
-      listener: (context, state) {
-        if (state is AppSettingsLoaded) {
-          if (mounted) {
-            setState(() {
-              selectedCurrency = state.selectedCurrency.code;
-            });
-          }
-        }
-      },
+    return BlocBuilder<AppSettingsBloc, AppSettingsState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -85,9 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               // Currency Section
                               SettingItem(
                                 title: 'Currency',
-                                subtitle: selectedCurrency.isEmpty
-                                    ? 'Select currency'
-                                    : selectedCurrency,
+                                subtitle: _getCurrencyDisplayText(state),
                                 svgAsset: 'assets/svg/settings_currency.svg',
                                 iconColor: Colors.white,
                                 textColor: AppColors.textPrimaryDark,

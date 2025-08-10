@@ -16,8 +16,7 @@ class CategoryModel extends Category {
       id: json['id'],
       name: json['name'],
       icon: json['icon'],
-      type: CategoryType.values
-          .firstWhere((e) => e.toString() == 'CategoryType.${json['type']}'),
+      type: CategoryTypeExtension.fromId(json['type']),
       borderColor: json['borderColor'] != null 
           ? Color(json['borderColor']) 
           : null,
@@ -30,7 +29,7 @@ class CategoryModel extends Category {
       'id': id,
       'name': name,
       'icon': icon,
-      'type': type.toString().split('.').last,
+      'type': type.id, // Use the ID instead of toString
       'borderColor': borderColor?.value,
       'order': order,
     };

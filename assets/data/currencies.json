@@ -1,85 +1,113 @@
 [
   {
+    "id": "1",
     "code": "AED",
+    "symbol": "AED",
     "isMostUsed": true,
     "countryName": "United Arab Emirates Dirham",
     "flagIconPath": "🇦🇪"
   },
   {
+    "id": "2",
     "code": "USD",
+    "symbol": "$",
     "isMostUsed": true,
     "countryName": "United States Dollar",
     "flagIconPath": "🇺🇸"
   },
   {
+    "id": "3",
     "code": "EUR",
+    "symbol": "€",
     "isMostUsed": true,
     "countryName": "Euro",
     "flagIconPath": "🇪🇺"
   },
   {
+    "id": "4",
     "code": "GBP",
+    "symbol": "£",
     "isMostUsed": true,
     "countryName": "British Pound Sterling",
     "flagIconPath": "🇬🇧"
   },
   
   {
+    "id": "5",
     "code": "AFN",
+    "symbol": "؋",
     "isMostUsed": false,
     "countryName": "Afghan Afghani",
     "flagIconPath": "🇦🇫"
   },
   {
+    "id": "6",
     "code": "SAR",
+    "symbol": "﷼",
     "isMostUsed": false,
-    "countryName": "Albanian Lek",
-    "flagIconPath": "🇦🇱"
+    "countryName": "Saudi Riyal",
+    "flagIconPath": "🇸🇦"
   },
   {
+    "id": "7",
     "code": "DZD",
+    "symbol": "د.ج",
     "isMostUsed": false,
     "countryName": "Algerian Dinar",
     "flagIconPath": "🇩🇿"
   },
   {
+    "id": "8",
     "code": "AOA",
+    "symbol": "Kz",
     "isMostUsed": false,
     "countryName": "Angolan Kwanza",
     "flagIconPath": "🇦🇴"
   },
-  {
+  { 
+    "id": "9",
     "code": "ARS",
+    "symbol": "$",
     "isMostUsed": false,
     "countryName": "Argentine Peso",
     "flagIconPath": "🇦🇷"
   },
   {
+    "id": "10",
     "code": "AMD",
+    "symbol": "֏",
     "isMostUsed": false,
     "countryName": "Armenian Dram",
     "flagIconPath": "🇦🇲"
   },
-  {
+  { 
+    "id": "11",
     "code": "AWG",
+    "symbol": "ƒ",
     "isMostUsed": false,
     "countryName": "Aruban Florin",
     "flagIconPath": "🇦🇼"
   },
-  {
+  { 
+    "id": "12",
     "code": "AUD",
+    "symbol": "AUD",
     "isMostUsed": false,
     "countryName": "Australian Dollar",
     "flagIconPath": "🇦🇺"
   },
-  {
+  {   
+    "id": "13", 
     "code": "AZN",
+    "symbol": "AZN",
     "isMostUsed": false,
     "countryName": "Azerbaijani Manat",
     "flagIconPath": "🇦🇿"
   },
-  {
+  { 
+    "id": "14",   
     "code": "BSD",
+    "symbol": "v",
     "isMostUsed": false,
     "countryName": "Bahamian Dollar",
     "flagIconPath": "🇧🇸"

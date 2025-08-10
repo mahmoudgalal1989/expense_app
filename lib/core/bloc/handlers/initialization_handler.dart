@@ -3,6 +3,7 @@ import 'package:expense_app/core/bloc/app_settings_event.dart';
 import 'package:expense_app/core/bloc/app_settings_state.dart';
 import 'package:expense_app/core/bloc/handlers/settings_handler.dart';
 import 'package:expense_app/features/currency/domain/repositories/currency_repository.dart';
+import 'package:expense_app/features/currency/domain/entities/currency.dart';
 import 'package:expense_app/features/category/domain/repositories/category_repository.dart';
 import 'package:expense_app/features/category/domain/entities/category.dart';
 
@@ -58,14 +59,24 @@ class InitializationHandler extends SettingsHandler<InitializeAppSettings>
     ]);
 
     final currencies = results[0] as List;
-    final selectedCurrency = results[1];
+    final selectedCurrency = results[1] as Currency?;
     final expenseCategories = results[2] as List;
     final incomeCategories = results[3] as List;
     final suggestedExpenseCategories = results[4] as List;
     final suggestedIncomeCategories = results[5] as List;
 
+    // Debug logging
+    print('🔍 InitializationHandler Debug:');
+    print('  📦 Loaded ${currencies.length} currencies');
+    print('  💰 Selected currency: ${selectedCurrency?.code ?? 'null'} (${selectedCurrency?.symbol ?? 'no symbol'})');
+    print('  🏷️ Expense categories: ${expenseCategories.length}');
+    print('  🏷️ Income categories: ${incomeCategories.length}');
+    
+    final finalSelectedCurrency = selectedCurrency ?? (currencies.isNotEmpty ? currencies.first : null);
+    print('  ✅ Final selected currency: ${(finalSelectedCurrency as Currency?)?.code ?? 'null'} (${(finalSelectedCurrency as Currency?)?.symbol ?? 'no symbol'})');
+
     return {
-      'selectedCurrency': selectedCurrency ?? (currencies.isNotEmpty ? currencies.first : null),
+      'selectedCurrency': finalSelectedCurrency,
       'availableCurrencies': currencies,
       'expenseCategories': expenseCategories,
       'incomeCategories': incomeCategories,

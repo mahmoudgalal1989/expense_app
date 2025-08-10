@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:expense_app/core/error/failures.dart';
 import 'package:expense_app/features/currency/di/currency_injection_container.dart';
 import 'package:expense_app/features/category/di/category_injection_container.dart';
+import 'package:expense_app/features/transaction/di/transaction_injection_container.dart';
 import 'package:expense_app/core/di/app_settings_injection_container.dart';
 
 import 'package:expense_app/core/bloc/bloc.dart';
@@ -48,6 +49,7 @@ Future<void> main() async {
         // Initialize dependency injection
         await initCurrencyFeature();
         initCategoryFeature();
+        await TransactionInjectionContainer.init();
         initAppSettings();
 
         // Run the app
