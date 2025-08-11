@@ -79,11 +79,19 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
     }
 
     final lowercaseQuery = query.toLowerCase();
+
+    // Get the currently selected currency so the search results can
+    // correctly mark it. Without this, any search would return currencies
+    // with `isSelected` set to false even if one is already chosen.
+    final selectedCurrencyCode = prefs.getString(_selectedCurrencyKey);
+
     return _cachedModels!
         .where((currency) =>
             currency.code.toLowerCase().contains(lowercaseQuery) ||
             currency.countryName.toLowerCase().contains(lowercaseQuery))
-        .map((model) => model.toEntity())
+        .map((model) => model.toEntity().copyWith(
+              isSelected: model.code == selectedCurrencyCode,
+            ))
         .toList();
   }
 
