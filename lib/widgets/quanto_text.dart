@@ -111,6 +111,13 @@ class QuantoText extends StatelessWidget {
       letterSpacing: 0.1,
     ),
 
+    'Display/D2': TextStyle(
+      fontSize: 42,
+      fontWeight: FontWeight.w700, // Bold
+      height: 32.0 / 25.0,
+      letterSpacing: 0.1,
+    ),
+
     // Button Styles
     'Button/Large': TextStyle(
       fontSize: 16,

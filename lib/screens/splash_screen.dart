@@ -1,8 +1,104 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expense_app/screens/onboarding/onboarding_screen.dart';
 import 'package:expense_app/main_page.dart';
+import '../theme/app_colors.dart';
+import '../widgets/quanto_text.dart';
+
+class GlowSpot {
+  /// Position as a fraction of the canvas (0..1). e.g. Offset(0.8, 0.1) = near top-right
+  final Offset pos;
+
+  /// Radius in logical pixels
+  final double radius;
+
+  /// Core color of the glow
+  final Color color;
+
+  /// 0..1 multiplier for brightness
+  final double intensity;
+
+  const GlowSpot({
+    required this.pos,
+    required this.radius,
+    this.color = const Color(0xFF2DA9FF),
+    this.intensity = 1.0,
+  });
+}
+
+class GlowOverlay extends StatelessWidget {
+  final Color baseColor;
+  final List<GlowSpot> spots;
+
+  const GlowOverlay({
+    super.key,
+    this.baseColor = const Color(0xFF0B0F12), // deep, near-black base
+    required this.spots,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: baseColor,
+      child: Stack(
+        children: [
+          CustomPaint(
+            painter: _GlowPainter(spots),
+            size: Size.infinite,
+          ),
+          // Quanto text in center
+          Center(
+            child: QuantoText(
+              'Quanto',
+              styleVariant: 'Display/D2',
+              color: AppColors.textPrimaryDark,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GlowPainter extends CustomPainter {
+  final List<GlowSpot> spots;
+
+  _GlowPainter(this.spots);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final s in spots) {
+      final center = Offset(s.pos.dx * size.width, s.pos.dy * size.height);
+
+      // Gradient from #008AFF to #00A1FF with radial fade
+      final shader = ui.Gradient.radial(
+        center,
+        s.radius,
+        [
+          const Color(0xFF008AFF).withOpacity(0.75 * s.intensity), // Inner gradient start
+          const Color(0xFF00A1FF).withOpacity(0.5 * s.intensity),  // Mid gradient
+          const Color(0xFF00A1FF).withOpacity(0.25 * s.intensity), // Outer gradient
+          Colors.transparent,
+        ],
+        const [0.0, 0.3, 0.6, 1.0],
+      );
+
+      final paint = Paint()
+        ..shader = shader
+        // 'plus' (additive) blending keeps background dark and adds glow on top
+        ..blendMode = BlendMode.plus;
+
+      // Large circle; gradient handles the fade
+      canvas.drawCircle(center, s.radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _GlowPainter old) => old.spots != spots;
+}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -53,34 +149,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Set background to transparent to avoid flash of white during transition
       backgroundColor: Colors.transparent,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        // Match the native splash screen gradient
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF283339), Color(0xFF0C0F11)],
+      body: GlowOverlay(
+        baseColor: const Color(0xFF0B0F12),
+        spots: const [
+          GlowSpot(
+            pos: Offset(0.75, 0.18), // x75%, y18%
+            radius: 391,
+            intensity: 0.8, // 80% density
+            color: Color(0xFF008AFF), // Blue color
           ),
-        ),
-        child: Center(
-          child: Semantics(
-            label: "Quanto logo",
-            header: true,
-            child: SvgPicture.asset(
-              'assets/svg/splash.svg',
-              width: 200,
-              height: 200,
-              // Ensure the logo is rendered with the correct blending
-              theme: const SvgTheme(
-                currentColor: Colors.white,
-              ),
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }

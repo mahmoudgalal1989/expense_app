@@ -110,21 +110,19 @@ flutter:
         - asset: assets/fonts/Sora-ExtraBold.ttf
           weight: 800
 
-# Splash screen configuration
+# Splash screen configuration - Simple dark background for seamless transition
 flutter_native_splash:
-  # Background color (will be used as fallback if gradient is not supported)
-  color: "#283339"
-  # Set splash image
-  image: "assets/svg/splash.svg"
+  # Dark background to match our glow design exactly
+  color: "#0B0F12"
+  # No image - let Flutter handle the beautiful glow design
   # Platform specific settings
   android: true
   ios: true
   web: false
-  # Background image with gradient (will be handled in Flutter code)
+  # Use the glow background image for visual continuity
   background_image: "assets/images/splash_background.png"
-  # Center the logo
-  android_gravity: center
-  ios_content_mode: center
+  # Fullscreen for seamless transition
+  fullscreen: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
