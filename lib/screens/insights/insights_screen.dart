@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/quanto_text.dart';
 import '../../widgets/quanto_button.dart';
-import '../../main_page.dart';
+import '../../features/currency/presentation/screens/currency_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsightsScreen extends StatefulWidget {
@@ -38,10 +38,10 @@ class _InsightsScreenState extends State<InsightsScreen> {
     });
   }
 
-  void _navigateToMainApp() {
+  void _navigateToCurrencySelection() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const MainPage(),
+        builder: (context) => const CurrencyScreen(),
       ),
     );
   }
@@ -154,7 +154,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 40),
                   child: QuantoButton(
-                    onPressed: _navigateToMainApp,
+                    onPressed: _navigateToCurrencySelection,
                     text: AppLocalizations.of(context)!.continueButton,
                     buttonType: QuantoButtonType.primary,
                     size: QuantoButtonSize.large,

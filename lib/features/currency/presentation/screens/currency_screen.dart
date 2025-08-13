@@ -10,6 +10,9 @@ import 'package:expense_app/core/bloc/app_settings_event.dart';
 import 'package:expense_app/core/bloc/app_settings_state.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:expense_app/widgets/quanto_divider.dart';
+import 'package:expense_app/widgets/quanto_button.dart';
+import 'package:expense_app/main_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrencyScreen extends StatefulWidget {
   const CurrencyScreen({super.key});
@@ -21,13 +24,14 @@ class CurrencyScreen extends StatefulWidget {
 class _CurrencyScreenState extends State<CurrencyScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  Currency? _selectedCurrency;
 
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    context.read<AppSettingsBloc>().add(const InitializeAppSettings());
+    // Don't initialize here - data should already be loaded from previous screens
     _focusNode.addListener(() {
       setState(() {});
     });
@@ -69,196 +73,213 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
         if (!isSelected) {
           // Update the selected currency in the global BLoC
           context.read<AppSettingsBloc>().add(CurrencyChanged(currency));
+
+          // Update local state to show the Next button
+          setState(() {
+            _selectedCurrency = currency;
+          });
         }
       },
     );
   }
 
-  Widget _buildScaffold(AppSettingsState state) {
-    final background = Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.backgroundGradient[0],
-            AppColors.backgroundGradient[1],
-          ],
-        ),
+  Future<void> _completeOnboardingAndNavigate() async {
+    // Save onboarding completion status
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', true);
+
+    if (!mounted) return;
+
+    // Navigate to main app with smooth transition
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const MainPage(),
+        transitionDuration: const Duration(milliseconds: 600),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
     );
+  }
 
+  Widget _buildScaffold(AppSettingsState state) {
+    // If data is not loaded, initialize it but show the UI immediately with cached data
     if (state is AppSettingsLoading || state is AppSettingsInitial) {
+      // Trigger initialization if needed
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<AppSettingsBloc>().add(const InitializeAppSettings());
+        }
+      });
+
+      // Show loading UI only if absolutely no data is available
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Stack(
-          children: [
-            background,
-            const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: AppColors.backgroundGradient,
             ),
-          ],
+          ),
+          child: const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ),
         ),
       );
     }
 
     if (state is AppSettingsError) {
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Stack(
-          children: [
-            background,
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Failed to load currencies',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => context
-                        .read<AppSettingsBloc>()
-                        .add(const InitializeAppSettings()),
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: AppColors.backgroundGradient,
             ),
-          ],
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuantoText(
+                  'Failed to load currencies',
+                  styleVariant: 'Body/B1-R',
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 16),
+                QuantoButton(
+                  text: 'Retry',
+                  onPressed: () => context
+                      .read<AppSettingsBloc>()
+                      .add(const InitializeAppSettings()),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
 
     if (state is AppSettingsLoaded) {
-      final searchQuery = _searchController.text.toLowerCase();
-      final allCurrencies = state.availableCurrencies;
+      final currencies = state.availableCurrencies;
       final selectedCurrency = state.selectedCurrency;
-      
+      final searchQuery = _searchController.text.toLowerCase();
+
       // Filter currencies based on search query
-      final filteredCurrencies = allCurrencies.where((currency) {
-        return currency.countryName.toLowerCase().contains(searchQuery) ||
-            currency.code.toLowerCase().contains(searchQuery);
-      }).toList();
+      final filteredCurrencies = currencies
+          .where((currency) =>
+              currency.countryName.toLowerCase().contains(searchQuery) ||
+              currency.code.toLowerCase().contains(searchQuery))
+          .toList();
 
       // Get most used currencies (filtered)
-      final filteredMostUsed = filteredCurrencies.where((currency) => currency.isMostUsed).toList();
+      final filteredMostUsed =
+          filteredCurrencies.where((currency) => currency.isMostUsed).toList();
 
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Stack(
-          children: [
-            background,
-            Column(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: AppColors.backgroundGradient,
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // App Bar
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icons/arrow_left.svg',
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: QuantoText.h3('Currency', color: Colors.white),
+                // Header with back button
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: SvgPicture.asset(
+                          'assets/svg/back_btn.svg',
+                          width: 38,
+                          height: 38,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
                           ),
                         ),
-                        const SizedBox(width: 48), // Balance the back button
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                // Search Bar
+
+                // Title below back button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.opacity8,
-                      borderRadius: BorderRadius.circular(16),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                  child: QuantoText(
+                    'Select your main currency',
+                    styleVariant: 'Header/H1',
+                    color: AppColors.textPrimaryDark,
+                  ),
+                ),
+
+                // Search Bar
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.opacity8,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    focusNode: _focusNode,
+                    onChanged: _onSearchChanged,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
                     ),
-                    child: TextField(
-                      controller: _searchController,
-                      focusNode: _focusNode,
-                      onChanged: _onSearchChanged,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: 'Search currencies',
-                        hintStyle: TextStyle(color: Colors.grey[400]),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.grey[400],
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
+                    decoration: InputDecoration(
+                      hintText: 'Search currency',
+                      hintStyle: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 16,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey[400],
+                        size: 20,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+
                 // Currency List
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-                      // Most Used Currencies
+                      // Most Used Section
                       if (filteredMostUsed.isNotEmpty)
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 10.0),
-                            child: QuantoText.bodyLarge(
-                              'Most Used',
-                              color: const Color(0xFF868A8D),
-                            ),
-                          ),
-                        ),
-                      if (filteredMostUsed.isNotEmpty)
-                        SliverToBoxAdapter(
-                          child: Container(
-                            margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                            decoration: BoxDecoration(
-                              color: AppColors.opacity8,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: List.generate(filteredMostUsed.length, (index) {
-                                final currency = filteredMostUsed[index];
-                                final isLast = index == filteredMostUsed.length - 1;
-                                return Column(
-                                  children: [
-                                    _buildCurrencyItem(
-                                      currency,
-                                      currency.code == selectedCurrency.code,
-                                    ),
-                                    if (!isLast) const QuantoDivider(),
-                                  ],
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                      // All Currencies
-                      if (filteredCurrencies.isNotEmpty)
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 10.0),
-                            child: QuantoText.bodyLarge(
-                              'All Currencies',
+                            padding: const EdgeInsets.fromLTRB(
+                                16.0, 0.0, 16.0, 10.0),
+                            child: QuantoText(
+                              'Most used',
+                              styleVariant: 'Body/B1-L',
                               color: const Color(0xFF868A8D),
                             ),
                           ),
@@ -271,14 +292,59 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
-                            children: List.generate(filteredCurrencies.length, (index) {
-                              final currency = filteredCurrencies[index];
-                              final isLast = index == filteredCurrencies.length - 1;
+                            children:
+                                List.generate(filteredMostUsed.length, (index) {
+                              final currency = filteredMostUsed[index];
+                              final isLast =
+                                  index == filteredMostUsed.length - 1;
                               return Column(
                                 children: [
                                   _buildCurrencyItem(
                                     currency,
-                                    currency.code == selectedCurrency.code,
+                                    currency.code == selectedCurrency.code ||
+                                        _selectedCurrency?.code ==
+                                            currency.code,
+                                  ),
+                                  if (!isLast) const QuantoDivider(),
+                                ],
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                      // All Currencies
+                      if (filteredCurrencies.isNotEmpty)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                16.0, 24.0, 16.0, 10.0),
+                            child: QuantoText(
+                              'All currencies',
+                              styleVariant: 'Body/B1-L',
+                              color: const Color(0xFF868A8D),
+                            ),
+                          ),
+                        ),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                          decoration: BoxDecoration(
+                            color: AppColors.opacity8,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: List.generate(filteredCurrencies.length,
+                                (index) {
+                              final currency = filteredCurrencies[index];
+                              final isLast =
+                                  index == filteredCurrencies.length - 1;
+                              return Column(
+                                children: [
+                                  _buildCurrencyItem(
+                                    currency,
+                                    currency.code == selectedCurrency.code ||
+                                        _selectedCurrency?.code ==
+                                            currency.code,
                                   ),
                                   if (!isLast) const QuantoDivider(),
                                 ],
@@ -288,29 +354,45 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                         ),
                       ),
                       // No Results
-                      if (filteredCurrencies.isEmpty && filteredMostUsed.isEmpty)
+                      if (filteredCurrencies.isEmpty &&
+                          filteredMostUsed.isEmpty)
                         SliverFillRemaining(
                           hasScrollBody: false,
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Text(
+                              child: QuantoText(
                                 'No currencies found for "$searchQuery"',
-                                style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 14,
-                                ),
+                                styleVariant: 'Body/B1-R',
+                                color: Colors.grey[400]!,
                                 textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
+                      // Add bottom padding for the Next button
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: 100),
+                      ),
                     ],
                   ),
                 ),
+
+                // Next Button (shown when currency is selected)
+                if (_selectedCurrency != null)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                    child: QuantoButton(
+                      text: 'Next',
+                      onPressed: _completeOnboardingAndNavigate,
+                      buttonType: QuantoButtonType.primary,
+                      size: QuantoButtonSize.large,
+                      isExpanded: true,
+                    ),
+                  ),
               ],
             ),
-          ],
+          ),
         ),
       );
     }
