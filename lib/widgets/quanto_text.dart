@@ -45,9 +45,9 @@ class QuantoText extends StatelessWidget {
       letterSpacing: 0,
     ),
     'Header/H3': TextStyle(
-      fontSize: 18,
+      fontSize: 19,
       fontWeight: FontWeight.w600, // SemiBold
-      height: 24.0 / 18.0, // line-height: 24px
+      height: 32.0 / 19.0, // line-height: 32px
       letterSpacing: 0,
     ),
     'Header/H4-M': TextStyle(
@@ -59,9 +59,9 @@ class QuantoText extends StatelessWidget {
 
     'Body/B1-L': TextStyle(
       fontSize: 13,
-      fontWeight: FontWeight.w300, // Regular
+      fontWeight: FontWeight.w300, // Light
       height: 20.0 / 13.0, // line-height: 20px
-      letterSpacing: 0,
+      letterSpacing: 0.01, // 1% letter spacing
     ),
     // Body Styles - Regular
     'Body/B1-R': TextStyle(
@@ -116,6 +116,14 @@ class QuantoText extends StatelessWidget {
       fontWeight: FontWeight.w700, // Bold
       height: 32.0 / 25.0,
       letterSpacing: 0.1,
+    ),
+
+    // CTA Styles
+    'CTA/C1': TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600, // SemiBold
+      height: 24.0 / 14.0, // line-height: 24px
+      letterSpacing: 0,
     ),
 
     // Button Styles

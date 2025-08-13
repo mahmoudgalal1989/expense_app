@@ -118,7 +118,7 @@ class _QuantoButtonState extends State<QuantoButton> {
   Widget _getTextWidget(String text, Color color) {
     switch (widget.size) {
       case QuantoButtonSize.large:
-        return QuantoText.buttonLarge(text, color: color);
+        return QuantoText(text, styleVariant: 'CTA/C1', color: color, textAlign: TextAlign.center);
       case QuantoButtonSize.medium:
         return QuantoText.buttonMedium(text, color: color);
       case QuantoButtonSize.small:

@@ -85,6 +85,7 @@ flutter:
   # Assets management
   assets:
     - assets/svg/
+    - assets/images/
     - assets/fonts/
     - assets/data/currencies.json
     - assets/flags/

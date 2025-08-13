@@ -1,8 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 import 'package:expense_app/screens/onboarding/onboarding_screen.dart';
-import 'package:expense_app/main_page.dart';
 import '../theme/app_colors.dart';
 import '../widgets/quanto_text.dart';
 
@@ -107,59 +106,159 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+  late AnimationController _logoController;
+  late Animation<double> _logoOpacity;
+  late Animation<double> _logoScale;
+
   @override
   void initState() {
     super.initState();
-    _navigateToNextScreen();
+    
+    // Set status bar style for dark background
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xFF0B0F12),
+      systemNavigationBarIconBrightness: Brightness.light,
+    ));
+    
+    // Initialize logo animation controller
+    _logoController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _logoOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _logoController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _logoScale = Tween<double>(
+      begin: 1.0,
+      end: 0.8,
+    ).animate(CurvedAnimation(
+      parent: _logoController,
+      curve: Curves.easeInOut,
+    ));
   }
 
-  Future<void> _navigateToNextScreen() async {
-    // Check if onboarding is completed
-    final prefs = await SharedPreferences.getInstance();
-    final isOnboardingComplete = prefs.getBool('onboarding_completed') ?? false;
+  @override
+  void dispose() {
+    _logoController.dispose();
+    super.dispose();
+  }
 
-    // Wait for 2.5 seconds
-    await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
-
+  Future<void> _navigateToOnboarding() async {
+    // Animate logo out
+    await _logoController.forward();
+    
     if (!mounted) return;
 
-    // Navigate based on onboarding status
-    if (isOnboardingComplete) {
-      // If onboarding is complete, navigate to the main app
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const MainPage(),
-          ),
-        );
-      }
-    } else {
-      // Otherwise, show the onboarding flow
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(),
-          ),
-        );
-      }
-    }
+    // Navigate to onboarding with seamless background transition
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const OnboardingScreen(),
+        transitionDuration: const Duration(milliseconds: 800),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          // Create a seamless transition by overlaying content
+          return Stack(
+            children: [
+              // Keep the same background during transition
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: const Color(0xFF0B0F12),
+                child: CustomPaint(
+                  painter: _GlowPainter(const [
+                    GlowSpot(
+                      pos: Offset(0.75, 0.18), // x75%, y18%
+                      radius: 391,
+                      intensity: 0.8,
+                      color: Color(0xFF008AFF),
+                    ),
+                  ]),
+                  size: Size.infinite,
+                ),
+              ),
+              // Fade in the new content
+              FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: GlowOverlay(
-        baseColor: const Color(0xFF0B0F12),
-        spots: const [
-          GlowSpot(
-            pos: Offset(0.75, 0.18), // x75%, y18%
-            radius: 391,
-            intensity: 0.8, // 80% density
-            color: Color(0xFF008AFF), // Blue color
-          ),
-        ],
+      body: GestureDetector(
+        onTap: _navigateToOnboarding,
+        child: AnimatedBuilder(
+          animation: _logoController,
+          builder: (context, child) {
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: const Color(0xFF0B0F12),
+              child: Stack(
+                children: [
+                  CustomPaint(
+                    painter: _GlowPainter(const [
+                      GlowSpot(
+                        pos: Offset(0.75, 0.18), // x75%, y18%
+                        radius: 391,
+                        intensity: 0.8, // 80% density
+                        color: Color(0xFF008AFF), // Blue color
+                      ),
+                    ]),
+                    size: Size.infinite,
+                  ),
+                  // Animated Quanto text in center
+                  Center(
+                    child: Transform.scale(
+                      scale: _logoScale.value,
+                      child: Opacity(
+                        opacity: _logoOpacity.value,
+                        child: QuantoText(
+                          'Quanto',
+                          styleVariant: 'Display/D2',
+                          color: AppColors.textPrimaryDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Tap instruction at bottom
+                  Positioned(
+                    bottom: 60,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Opacity(
+                        opacity: 1.0 - _logoController.value,
+                        child: QuantoText(
+                          'Tap to continue',
+                          styleVariant: 'Body/B2',
+                          color: AppColors.textSecondaryDark.withOpacity(0.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
