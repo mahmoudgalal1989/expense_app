@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../main_page.dart';
+import '../insights/insights_screen.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/quanto_text.dart';
 import '../../widgets/quanto_button.dart';
@@ -402,10 +402,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
     if (!mounted) return;
 
-    // Navigate to main app with smooth transition
+    // Navigate to insights screen with smooth transition
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const MainPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => const InsightsScreen(),
         transitionDuration: const Duration(milliseconds: 600),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(

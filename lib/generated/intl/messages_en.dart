@@ -21,5 +21,29 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
+    "goalAnalyzeTrends": MessageLookupByLibrary.simpleMessage(
+      "Analyze trends and patterns",
+    ),
+    "goalGetRidOfDebts": MessageLookupByLibrary.simpleMessage(
+      "Get rid of debts",
+    ),
+    "goalIncreaseSavings": MessageLookupByLibrary.simpleMessage(
+      "Increase savings",
+    ),
+    "goalManageBudgets": MessageLookupByLibrary.simpleMessage(
+      "Create and manage budgets",
+    ),
+    "goalTrackExpenses": MessageLookupByLibrary.simpleMessage(
+      "Track my expenses",
+    ),
+    "goalTrackIncome": MessageLookupByLibrary.simpleMessage("Track my income"),
+    "insightsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Feel free to pick more than one.",
+    ),
+    "insightsTitle": MessageLookupByLibrary.simpleMessage(
+      "What are your main goals?",
+    ),
+  };
 }

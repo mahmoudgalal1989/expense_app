@@ -34,7 +34,7 @@ class QuantoText extends StatelessWidget {
     // Header Styles
     'Header/H1': TextStyle(
       fontSize: 25,
-      fontWeight: FontWeight.w500, // SemiBold
+      fontWeight: FontWeight.w600, // SemiBold
       height: 32.0 / 25.0, // line-height: 32px
       letterSpacing: 0,
     ),

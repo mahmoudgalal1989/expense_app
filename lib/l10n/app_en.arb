@@ -56,5 +56,42 @@
   "categories": "Categories",
   "@categories": {
     "description": "Title for the categories screen"
+  },
+  
+  "insightsTitle": "What are your main goals?",
+  "@insightsTitle": {
+    "description": "Title for the insights screen"
+  },
+  "insightsSubtitle": "Feel free to pick more than one.",
+  "@insightsSubtitle": {
+    "description": "Subtitle for the insights screen"
+  },
+  "goalTrackExpenses": "Track my expenses",
+  "@goalTrackExpenses": {
+    "description": "Goal option for tracking expenses"
+  },
+  "goalTrackIncome": "Track my income",
+  "@goalTrackIncome": {
+    "description": "Goal option for tracking income"
+  },
+  "goalManageBudgets": "Create and manage budgets",
+  "@goalManageBudgets": {
+    "description": "Goal option for managing budgets"
+  },
+  "goalIncreaseSavings": "Increase savings",
+  "@goalIncreaseSavings": {
+    "description": "Goal option for increasing savings"
+  },
+  "goalGetRidOfDebts": "Get rid of debts",
+  "@goalGetRidOfDebts": {
+    "description": "Goal option for getting rid of debts"
+  },
+  "goalAnalyzeTrends": "Analyze trends and patterns",
+  "@goalAnalyzeTrends": {
+    "description": "Goal option for analyzing trends"
+  },
+  "continueButton": "Next",
+  "@continueButton": {
+    "description": "Next button text"
   }
 }

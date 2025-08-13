@@ -53,6 +53,91 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `What are your main goals?`
+  String get insightsTitle {
+    return Intl.message(
+      'What are your main goals?',
+      name: 'insightsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feel free to pick more than one.`
+  String get insightsSubtitle {
+    return Intl.message(
+      'Feel free to pick more than one.',
+      name: 'insightsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Track my expenses`
+  String get goalTrackExpenses {
+    return Intl.message(
+      'Track my expenses',
+      name: 'goalTrackExpenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Track my income`
+  String get goalTrackIncome {
+    return Intl.message(
+      'Track my income',
+      name: 'goalTrackIncome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create and manage budgets`
+  String get goalManageBudgets {
+    return Intl.message(
+      'Create and manage budgets',
+      name: 'goalManageBudgets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Increase savings`
+  String get goalIncreaseSavings {
+    return Intl.message(
+      'Increase savings',
+      name: 'goalIncreaseSavings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get rid of debts`
+  String get goalGetRidOfDebts {
+    return Intl.message(
+      'Get rid of debts',
+      name: 'goalGetRidOfDebts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Analyze trends and patterns`
+  String get goalAnalyzeTrends {
+    return Intl.message(
+      'Analyze trends and patterns',
+      name: 'goalAnalyzeTrends',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get continueButton {
+    return Intl.message('Continue', name: 'continueButton', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
