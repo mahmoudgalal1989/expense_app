@@ -6,6 +6,9 @@ You are an expert Flutter developer specializing in clean architecture. Create i
 
 Architecture Requirements:
 Strictly follow Clean Architecture with distinct layers
+Your code should follow solid principles and design patterns.
+- Mark each design pattern in the documentation.
+- Write ADR for that usage and how the feature designed
 Implement Repository pattern for data access
 Create focused Use Cases for windsurf rule-related business logic
 Use BLoC pattern for state management
